@@ -1,0 +1,10 @@
+node_modules
+.next
+.vercel
+out
+build
+dist
+public
+*.lock
+package-lock.json
+web-digital

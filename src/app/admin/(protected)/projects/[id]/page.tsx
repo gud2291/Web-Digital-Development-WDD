@@ -1,0 +1,34 @@
+import { notFound } from "next/navigation";
+import { getProjectById } from "@/server/services/project.service";
+import { PageHeader } from "@/components/admin/PageHeader";
+import { ProjectForm } from "../ProjectForm";
+
+export const dynamic = "force-dynamic";
+
+interface PageProps {
+  params: { id: string };
+}
+
+export default async function EditProjectPage({ params }: PageProps) {
+  const doc = await getProjectById(params.id).catch(() => null);
+  if (!doc) notFound();
+
+  return (
+    <>
+      <PageHeader title="Edit project" description={doc.title} />
+      <ProjectForm
+        initial={{
+          _id: String(doc._id),
+          title: doc.title,
+          category: doc.category ?? "Web",
+          description: doc.description ?? "",
+          image: doc.image ?? "",
+          liveUrl: doc.liveUrl ?? "",
+          featured: !!doc.featured,
+          visible: !!doc.visible,
+          tech: doc.tech ?? [],
+        }}
+      />
+    </>
+  );
+}
