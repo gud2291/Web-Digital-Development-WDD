@@ -21,7 +21,7 @@ import { ProcessSteps } from "@/components/public/ProcessSteps";
 import { GradientMesh } from "@/components/public/GradientMesh";
 import { SectionDivider } from "@/components/public/SectionDivider";
 import { getHomepage } from "@/server/services/homepage.service";
-import { getSiteContent } from "@/server/services/siteContent.service";
+import { getCachedSiteContent } from "@/server/services/siteContent.service";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { listServices } from "@/server/services/service.service";
 import { listProjects } from "@/server/services/project.service";
@@ -33,9 +33,13 @@ import { metadataFromDb } from "@/lib/seo";
 import { HeroSceneWrapper } from "@/components/3d/HeroSceneWrapper";
 import { HeroSlider } from "@/components/public/HeroSlider";
 import { SafeImage } from "@/components/public/SafeImage";
+import { FAQList } from "@/components/FAQList";
+import { SchemaMarkup, faqSchema, businessReviewsSchema, speakableSchema } from "@/components/SchemaMarkup";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// ISR: cached HTML for fast loads; admin saves call revalidatePath("/") so edits
+// appear immediately. Drafts render via draftMode() (see getPreviewDoc), which
+// only bypasses the cache for an editor — never for normal visitors.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("home", { path: "/" });
@@ -132,6 +136,37 @@ const FALLBACK_BLOGS: [string, string, string, string, string][] = [
 
 const FALLBACK_TRUST_LOGOS = ["Expoed", "SBM Greens", "Vishwakarma Tour", "Shree Namo Motar"];
 
+// Homepage FAQ (C2 / AEO). Answers are factual and consistent with the rest of
+// the site (Palam, New Delhi · since 2019 · 400+ sites · 3–5 week delivery ·
+// 1-month support). The visible FAQList below and the FAQPage JSON-LD are built
+// from this same array, so the schema mirrors exactly what users see.
+const HOME_FAQ: [string, string][] = [
+  [
+    "How much does a website cost in Delhi?",
+    "It depends on the scope. We share a clear, fixed quote after a short discovery call — no hidden charges. Book a free consultation and we'll give you an exact figure for your project.",
+  ],
+  [
+    "How long does it take to build a website?",
+    "Most websites go live in 3–5 weeks. Larger e-commerce or fully custom builds can take 6–8 weeks, depending on content readiness and how quickly feedback comes back.",
+  ],
+  [
+    "Do you provide SEO along with website design?",
+    "Yes. Every website we build is SEO-ready from day one, and we offer dedicated SEO packages for businesses that want to rank higher and grow traffic faster.",
+  ],
+  [
+    "Will my website work well on mobile phones?",
+    "Absolutely. Every site is mobile-first and fully responsive, so it looks and works perfectly across phones, tablets and desktops.",
+  ],
+  [
+    "Do you work with businesses outside Delhi?",
+    "Yes. We're based in Palam, New Delhi, but we've delivered 400+ websites for clients across India and abroad. The entire process can be handled online.",
+  ],
+  [
+    "What happens after my website launches?",
+    "Every project includes one month of free support. After that, optional maintenance plans cover updates, security, backups and content edits.",
+  ],
+];
+
 const ACCENT_COLORS = ["#22C55E", "#2563EB", "#F59E0B", "#8B5CF6"];
 const PROJECT_BGS = ["#EFF6FF", "#FCE7F3", "#FEF3C7", "#DCFCE7", "#FEE2E2", "#E0E7FF"];
 const TESTIMONIAL_AVATAR_COLORS = ["#2563EB", "#22C55E", "#F59E0B", "#8B5CF6"];
@@ -141,15 +176,11 @@ function initialsOf(name: string): string {
   return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).toUpperCase() || "??";
 }
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams?: { preview?: string; token?: string };
-}) {
-  const previewHomepage = await getPreviewDoc<Record<string, unknown>>("homepage", searchParams);
+export default async function HomePage() {
+  const previewHomepage = await getPreviewDoc<Record<string, unknown>>("homepage");
   const [homepageRaw, siteContentDb, servicesRaw, projectsRaw, testimonialsRaw, blogResult] = await Promise.all([
     getHomepage().catch(() => null),
-    getSiteContent().catch(() => null),
+    getCachedSiteContent().catch(() => null),
     listServices().catch(() => []),
     listProjects().catch(() => []),
     listTestimonials().catch(() => []),
@@ -281,6 +312,9 @@ export default async function HomePage({
 
   return (
     <>
+      {/* D5 — Speakable: voice assistants read the hero headline + lead, which
+          are always server-rendered (the primary spoken answer for this page). */}
+      <SchemaMarkup data={speakableSchema(["#s-hero h1", "#s-hero .t-lead"])} />
       {/* Hero */}
       <section
         id="s-hero"
@@ -434,17 +468,19 @@ export default async function HomePage({
             </Reveal>
             <Reveal delay={100}>
               <p className="t-lead" style={{ marginTop: 16 }}>
-                I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi in 2019
-                with one laptop and a simple belief — a small business deserves the same quality of
-                website a big company gets, without the big-company invoice. Six years on, there are
-                six of us in one office, 400+ websites shipped for clients across India and abroad,
-                and I still review every design before it goes live.
+                I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi, in 2019 —
+                with one laptop and one belief. A small business deserves a website as good as a big
+                company gets, without the big-company invoice. Six years on, there are six of us in
+                one office. We&apos;ve shipped 400+ websites for clients across India and abroad. And I
+                still review every design before it goes live.
               </p>
             </Reveal>
             <Reveal delay={150}>
-              <div className="about-preview__checks">
+              {/* §E2 — semantic list (was divs). Inline reset keeps the exact grid
+                  look from .about-preview__checks (no <ul> default margin/padding/marker). */}
+              <ul className="about-preview__checks" style={{ listStyle: "none", margin: 0, marginTop: 22, padding: 0 }}>
                 {CHECKS.map(([t, d]) => (
-                  <div key={t} className="check-item">
+                  <li key={t} className="check-item" style={{ listStyle: "none" }}>
                     <div className="check-item__icon">
                       <Icon name="check" size={12} stroke={3} />
                     </div>
@@ -452,9 +488,9 @@ export default async function HomePage({
                       <div style={{ fontWeight: 600 }}>{t}</div>
                       <div className="t-small">{d}</div>
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Reveal>
             <Reveal delay={200}>
               <Link href="/about">
@@ -519,6 +555,18 @@ export default async function HomePage({
         <TestimonialsCarousel
           testimonials={testimonials}
           title={sectionTitles?.testimonials || "What Our Clients Say"}
+        />
+        {/* C1 — Review items for the testimonials shown above. No aggregateRating
+            here: the homepage shows individual reviews but not a computed on-page
+            average (see /reviews for the AggregateRating). */}
+        <SchemaMarkup
+          data={businessReviewsSchema({
+            reviews: testimonials.map((t) => ({
+              author: t.name,
+              rating: t.rating,
+              body: t.quote,
+            })),
+          })}
         />
       </div>
 
@@ -588,6 +636,17 @@ export default async function HomePage({
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FAQ — §C2/AEO. Visible Q&A + matching FAQPage JSON-LD (mirrors HOME_FAQ). */}
+      <section id="s-faq" className="section section--alt">
+        <div className="container" style={{ maxWidth: 820, margin: "0 auto" }}>
+          <Reveal>
+            <SectionHead kicker="FAQ" title="Frequently Asked Questions" />
+          </Reveal>
+          <SchemaMarkup data={faqSchema(HOME_FAQ.map(([q, a]) => ({ q, a })))} />
+          <FAQList items={HOME_FAQ} />
         </div>
       </section>
 

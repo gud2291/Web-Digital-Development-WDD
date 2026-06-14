@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { Badge, Btn, PH, Reveal, SectionHead } from "@/components/ui";
 import { CldImage } from "@/components/CldImage";
-import { getBlogBySlug, getRelatedBlogs } from "@/server/services/blog.service";
+import { getBlogBySlug, getRelatedBlogs, listBlogs } from "@/server/services/blog.service";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { BlogShareButtons } from "@/components/public/BlogShareButtons";
 import { NewsletterSignup } from "@/components/public/NewsletterSignup";
@@ -16,11 +16,20 @@ import {
   breadcrumbSchema,
 } from "@/components/SchemaMarkup";
 
-export const dynamic = "force-dynamic";
+// ISR: prerender published posts via generateStaticParams; cache 1h. Admin saves
+// call revalidatePath("/blog/[slug]") so edits appear immediately. Drafts render
+// via draftMode() for editors only.
+export const revalidate = 3600;
 
 interface PageProps {
   params: { slug: string };
-  searchParams?: { preview?: string; token?: string };
+}
+
+export async function generateStaticParams() {
+  const { items } = await listBlogs({ limit: 1000 }).catch(() => ({
+    items: [] as Awaited<ReturnType<typeof listBlogs>>["items"],
+  }));
+  return items.filter((b) => b.slug).map((b) => ({ slug: b.slug as string }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -29,7 +38,12 @@ export async function generateMetadata({ params }: PageProps) {
   return metadataFromDb(`blog/${params.slug}`, {
     path: `/blog/${params.slug}`,
     title: post.seoTitle || post.title,
-    description: post.seoDescription || post.excerpt || undefined,
+    // Fall back to a per-post sentence rather than the global site description,
+    // so empty SEO fields don't duplicate the homepage meta.
+    description:
+      post.seoDescription ||
+      post.excerpt ||
+      `${post.title} — web design, development and SEO insights from Web Digital Development.`,
     ogImage: post.featuredImage || undefined,
     keywords: post.tags,
   });
@@ -41,9 +55,9 @@ function authorInitials(name?: string): string {
   return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).toUpperCase() || "W";
 }
 
-export default async function BlogDetailPage({ params, searchParams }: PageProps) {
-  // §15.6 — render the unsaved draft when a valid preview link is present.
-  const draft = await getPreviewDoc<Record<string, unknown>>("blog", searchParams);
+export default async function BlogDetailPage({ params }: PageProps) {
+  // §15.6 — render the unsaved draft when the editor is in draft mode.
+  const draft = await getPreviewDoc<Record<string, unknown>>("blog");
   const post = draft
     ? ({
         _id: "preview",

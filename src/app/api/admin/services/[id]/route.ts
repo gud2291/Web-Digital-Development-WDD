@@ -7,6 +7,7 @@ import {
 import { updateServiceSchema } from "@/server/validation/service";
 import { handle, notFound } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
+import { revalidatePublic } from "@/server/utils/revalidatePublic";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export async function PUT(req: Request, ctx: { params: { id: string } }) {
     const data = updateServiceSchema.parse(await req.json());
     const doc = await updateService(ctx.params.id, data);
     if (!doc) return notFound("Service");
+    revalidatePublic.services();
     return NextResponse.json(doc);
   });
 }
@@ -36,6 +38,7 @@ export async function DELETE(_req: Request, ctx: { params: { id: string } }) {
   if (!gate.ok) return gate.response;
   return handle(async () => {
     await deleteService(ctx.params.id);
+    revalidatePublic.services();
     return NextResponse.json({ ok: true });
   });
 }
