@@ -8,9 +8,21 @@ export function FloatingActions() {
   const [showTop, setShowTop] = React.useState(false);
 
   React.useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 600);
+    const onScroll = () => {
+      if (window.innerWidth <= 767) {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        setShowTop(scrollable > 0 && window.scrollY > scrollable * 0.65);
+      } else {
+        setShowTop(window.scrollY > 600);
+      }
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (

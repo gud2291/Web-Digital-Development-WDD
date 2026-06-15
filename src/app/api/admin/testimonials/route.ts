@@ -6,6 +6,7 @@ import {
 import { createTestimonialSchema } from "@/server/validation/testimonial";
 import { handle } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
+import { revalidatePublic } from "@/server/utils/revalidatePublic";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
   return handle(async () => {
     const data = createTestimonialSchema.parse(await req.json());
     const doc = await createTestimonial(data);
+    revalidatePublic.testimonials();
     return NextResponse.json(doc, { status: 201 });
   });
 }

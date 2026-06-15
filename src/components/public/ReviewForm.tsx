@@ -67,7 +67,7 @@ export function ReviewForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="card" style={{ padding: 22 }} noValidate>
-      <h4 className="t-h4">Write a review</h4>
+      <h2 className="t-h4">Write a review</h2>
       <div className="field" style={{ marginTop: 14 }}>
         <label className="field__label">Your Name *</label>
         <input className="input" placeholder="Rahul Sharma" {...register("clientName")} />

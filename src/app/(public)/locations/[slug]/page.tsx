@@ -19,8 +19,12 @@ export async function generateMetadata({ params }: PageProps) {
     const doc = await res.json();
     return buildMetadata({
       path: `/locations/${params.slug}`,
-      title: doc.seoTitle,
-      description: doc.seoDescription,
+      // Fall back to city-specific copy so empty SEO fields don't inherit the
+      // homepage title/description.
+      title: doc.seoTitle || `Website Design in ${doc.city}`,
+      description:
+        doc.seoDescription ||
+        `Website design, development and SEO in ${doc.city} by Web Digital Development. 400+ sites delivered — get a free quote.`,
       keywords: doc.keywords,
     });
   } catch {

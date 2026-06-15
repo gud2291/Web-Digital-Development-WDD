@@ -3,6 +3,7 @@ import { listServices, createService } from "@/server/services/service.service";
 import { createServiceSchema } from "@/server/validation/service";
 import { handle } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
+import { revalidatePublic } from "@/server/utils/revalidatePublic";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export async function POST(req: Request) {
   return handle(async () => {
     const data = createServiceSchema.parse(await req.json());
     const doc = await createService(data);
+    revalidatePublic.services();
     return NextResponse.json(doc, { status: 201 });
   });
 }

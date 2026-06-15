@@ -7,13 +7,16 @@ import { listBlogs } from "@/server/services/blog.service";
 import { metadataFromDb } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+// ISR (A3): cache for 1h; admin edits appear within the window. Safe — this page
+// reads no per-request data (no searchParams/preview), only published CMS content.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("blog", {
     path: "/blog",
-    title: "Blog",
-    description: "Tips, trends and how-tos to help your business stand out online.",
+    title: "Web Design & SEO Blog",
+    description:
+      "Practical web design, development and SEO tips for Indian businesses — trends, how-tos and guides to help your website rank higher and convert more.",
   });
 }
 
@@ -147,7 +150,7 @@ export default async function BlogListPage() {
           <aside className="blog-sidebar">
             <Reveal>
               <div className="card">
-                <h4 style={{ fontWeight: 700, fontSize: 18 }}>Categories</h4>
+                <h3 style={{ fontWeight: 700, fontSize: 18 }}>Categories</h3>
                 <div className="sidebar-cats">
                   {categories.map(([c, n]) => (
                     <a key={c} className="sidebar-cat">
@@ -163,7 +166,7 @@ export default async function BlogListPage() {
             </Reveal>
             <Reveal delay={120}>
               <div className="card">
-                <h4 style={{ fontWeight: 700, fontSize: 18 }}>Popular Tags</h4>
+                <h3 style={{ fontWeight: 700, fontSize: 18 }}>Popular Tags</h3>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
                   {tags.map((t) => (
                     <span key={t} className="badge" style={{ background: "#F1F5F9", color: "#475569" }}>

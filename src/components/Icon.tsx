@@ -6,7 +6,7 @@ export type IconName =
   | "user" | "users" | "mail" | "phone" | "map" | "clock" | "home" | "heart"
   | "target" | "zap" | "award" | "shield" | "chat" | "sparkle" | "badgeCheck"
   | "play" | "quote" | "whatsapp" | "menu" | "x" | "download" | "file"
-  | "facebook" | "linkedin" | "instagram" | "youtube" | "plus" | "filter" | "layers";
+  | "facebook" | "linkedin" | "instagram" | "youtube" | "plus" | "filter" | "layers" | "google";
 
 interface IconProps {
   name: IconName;
@@ -66,6 +66,7 @@ const PATHS: Record<IconName, React.ReactNode> = {
   plus: <path d="M12 5v14M5 12h14" />,
   filter: <polygon points="22 3 2 3 10 12 10 19 14 21 14 12 22 3" />,
   layers: <><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></>,
+  google: <><path d="M12 2C6.48 2 2 6.48 2 12c0 4.99 3.66 9.12 8.5 9.93v-7.01H8.33V12h3.17v-2.08c0-3.1 1.86-4.79 4.66-4.79 1.36 0 2.68.25 2.68.25v2.96h-1.51c-1.49 0-1.95.93-1.95 1.88V12h3.33l-.53 2.92h-2.8v7.01C18.34 21.12 22 16.99 22 12c0-5.52-4.48-10-10-10z"/></>,
 };
 
 export function Icon({ name, size = 20, stroke = 1.75, color = "currentColor", style }: IconProps) {

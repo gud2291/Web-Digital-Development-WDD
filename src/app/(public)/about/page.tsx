@@ -2,20 +2,23 @@ import { Icon, type IconName } from "@/components/Icon";
 import { CTABanner, Eyebrow, Reveal, SectionHead } from "@/components/ui";
 import { Counter } from "@/components/public/Counter";
 import { SectionDivider } from "@/components/public/SectionDivider";
-import { getSiteContent } from "@/server/services/siteContent.service";
+import { getCachedSiteContent } from "@/server/services/siteContent.service";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { listTeam } from "@/server/services/team.service";
 import { metadataFromDb } from "@/lib/seo";
 import { SafeImage } from "@/components/public/SafeImage";
+import { SchemaMarkup, aboutPageSchema } from "@/components/SchemaMarkup";
 
-export const dynamic = "force-dynamic";
+// ISR: cached HTML; site-content & team admin saves call revalidatePath("/about")
+// so edits appear immediately. Drafts render via draftMode() for editors only.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("about", {
     path: "/about",
-    title: "About Us",
+    title: "About Our Delhi Web Design Studio",
     description:
-      "Delhi-based website design and development studio. 400+ websites delivered for 250+ clients across India and abroad since 2019.",
+      "Delhi web design & development studio since 2019 — 400+ sites delivered for 250+ clients across India and abroad. Meet the team behind your next site.",
   });
 }
 
@@ -60,15 +63,11 @@ const TIMELINE_THEMES = [
 
 const TEAM_BG_COLORS = ["#DBE7FE", "#FCE7F3", "#FEF3C7", "#DCFCE7", "#EFF6FF", "#FEE2E2"];
 
-export default async function AboutPage({
-  searchParams,
-}: {
-  searchParams?: { preview?: string; token?: string };
-}) {
+export default async function AboutPage() {
   const [siteContentDb, teamRaw, draft] = await Promise.all([
-    getSiteContent().catch(() => null),
+    getCachedSiteContent().catch(() => null),
     listTeam().catch(() => []),
-    getPreviewDoc<Record<string, unknown>>("site-content", searchParams),
+    getPreviewDoc<Record<string, unknown>>("site-content"),
   ]);
   const siteContent = (draft as unknown as typeof siteContentDb) ?? siteContentDb;
 
@@ -101,6 +100,8 @@ export default async function AboutPage({
 
   return (
     <>
+      {/* D4 — AboutPage + founder Person entity, linked to the #business node. */}
+      <SchemaMarkup data={aboutPageSchema()} />
       <section className="page-banner">
         <div className="container" style={{ textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
           <div className="breadcrumb">
@@ -120,9 +121,6 @@ export default async function AboutPage({
 
       <section className="section">
         <div className="container two-col">
-          <div style={{ position: "relative", height: "100%", minHeight: 400, width: "100%", borderRadius: 16, overflow: "hidden" }}>
-            <SafeImage src={about?.heroImage || "https://res.cloudinary.com/dt4i2xbs8/image/upload/f_auto,q_auto/wdd/about/our-story"} alt="Web Digital Development studio workspace in Delhi" fallbackLabel="WDD Studio, Delhi" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-          </div>
           <div>
             <Reveal>
               <Eyebrow>OUR STORY</Eyebrow>
@@ -139,14 +137,15 @@ export default async function AboutPage({
               ) : (
                 <>
                   <p style={{ marginTop: 18, color: "#475569" }}>
-                    Founded in 2018 in Delhi, Web Digital Development started as a two-person
-                    studio with a simple belief: small and mid-sized Indian businesses deserve
-                    websites as good as the ones global brands enjoy.
+                    Web Digital Development is a website design and development studio in Palam,
+                    New Delhi, founded in 2019 by Gudia Yadav. It started with one simple belief:
+                    small and mid-sized Indian businesses deserve websites as good as the ones
+                    global brands enjoy — without the global-brand invoice.
                   </p>
                   <p style={{ marginTop: 14, color: "#475569" }}>
-                    Today we&apos;re a 24-person team delivering websites, e-commerce stores and
-                    full digital growth services to clients across 6 cities — and we&apos;re just
-                    getting started.
+                    Since then we&apos;ve delivered 400+ websites and digital growth services to
+                    250+ clients across India and abroad — and the founder still reviews every
+                    design before it goes live.
                   </p>
                 </>
               )}
@@ -163,6 +162,9 @@ export default async function AboutPage({
                 ))}
               </div>
             </Reveal>
+          </div>
+          <div style={{ position: "relative", height: "100%", minHeight: 400, width: "100%", borderRadius: 16, overflow: "hidden" }}>
+            <SafeImage src={about?.heroImage || "https://res.cloudinary.com/dt4i2xbs8/image/upload/f_auto,q_auto/wdd/about/our-story"} alt="Web Digital Development studio workspace in Delhi" fallbackLabel="WDD Studio, Delhi" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
           </div>
         </div>
       </section>
@@ -181,7 +183,7 @@ export default async function AboutPage({
                   <div className="svc-icon" style={{ background: "var(--c-primary-50)", color: "#2563EB" }}>
                     <Icon name={ic} />
                   </div>
-                  <h4 className="t-h4">{t}</h4>
+                  <h3 className="t-h4">{t}</h3>
                   <p className="t-small" style={{ marginTop: 6 }}>{d}</p>
                 </div>
               </Reveal>
@@ -252,7 +254,7 @@ export default async function AboutPage({
                     }}
                   />
                   <div style={{ padding: 18 }}>
-                    <h4 style={{ fontWeight: 700, fontSize: 18 }}>{m.name}</h4>
+                    <h3 style={{ fontWeight: 700, fontSize: 18 }}>{m.name}</h3>
                     <div className="t-small" style={{ marginTop: 4 }}>{m.role}</div>
                     <div style={{ display: "flex", gap: 10, marginTop: 12, color: "#64748B" }}>
                       {m.linkedin ? (

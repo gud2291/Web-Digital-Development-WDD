@@ -8,7 +8,20 @@ import { serverEnv } from "@/config/env";
 import { verifyPassword } from "./bcrypt";
 import { verifyTwoFactorCode } from "./two-factor";
 import { clearLoginAttempts, getBruteForceState, recordFailedAttempt } from "./brute-force";
+import { checkRateLimit } from "@/server/middleware/rateLimit";
 import { logger } from "@/server/utils/logger";
+
+/**
+ * Extract the client IP from NextAuth's internal request. Its `headers` is a
+ * plain object (not a Headers instance), so we read it directly rather than via
+ * getClientIp(). Mirrors the x-forwarded-for / x-real-ip precedence used there.
+ */
+function ipFromAuthReq(req?: { headers?: Record<string, string> }): string {
+  const headers = req?.headers ?? {};
+  const xff = headers["x-forwarded-for"];
+  if (xff) return xff.split(",")[0].trim();
+  return headers["x-real-ip"] || "unknown";
+}
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -29,9 +42,28 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
         twoFactorCode: { label: "2FA Code", type: "text" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.email || !credentials.password) {
           throw new Error("Missing credentials");
+        }
+
+        // Per-IP brute-force throttle. Complements the per-account lock in
+        // brute-force.ts by slowing credential-stuffing / password-spray that
+        // cycles through many emails from one source. Fails OPEN if the limiter
+        // backend errors so a Redis outage can never block legitimate logins.
+        const ip = ipFromAuthReq(req as { headers?: Record<string, string> });
+        let loginAllowed = true;
+        try {
+          const rl = await checkRateLimit(`admin-login:${ip}`, {
+            limit: 10,
+            window: "5 m",
+          });
+          loginAllowed = rl.success;
+        } catch (err) {
+          logger.warn({ err }, "login rate-limit check failed; allowing");
+        }
+        if (!loginAllowed) {
+          throw new Error("Too many login attempts. Try again later.");
         }
 
         await connectDB();

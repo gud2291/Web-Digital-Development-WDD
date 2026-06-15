@@ -3,6 +3,7 @@ import { listBlogs, createBlog } from "@/server/services/blog.service";
 import { blogQuerySchema, createBlogSchema } from "@/server/validation/blog";
 import { handle } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
+import { revalidatePublic } from "@/server/utils/revalidatePublic";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
   return handle(async () => {
     const data = createBlogSchema.parse(await req.json());
     const doc = await createBlog(data);
+    revalidatePublic.blog();
     return NextResponse.json(doc, { status: 201 });
   });
 }

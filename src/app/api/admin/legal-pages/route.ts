@@ -6,6 +6,7 @@ import {
 import { upsertLegalPageSchema } from "@/server/validation/legalPage";
 import { handle } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
+import { revalidatePublic } from "@/server/utils/revalidatePublic";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export async function PUT(req: Request) {
   return handle(async () => {
     const data = upsertLegalPageSchema.parse(await req.json());
     const doc = await upsertLegalPage(data);
+    revalidatePublic.legal();
     return NextResponse.json(doc);
   });
 }

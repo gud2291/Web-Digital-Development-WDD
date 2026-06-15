@@ -3,13 +3,14 @@
 import * as React from "react";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Icon, type IconName } from "@/components/Icon";
 import { Badge, Btn, Eyebrow } from "@/components/ui";
 
 /**
- * Swipeable projects carousel (CLAUDE.md §12.11). Embla, user-controlled (no
- * autoplay): 3 cards + peek on desktop, 2 on tablet, ~1.2 on mobile, with
+ * Swipeable projects carousel (CLAUDE.md §12.11). Embla with 4s autoplay that
+ * pauses on hover; 3 cards + peek on desktop, 2 on tablet, 1 on mobile;
  * drag/snap, prev/next arrows and dot indicators.
  */
 export interface ProjectSlide {
@@ -23,7 +24,8 @@ export interface ProjectSlide {
 }
 
 export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]; title: string }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false, containScroll: "trimSnaps" });
+  const autoplay = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: true }, [autoplay.current]);
   const [selected, setSelected] = React.useState(0);
   const [snaps, setSnaps] = React.useState<number[]>([]);
   const [canPrev, setCanPrev] = React.useState(false);

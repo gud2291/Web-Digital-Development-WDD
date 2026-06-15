@@ -127,6 +127,7 @@ export function HeroSlider({ slides, badgeText, interval = 6000 }: HeroSliderPro
       {slides.map((s, i) => {
         const isVideo = s.type === "video" && !!s.video;
         const isActive = i === current;
+        const HeadingTag = i === 0 ? "h1" : "h2";
         return (
           <div
             key={i}
@@ -234,7 +235,7 @@ export function HeroSlider({ slides, badgeText, interval = 6000 }: HeroSliderPro
                   <span className="hero__dot" />
                   {badgeText || "Available for new projects"}
                 </div>
-                <h1 className="t-h1" style={{ color: "#fff", marginTop: 18 }}>
+                <HeadingTag className="t-h1" style={{ color: "#fff", marginTop: 18 }}>
                   {renderTitle(s.title) || (
                     <>
                       Build a Website That <span style={{ color: "#4ADE80" }}>Brings Real</span>
@@ -242,7 +243,7 @@ export function HeroSlider({ slides, badgeText, interval = 6000 }: HeroSliderPro
                       Business Leads.
                     </>
                   )}
-                </h1>
+                </HeadingTag>
                 <p className="t-lead" style={{ marginTop: 22, maxWidth: 540, color: "#BFDBFE" }}>
                   {s.subtitle ||
                     "We design and develop modern, responsive websites that attract qualified visitors and turn them into paying customers. Delhi-based, results-obsessed."}

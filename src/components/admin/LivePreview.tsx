@@ -61,10 +61,15 @@ export function LivePreview({ resource, previewPath, state, sectionAnchor, child
     return () => mq.removeEventListener("change", apply);
   }, []);
 
+  // Point the iframe at the draft-mode enable route, which validates the token,
+  // turns on Next.js draft mode (httpOnly cookie), and redirects to the public
+  // path — which then renders the draft. The token (not the draftId) carries the
+  // draft identity, and the `t` param forces the iframe to reload on each edit.
   const buildUrl = React.useCallback(
-    (draftId: string, token: string) => {
+    (token: string) => {
       const hash = anchorRef.current ? `#${anchorRef.current}` : "";
-      return `${previewPath}?preview=${draftId}&token=${encodeURIComponent(token)}&t=${Date.now()}${hash}`;
+      const target = `${previewPath}${hash}`;
+      return `/api/preview/enable?token=${encodeURIComponent(token)}&path=${encodeURIComponent(target)}&t=${Date.now()}`;
     },
     [previewPath]
   );
@@ -85,7 +90,7 @@ export function LivePreview({ resource, previewPath, state, sectionAnchor, child
         if (!data.draftId || !data.token) return;
         draftIdRef.current = data.draftId;
         tokenRef.current = data.token;
-        setIframeUrl(buildUrl(data.draftId, data.token));
+        setIframeUrl(buildUrl(data.token));
       } catch {
         /* network errors are non-fatal */
       }
@@ -97,7 +102,7 @@ export function LivePreview({ resource, previewPath, state, sectionAnchor, child
   // Scroll the preview to the focused section without waiting for a new draft.
   React.useEffect(() => {
     if (sectionAnchor && draftIdRef.current && tokenRef.current) {
-      setIframeUrl(buildUrl(draftIdRef.current, tokenRef.current));
+      setIframeUrl(buildUrl(tokenRef.current));
     }
   }, [sectionAnchor, buildUrl]);
 

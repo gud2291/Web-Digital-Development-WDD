@@ -25,7 +25,7 @@ const locations: Record<
   delhi: {
     city: "Delhi",
     region: "National Capital Territory",
-    seoTitle: "Website Design & Development Company in Delhi NCR",
+    seoTitle: "Web Design Company in Delhi NCR",
     seoDescription:
       "Professional website design, SEO and development services in Delhi. Serving businesses across NCR with 400+ launches since 2019. Talk to our Delhi team today.",
     keywords: [
@@ -38,7 +38,7 @@ const locations: Record<
   noida: {
     city: "Noida",
     region: "Uttar Pradesh",
-    seoTitle: "Website Design & Development Services in Noida",
+    seoTitle: "Website Design Services in Noida",
     seoDescription:
       "Custom website design and SEO services for Noida businesses. We serve Noida, Greater Noida and nearby areas with 400+ successful projects.",
     keywords: ["website design in Noida", "web development Noida", "Noida SEO services", "website company Noida"],
@@ -46,7 +46,7 @@ const locations: Record<
   gurgaon: {
     city: "Gurgaon",
     region: "Haryana",
-    seoTitle: "Website Design Services in Gurgaon | Web Digital Development",
+    seoTitle: "Website Design Services in Gurgaon",
     seoDescription:
       "Professional website design and digital services for Gurgaon startups and businesses. Custom-coded, SEO-ready websites built by our Gurgaon-based team.",
     keywords: ["website design Gurgaon", "web development Gurgaon", "Gurgaon website company", "SEO Gurgaon"],
@@ -54,7 +54,7 @@ const locations: Record<
   faridabad: {
     city: "Faridabad",
     region: "Haryana",
-    seoTitle: "Website Design & Development in Faridabad",
+    seoTitle: "Website Design in Faridabad",
     seoDescription:
       "Faridabad businesses deserve great websites. We design and develop custom sites optimized for Google search and local visibility. 6+ years, 400+ projects.",
     keywords: ["website design Faridabad", "web design Faridabad", "Faridabad SEO", "website company Faridabad"],
@@ -62,7 +62,7 @@ const locations: Record<
   ghaziabad: {
     city: "Ghaziabad",
     region: "Uttar Pradesh",
-    seoTitle: "Website Design Services in Ghaziabad",
+    seoTitle: "Web Design Services in Ghaziabad",
     seoDescription:
       "Modern, fast-loading websites designed for Ghaziabad manufacturers, traders and service businesses. SEO included. Talk to our team about your online presence.",
     keywords: ["website design Ghaziabad", "Ghaziabad web design", "Ghaziabad SEO services", "website Ghaziabad"],

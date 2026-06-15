@@ -1,19 +1,23 @@
 import { Icon, type IconName } from "@/components/Icon";
 import { Reveal } from "@/components/ui";
 import { ContactForm } from "@/components/public/ContactForm";
-import { getSiteContent } from "@/server/services/siteContent.service";
+import { getCachedSiteContent } from "@/server/services/siteContent.service";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
-import { getSettings } from "@/server/services/settings.service";
+import { getCachedSettings } from "@/server/services/settings.service";
 import { siteConfig } from "@/config/site";
 import { metadataFromDb } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+// ISR: cached HTML; site-content & settings admin saves call
+// revalidatePath("/contact") so edits appear immediately. Drafts render via
+// draftMode() for editors only.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("contact", {
     path: "/contact",
-    title: "Contact a Website Design Company in Delhi",
-    description: "Talk to Web Digital Development about your website, SEO or e-commerce project. Reply within 4 business hours — call, WhatsApp or send the form.",
+    title: "Contact Our Delhi Web Design Team",
+    description:
+      "Talk to Web Digital Development about your website, SEO or e-commerce project. We reply within 4 business hours — call, WhatsApp or send the form.",
   });
 }
 
@@ -26,15 +30,11 @@ const PROMISES: [IconName, string, string, string][] = [
 
 const FALLBACK_SERVICES = ["Website Design", "Development", "SEO", "E-commerce", "Digital Marketing"];
 
-export default async function ContactPage({
-  searchParams,
-}: {
-  searchParams?: { preview?: string; token?: string };
-}) {
+export default async function ContactPage() {
   const [siteContentDb, settings, draft] = await Promise.all([
-    getSiteContent().catch(() => null),
-    getSettings().catch(() => null),
-    getPreviewDoc<Record<string, unknown>>("site-content", searchParams),
+    getCachedSiteContent().catch(() => null),
+    getCachedSettings().catch(() => null),
+    getPreviewDoc<Record<string, unknown>>("site-content"),
   ]);
   const siteContent = (draft as unknown as typeof siteContentDb) ?? siteContentDb;
 
@@ -112,7 +112,7 @@ export default async function ContactPage({
             <div>
               <Reveal delay={80}>
                 <div className="card" style={{ padding: 28 }}>
-                  <h4 className="t-h4">Contact Information</h4>
+                  <h2 className="t-h4">Contact Information</h2>
                   <div className="contact-info-list">
                     {contactInfo.map(([ic, l, v]) => (
                       <div key={l} className="contact-info-item">

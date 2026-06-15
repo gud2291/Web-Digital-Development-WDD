@@ -6,7 +6,17 @@ import { serverEnv } from "@/config/env";
 /**
  * Rate limiting — sliding window, per IP. Default 10 requests / 10 seconds.
  * Callers can pass a custom `{ limit, window }` (e.g. the chatbot uses 5 / 30s
- * per CLAUDE.md §11.1). If Upstash isn't configured, falls back to a no-op (dev).
+ * per CLAUDE.md §11.1).
+ *
+ * When Upstash IS configured it is used exactly as before. When the Upstash env
+ * vars are absent we fall back to a lightweight IN-MEMORY sliding-window limiter
+ * so public endpoints still get basic protection instead of a no-op.
+ *
+ * NOTE: the in-memory fallback is PER-INSTANCE state. On serverless / multi-
+ * instance deployments each instance keeps its own counters, so it is only
+ * best-effort (an attacker hitting different instances gets a higher effective
+ * limit, and counters reset on cold start). Upstash (shared Redis) is still the
+ * recommended limiter for production.
  */
 
 type Window = Parameters<typeof Ratelimit.slidingWindow>[1];
@@ -42,11 +52,72 @@ function getLimiter(limit: number, window: Window): Ratelimit | null {
   return limiter;
 }
 
+// ---------------------------------------------------------------------------
+// In-memory fallback (used ONLY when Upstash is not configured).
+// ---------------------------------------------------------------------------
+
+const WINDOW_UNIT_MS: Record<string, number> = {
+  ms: 1,
+  s: 1000,
+  m: 60_000,
+  h: 3_600_000,
+  d: 86_400_000,
+};
+
+/** Parse an Upstash-style duration string ("10 s", "30 s", "1 m") to ms. */
+function windowToMs(window: Window): number {
+  const match = /^(\d+)\s*(ms|s|m|h|d)$/.exec(String(window).trim());
+  if (!match) return 10_000; // safe default — matches the historical "10 s"
+  return Number(match[1]) * WINDOW_UNIT_MS[match[2]];
+}
+
+// Map of identifier -> sorted list of request timestamps (ms) within the window.
+const _memHits = new Map<string, number[]>();
+let _lastSweep = 0;
+
+/**
+ * Periodically drop fully-expired identifiers so the Map can't grow unbounded
+ * on a long-lived instance. Cheap: runs at most once per sweep interval.
+ */
+function sweep(now: number, maxWindowMs: number) {
+  if (now - _lastSweep < 60_000) return;
+  _lastSweep = now;
+  const cutoff = now - maxWindowMs;
+  for (const [key, hits] of _memHits) {
+    if (hits.length === 0 || hits[hits.length - 1] <= cutoff) {
+      _memHits.delete(key);
+    }
+  }
+}
+
+function memoryLimit(identifier: string, limit: number, windowMs: number) {
+  const now = Date.now();
+  sweep(now, windowMs);
+  const windowStart = now - windowMs;
+
+  const prev = _memHits.get(identifier) ?? [];
+  // Keep only timestamps still inside the sliding window.
+  const hits = prev.filter((t) => t > windowStart);
+
+  const success = hits.length < limit;
+  if (success) hits.push(now);
+  _memHits.set(identifier, hits);
+
+  const remaining = Math.max(0, limit - hits.length);
+  // reset ≈ when the oldest in-window hit ages out (matches Upstash semantics).
+  const reset = (hits.length > 0 ? hits[0] : now) + windowMs;
+  return { success, limit, remaining, reset };
+}
+
 export async function checkRateLimit(
   identifier: string,
   opts?: { limit?: number; window?: Window }
 ) {
-  const limiter = getLimiter(opts?.limit ?? 10, opts?.window ?? "10 s");
-  if (!limiter) return { success: true, limit: 0, remaining: 0, reset: 0 };
-  return limiter.limit(identifier);
+  const limit = opts?.limit ?? 10;
+  const window = opts?.window ?? "10 s";
+  const limiter = getLimiter(limit, window);
+  // Upstash configured → use it exactly as before.
+  if (limiter) return limiter.limit(identifier);
+  // No Upstash → best-effort per-instance in-memory fallback.
+  return memoryLimit(identifier, limit, windowToMs(window));
 }

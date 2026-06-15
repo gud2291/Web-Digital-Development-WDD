@@ -11,7 +11,8 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json,md}\"",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "apply-seo": "tsx scripts/apply-seo-meta.ts"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.7.2",

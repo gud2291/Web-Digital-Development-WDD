@@ -1,21 +1,15 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { FloatingActions } from "@/components/FloatingActions";
-import { MobileBottomBar } from "@/components/MobileBottomBar";
 import { ToastProvider } from "@/components/public/ToastProvider";
 import { BrandLoader } from "@/components/public/BrandLoader";
-import { ChatWidget } from "@/components/public/Chatbot/ChatWidget";
-import { CookieBanner } from "@/components/public/CookieBanner";
-import { StickyQuoteCTA } from "@/components/public/StickyQuoteCTA";
-import { ReadingProgressBar } from "@/components/public/ReadingProgressBar";
 import { SmoothScrollProvider } from "@/components/public/SmoothScrollProvider";
 import { PageTransition } from "@/components/public/PageTransition";
-import { ActivityTicker } from "@/components/public/ActivityTicker";
-import { getSettings } from "@/server/services/settings.service";
+import { DeferredPublicWidgets } from "@/components/public/DeferredPublicWidgets";
+import { getCachedSettings } from "@/server/services/settings.service";
 import { siteConfig } from "@/config/site";
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSettings().catch(() => null);
+  const settings = await getCachedSettings().catch(() => null);
 
   const socialLinks: Record<string, string> = {
     facebook: settings?.social?.fb || siteConfig.social.facebook,
@@ -33,20 +27,17 @@ export default async function PublicLayout({ children }: { children: React.React
   return (
     <>
       <SmoothScrollProvider />
-      <ReadingProgressBar />
       <BrandLoader />
       <SiteHeader socialLinks={socialLinks} />
       <main>
         <PageTransition>{children}</PageTransition>
       </main>
       <SiteFooter />
-      <FloatingActions />
-      <MobileBottomBar />
       <ToastProvider />
-      <ChatWidget />
-      <StickyQuoteCTA />
-      <CookieBanner analyticsIds={analyticsIds} />
-      <ActivityTicker />
+      {/* PERF Task 3 — these non-critical fixed-overlay widgets are loaded
+          client-side only and mounted on idle/first-interaction. They still
+          appear and behave identically; see DeferredPublicWidgets. */}
+      <DeferredPublicWidgets analyticsIds={analyticsIds} />
     </>
   );
 }

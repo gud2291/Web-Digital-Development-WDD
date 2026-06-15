@@ -34,9 +34,11 @@ export function localBusinessSchema() {
     logo: `${siteConfig.url}/assets/logo.png`,
     telephone: siteConfig.phone,
     email: siteConfig.email,
+    priceRange: "₹₹",
     foundingDate: "2019-06",
     founder: {
       "@type": "Person",
+      "@id": `${siteConfig.url}#founder`,
       name: "Gudia Yadav",
       jobTitle: "Founder",
     },
@@ -86,6 +88,34 @@ export function websiteSchema() {
   };
 }
 
+/**
+ * AboutPage + founder Person (D4 / E-E-A-T). Links the About page and the named
+ * founder to the canonical `#business` entity. Facts only — name, role and the
+ * business affiliation that are already true site-wide.
+ */
+export function aboutPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": `${siteConfig.url}/about#aboutpage`,
+        url: `${siteConfig.url}/about`,
+        name: `About ${siteConfig.name}`,
+        mainEntity: { "@id": `${siteConfig.url}#business` },
+      },
+      {
+        "@type": "Person",
+        "@id": `${siteConfig.url}#founder`,
+        name: "Gudia Yadav",
+        jobTitle: "Founder",
+        worksFor: { "@id": `${siteConfig.url}#business` },
+        url: `${siteConfig.url}/about`,
+      },
+    ],
+  };
+}
+
 export interface BreadcrumbItem {
   name: string;
   url: string;
@@ -121,9 +151,16 @@ export function articleSchema(a: ArticleSchemaInput) {
     headline: a.title,
     description: a.description,
     image: a.image ? [a.image] : undefined,
+    // Real Person author (E-E-A-T) linked to the About page + the business; falls
+    // back to the Organization only when no author name is available.
     author: a.author
-      ? { "@type": "Person", name: a.author }
-      : { "@type": "Organization", name: siteConfig.name },
+      ? {
+          "@type": "Person",
+          name: a.author,
+          url: `${siteConfig.url}/about`,
+          worksFor: { "@id": `${siteConfig.url}#business` },
+        }
+      : { "@type": "Organization", "@id": `${siteConfig.url}#business`, name: siteConfig.name },
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
@@ -176,4 +213,86 @@ export function serviceSchema(s: ServiceSchemaInput) {
     serviceType: s.name,
     url: s.url,
   };
+}
+
+/**
+ * SpeakableSpecification (D5) — marks the elements a voice assistant can read
+ * aloud as a concise spoken answer. `cssSelector` entries MUST point at elements
+ * that are actually rendered in the page DOM. Returns a WebPage node carrying the
+ * `speakable` property.
+ */
+export function speakableSchema(cssSelector: string[], pageUrl: string = siteConfig.url) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector,
+    },
+  };
+}
+
+export interface ReviewSchemaInput {
+  author: string;
+  rating: number;
+  body: string;
+  datePublished?: Date | string | number;
+}
+
+/**
+ * Review / AggregateRating attached to the canonical `#business` entity.
+ *
+ * Google policy + the §0 ground rules require schema to mirror only what is
+ * VISIBLE on the page. So:
+ *  - `reviews` must be the testimonials actually rendered on that page.
+ *  - `aggregate` is emitted ONLY when the page visibly shows that same average
+ *    and count (e.g. the reviews page's "X out of 5 · N reviews"). Pages that
+ *    show individual reviews but no computed aggregate should omit `aggregate`
+ *    and get `review` items only.
+ * Re-using the `#business` @id merges these into the same entity declared in
+ * the root layout (localBusinessSchema), not a second business node.
+ */
+export function businessReviewsSchema(input: {
+  reviews: ReviewSchemaInput[];
+  aggregate?: { ratingValue: number; reviewCount: number };
+}) {
+  const node: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": `${siteConfig.url}#business`,
+    name: siteConfig.name,
+    url: siteConfig.url,
+  };
+
+  if (input.aggregate && input.aggregate.reviewCount > 0) {
+    node.aggregateRating = {
+      "@type": "AggregateRating",
+      // Match the visible "X out of 5" string (one decimal place).
+      ratingValue: Number(input.aggregate.ratingValue.toFixed(1)),
+      reviewCount: input.aggregate.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
+
+  if (input.reviews.length) {
+    node.review = input.reviews.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.author },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: r.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      reviewBody: r.body,
+      ...(r.datePublished
+        ? { datePublished: new Date(r.datePublished).toISOString().slice(0, 10) }
+        : {}),
+    }));
+  }
+
+  return node;
 }

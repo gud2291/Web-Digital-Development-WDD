@@ -5,6 +5,7 @@ import { listBlogs } from "@/server/services/blog.service";
 import { listProjects } from "@/server/services/project.service";
 import { listLegalPages } from "@/server/services/legalPage.service";
 import { listLocationPages } from "@/server/services/locationPage.service";
+import { getHomepage } from "@/server/services/homepage.service";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,22 @@ const STATIC_PATHS: {
 
 const FALLBACK_LEGAL_SLUGS: string[] = ["privacy-policy", "terms", "refund"];
 
+// Stable per-deploy timestamp (evaluated once at module load), used as the
+// last-modified for static pages that have no real content signal. Preferred
+// over a per-request `new Date()` so dateless pages don't appear to change on
+// every crawl (a weak/ignored signal).
+const BUILD_TIME = new Date();
+
+/** Most recent `updatedAt` across a list of docs, or `fallback` when none have one. */
+function latestUpdatedAt(items: Array<{ updatedAt?: unknown }>, fallback: Date): Date {
+  let max = 0;
+  for (const it of items) {
+    const t = it.updatedAt ? new Date(it.updatedAt as string | number | Date).getTime() : 0;
+    if (Number.isFinite(t) && t > max) max = t;
+  }
+  return max ? new Date(max) : fallback;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url.replace(/\/$/, "");
   const now = new Date();
@@ -43,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // All fetches run in parallel. Each service-layer fn applies the right
   // visibility filter by default (published: true / visible: true) so we only
   // emit URLs that are publicly resolvable.
-  const [services, blogResult, projects, legalPages, locationPages] = await Promise.all([
+  const [services, blogResult, projects, legalPages, locationPages, homepage] = await Promise.all([
     listServices().catch(() => []),
     // Lift the cap to 5000. Past that, sitemap index files become the right answer.
     listBlogs({ page: 1, limit: 5000 }).catch(() => ({
@@ -52,11 +69,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     listProjects().catch(() => []),
     listLegalPages().catch(() => []),
     listLocationPages().catch(() => []),
+    getHomepage().catch(() => null),
   ]);
+
+  // Real last-modified per static path where a content signal exists (homepage
+  // settings + the newest child of each list page); otherwise the stable build
+  // time. Avoids stamping every static page with an always-"now" date.
+  const staticLastMod: Record<string, Date> = {
+    "/": homepage?.updatedAt ? new Date(homepage.updatedAt) : BUILD_TIME,
+    "/services": latestUpdatedAt(services, BUILD_TIME),
+    "/projects": latestUpdatedAt(projects, BUILD_TIME),
+    "/blog": latestUpdatedAt(blogResult.items, BUILD_TIME),
+  };
 
   const staticUrls: MetadataRoute.Sitemap = STATIC_PATHS.map((s) => ({
     url: `${base}${s.path}`,
-    lastModified: now,
+    lastModified: staticLastMod[s.path] ?? BUILD_TIME,
     changeFrequency: s.changeFrequency,
     priority: s.priority,
   }));
@@ -75,11 +103,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Projects are listing-only on this site — no /projects/[slug] route exists,
-  // so emitting per-project URLs would yield 404s. The query above still runs
-  // (cheap, parallel) in case detail pages are added later; the moment a
-  // /projects/[slug] route exists this block can be uncommented.
-  void projects;
+  // /projects/[slug] detail pages exist — emit one URL per published project.
+  // Guard against an empty slug (slug is auto-generated from title on save, but
+  // isn't a hard-required field) so we never emit a broken /projects/ URL.
+  const projectUrls: MetadataRoute.Sitemap = projects
+    .filter((p) => p.slug)
+    .map((p) => ({
+      url: `${base}/projects/${p.slug}`,
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    }));
 
   // Legal pages always have a fixed slug set even if the DB is empty (the
   // public /legal/[slug] route falls back to baked-in copy), so we always
@@ -102,5 +136,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticUrls, ...serviceUrls, ...blogUrls, ...legalUrls, ...locationUrls];
+  return [...staticUrls, ...serviceUrls, ...blogUrls, ...projectUrls, ...legalUrls, ...locationUrls];
 }

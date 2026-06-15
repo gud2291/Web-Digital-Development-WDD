@@ -8,7 +8,10 @@ import { buildMetadata, metadataFromDb } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { SchemaMarkup, breadcrumbSchema } from "@/components/SchemaMarkup";
 
-export const dynamic = "force-dynamic";
+// ISR: the three legal slugs are prerendered via generateStaticParams; cache 1h.
+// Admin saves call revalidatePath("/legal/[slug]") so edits appear immediately.
+// Drafts render via draftMode() for editors only.
+export const revalidate = 3600;
 
 const ALLOWED_SLUGS = ["privacy-policy", "terms", "refund"] as const;
 
@@ -52,6 +55,10 @@ interface PageProps {
   params: { slug: string };
 }
 
+export async function generateStaticParams() {
+  return ALLOWED_SLUGS.map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: PageProps) {
   if (!ALLOWED_SLUGS.includes(params.slug as (typeof ALLOWED_SLUGS)[number])) {
     return buildMetadata({ title: "Legal", path: `/legal/${params.slug}` });
@@ -65,15 +72,12 @@ export async function generateMetadata({ params }: PageProps) {
   });
 }
 
-export default async function LegalPage({
-  params,
-  searchParams,
-}: PageProps & { searchParams?: { preview?: string; token?: string } }) {
+export default async function LegalPage({ params }: PageProps) {
   if (!ALLOWED_SLUGS.includes(params.slug as (typeof ALLOWED_SLUGS)[number])) {
     notFound();
   }
 
-  const draft = await getPreviewDoc<Record<string, unknown>>("legal", searchParams);
+  const draft = await getPreviewDoc<Record<string, unknown>>("legal");
   const doc = draft
     ? (draft as unknown as Awaited<ReturnType<typeof getLegalPageBySlug>>)
     : await getLegalPageBySlug(params.slug).catch(() => null);

@@ -7,6 +7,7 @@ import {
 import { updateTeamSchema } from "@/server/validation/team";
 import { handle, notFound } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
+import { revalidatePublic } from "@/server/utils/revalidatePublic";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export async function PUT(req: Request, ctx: { params: { id: string } }) {
     const data = updateTeamSchema.parse(await req.json());
     const doc = await updateTeamMember(ctx.params.id, data);
     if (!doc) return notFound("Team member");
+    revalidatePublic.team();
     return NextResponse.json(doc);
   });
 }
@@ -36,6 +38,7 @@ export async function DELETE(_req: Request, ctx: { params: { id: string } }) {
   if (!gate.ok) return gate.response;
   return handle(async () => {
     await deleteTeamMember(ctx.params.id);
+    revalidatePublic.team();
     return NextResponse.json({ ok: true });
   });
 }
