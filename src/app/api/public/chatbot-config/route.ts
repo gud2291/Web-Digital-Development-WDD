@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSettings } from "@/server/services/settings.service";
+import { getCachedSettings } from "@/server/services/settings.service";
 import { handle } from "@/server/utils/apiError";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ const FALLBACK_QUICK_ACTIONS = [
  */
 export async function GET() {
   return handle(async () => {
-    const settings = await getSettings().catch(() => null);
+    const settings = await getCachedSettings().catch(() => null);
     const cfg = settings?.chatbot;
 
     const quickActions = cfg?.quickActions?.length

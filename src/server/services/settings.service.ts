@@ -1,4 +1,6 @@
 import "server-only";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { connectDB } from "@/server/db/mongodb";
 import Settings from "@/server/models/Settings";
 import type { UpdateSettingsInput } from "@/server/validation/settings";
@@ -12,6 +14,26 @@ export async function getSettings() {
   }
   return doc;
 }
+
+/**
+ * Cached, deduped settings read for the PUBLIC site (layout, footer, contact
+ * page, chatbot-config). Returns exactly the same data as `getSettings()`.
+ *
+ * - React `cache()` dedupes the repeated reads within a single render (the
+ *   public layout and the footer both need settings → one DB hit, not two).
+ * - `unstable_cache` + the `"settings"` tag avoids a DB round-trip on every
+ *   navigation across requests; `revalidate` is a safety net.
+ *
+ * Freshness is preserved by `revalidateTag("settings")` in the admin settings
+ * PUT route, so an admin save still shows immediately. Admin reads keep using
+ * the uncached `getSettings()` so the admin form is always live.
+ */
+export const getCachedSettings = cache(
+  unstable_cache(async () => getSettings(), ["public-settings"], {
+    tags: ["settings"],
+    revalidate: 3600,
+  })
+);
 
 export async function updateSettings(data: UpdateSettingsInput) {
   await connectDB();

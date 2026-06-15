@@ -3,7 +3,7 @@ import { Icon } from "./Icon";
 import { Logo } from "./ui";
 import { NewsletterSignup } from "@/components/public/NewsletterSignup";
 import { siteConfig } from "@/config/site";
-import { getSettings } from "@/server/services/settings.service";
+import { getCachedSettings } from "@/server/services/settings.service";
 
 const QUICK_LINKS: [string, string][] = [
   ["/", "Home"],
@@ -24,7 +24,7 @@ const SERVICE_LINKS: [string, string][] = [
 ];
 
 export async function SiteFooter() {
-  const settings = await getSettings().catch(() => null);
+  const settings = await getCachedSettings().catch(() => null);
 
   const socialLinks: Record<string, string> = {
     facebook: settings?.social?.fb || siteConfig.social.facebook,

@@ -6,14 +6,16 @@ import { metadataFromDb } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { SchemaMarkup, breadcrumbSchema } from "@/components/SchemaMarkup";
 
-export const dynamic = "force-dynamic";
+// ISR (A3): cache for 1h; admin edits appear within the window. Safe — this page
+// reads no per-request data (no searchParams/preview), only published CMS content.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("legal", {
     path: "/legal",
-    title: "Legal",
+    title: "Legal & Policies",
     description:
-      "Privacy Policy, Terms of Service, and Refund Policy for Web Digital Development.",
+      "Read the Privacy Policy, Terms of Service and Refund Policy for Web Digital Development — how we handle your data, payments and project agreements.",
   });
 }
 

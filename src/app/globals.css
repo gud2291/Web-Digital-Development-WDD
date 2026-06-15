@@ -720,8 +720,8 @@ html.lenis, html.lenis body { height: auto; }
   .embla--testi .embla__slide { flex: 0 0 72%; }
 }
 @media (max-width: 640px) {
-  .embla__slide { flex: 0 0 82%; }                        /* mobile: ~1.2 */
-  .embla--testi .embla__slide { flex: 0 0 90%; }          /* mobile: 1 */
+  .embla__slide { flex: 0 0 100%; }                       /* mobile: 1 (perfectly centered) */
+  .embla--testi .embla__slide { flex: 0 0 100%; }         /* mobile: 1 (perfectly centered) */
   .embla__arrow, .hero-arrow { display: none; }
 }
 
@@ -790,6 +790,13 @@ html.lenis, html.lenis body { height: auto; }
   border: 1px solid var(--c-border);
   border-radius: 12px;
   box-shadow: var(--sh-card);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .testimonial-card {
+    padding: 24px 20px !important;
+  }
 }
 .testimonial-card__author {
   display: flex;
@@ -931,7 +938,7 @@ html.lenis, html.lenis body { height: auto; }
 .before-after__badge--after { right: 12px; background: rgba(37,99,235,.85); }
 
 /* ===== §13.3 ACTIVITY TICKER ===== */
-.activity-ticker { position: fixed; left: 18px; bottom: 96px; z-index: 70; display: flex; align-items: flex-start; gap: 10px; max-width: 300px; padding: 12px 14px; background: #fff; border: 1px solid var(--c-border); border-radius: 12px; box-shadow: var(--sh-lg); }
+.activity-ticker { position: fixed; left: 18px; bottom: 96px; z-index: 100; display: flex; align-items: flex-start; gap: 10px; max-width: 300px; padding: 12px 14px; background: #fff; border: 1px solid var(--c-border); border-radius: 12px; box-shadow: var(--sh-lg); }
 .activity-ticker__dot { width: 8px; height: 8px; border-radius: 50%; background: #22C55E; flex-shrink: 0; margin-top: 4px; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
 .activity-ticker__text { font-size: 13px; line-height: 1.35; color: var(--c-text); }
 .activity-ticker__text span { color: var(--c-text-muted); }
@@ -1465,7 +1472,7 @@ html[data-theme="dark"] {
 
   .fab { width: 46px; height: 46px; }
   .fab--top { width: 38px; height: 38px; }
-  .floating-actions { right: 14px; left: auto; bottom: 142px; }
+  .floating-actions { left: 14px; right: auto; bottom: 84px; }
 
   .mobile-bottom-bar {
     display: flex;

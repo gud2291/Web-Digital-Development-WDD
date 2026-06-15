@@ -121,9 +121,6 @@ export default async function AboutPage() {
 
       <section className="section">
         <div className="container two-col">
-          <div style={{ position: "relative", height: "100%", minHeight: 400, width: "100%", borderRadius: 16, overflow: "hidden" }}>
-            <SafeImage src={about?.heroImage || "https://res.cloudinary.com/dt4i2xbs8/image/upload/f_auto,q_auto/wdd/about/our-story"} alt="Web Digital Development studio workspace in Delhi" fallbackLabel="WDD Studio, Delhi" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-          </div>
           <div>
             <Reveal>
               <Eyebrow>OUR STORY</Eyebrow>
@@ -165,6 +162,9 @@ export default async function AboutPage() {
                 ))}
               </div>
             </Reveal>
+          </div>
+          <div style={{ position: "relative", height: "100%", minHeight: 400, width: "100%", borderRadius: 16, overflow: "hidden" }}>
+            <SafeImage src={about?.heroImage || "https://res.cloudinary.com/dt4i2xbs8/image/upload/f_auto,q_auto/wdd/about/our-story"} alt="Web Digital Development studio workspace in Delhi" fallbackLabel="WDD Studio, Delhi" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
           </div>
         </div>
       </section>

@@ -2,20 +2,23 @@ import Link from "next/link";
 import { Icon, type IconName } from "@/components/Icon";
 import { Btn, CTABanner, Reveal, SectionHead } from "@/components/ui";
 import { FAQList } from "@/components/FAQList";
+import { SchemaMarkup, faqSchema } from "@/components/SchemaMarkup";
 import { ServiceIcon } from "@/components/public/ServiceIcon";
 import { SectionDivider } from "@/components/public/SectionDivider";
 import { listServices } from "@/server/services/service.service";
 import { safeIcon } from "@/lib/iconMap";
 import { metadataFromDb } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+// ISR (A3): cache for 1h; admin edits appear within the window. Safe — this page
+// reads no per-request data (no searchParams/preview), only published CMS content.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("services", {
     path: "/services",
-    title: "Services",
+    title: "Web Design & Development Services",
     description:
-      "Website design, development, SEO, e-commerce and digital marketing services for Indian businesses.",
+      "Website design, development, SEO, e-commerce and digital marketing for Indian businesses — everything to launch, rank and grow. Get a free quote.",
   });
 }
 
@@ -89,7 +92,7 @@ export default async function ServicesPage() {
           <Reveal delay={80}>
             <p className="t-lead" style={{ marginTop: 14 }}>
               Everything you need to launch online and grow — design, development, SEO, and
-              marketing under one roof.
+              marketing under one roof, from a Delhi studio serving businesses across India and abroad.
             </p>
           </Reveal>
         </div>
@@ -107,7 +110,7 @@ export default async function ServicesPage() {
             <Reveal key={s.title + idx} delay={idx * 60}>
               <div className="card card--interactive" style={{ padding: 28 }}>
                 <ServiceIcon iconName={s.iconName} accentColor={s.accentColor} />
-                <h3 className="t-h4">{s.title}</h3>
+                <h2 className="t-h4">{s.title}</h2>
                 <p className="t-small" style={{ marginTop: 8 }}>{s.desc}</p>
                 {s.features.length > 0 && (
                   <ul className="svc-feats">
@@ -163,6 +166,8 @@ export default async function ServicesPage() {
           <Reveal>
             <SectionHead kicker="FAQ" title="Frequently Asked Questions" />
           </Reveal>
+          {/* C2 — FAQPage schema mirroring the visible FAQ above. */}
+          <SchemaMarkup data={faqSchema(faq.map(([q, a]) => ({ q, a })))} />
           <FAQList items={faq} />
         </div>
       </section>

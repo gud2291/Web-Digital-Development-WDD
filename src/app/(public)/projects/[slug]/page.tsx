@@ -12,7 +12,10 @@ import {
 import { metadataFromDb, buildMetadata } from "@/lib/seo";
 import { SchemaMarkup, breadcrumbSchema } from "@/components/SchemaMarkup";
 
-export const dynamic = "force-dynamic";
+// ISR (A3): cache for 1h. Safe — no per-request data (no searchParams/preview);
+// uses generateStaticParams to prerender known projects and on-demand ISR for the
+// rest. Missing slugs still 404 via notFound().
+export const revalidate = 3600;
 
 interface PageProps {
   params: { slug: string };

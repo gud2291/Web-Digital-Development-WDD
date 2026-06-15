@@ -440,25 +440,6 @@ export default async function HomePage() {
       {/* About Preview */}
       <section id="s-about" className="section section--alt">
         <div className="about-preview container">
-          <div
-            style={{
-              position: "relative",
-              height: "100%",
-      minHeight: 400,
-              width: "100%",
-              borderRadius: 16,
-              overflow: "hidden",
-            }}
-          >
-            <SafeImage
-              src={aboutHeroImage}
-              alt="Web Digital Development studio workspace in Delhi"
-              fallbackLabel="Web Digital Development Studio, Delhi"
-              loading="lazy"
-              decoding="async"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }}
-            />
-          </div>
           <div>
             <Reveal>
               <Eyebrow>ABOUT US</Eyebrow>
@@ -499,6 +480,25 @@ export default async function HomePage() {
                 </Btn>
               </Link>
             </Reveal>
+          </div>
+          <div
+            style={{
+              position: "relative",
+              height: "100%",
+              minHeight: 400,
+              width: "100%",
+              borderRadius: 16,
+              overflow: "hidden",
+            }}
+          >
+            <SafeImage
+              src={aboutHeroImage}
+              alt="Web Digital Development studio workspace in Delhi"
+              fallbackLabel="Web Digital Development Studio, Delhi"
+              loading="lazy"
+              decoding="async"
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }}
+            />
           </div>
         </div>
       </section>

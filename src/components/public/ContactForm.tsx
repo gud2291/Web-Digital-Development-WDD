@@ -78,7 +78,7 @@ export function ContactForm({ services }: Props) {
     return (
       <div className="card contact-form" style={{ textAlign: "center", padding: 48 }}>
         <div style={{ fontSize: 48 }}>✅</div>
-        <h3 className="t-h3" style={{ marginTop: 16 }}>Message Sent</h3>
+        <h2 className="t-h3" style={{ marginTop: 16 }}>Message Sent</h2>
         <p style={{ marginTop: 10, color: "#475569" }}>
           Thanks for reaching out. A confirmation has been sent to your inbox — we&apos;ll reply
           within 4 business hours.
@@ -92,7 +92,7 @@ export function ContactForm({ services }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="card contact-form" noValidate>
-      <h3 className="t-h3" style={{ fontSize: 24 }}>Send us a message</h3>
+      <h2 className="t-h3" style={{ fontSize: 24 }}>Send us a message</h2>
       <p className="t-small" style={{ marginTop: 6 }}>Required fields marked *</p>
       <div className="contact-form__fields" style={{ marginTop: 20 }}>
         <FloatingInput label="Your Name *" error={errors.name?.message} {...register("name")} />

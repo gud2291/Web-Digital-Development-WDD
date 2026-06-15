@@ -4,13 +4,16 @@ import { ProjectsGrid, type ProjectCardData } from "@/components/public/Projects
 import { listProjects } from "@/server/services/project.service";
 import { metadataFromDb } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+// ISR (A3): cache for 1h; admin edits appear within the window. Safe — this page
+// reads no per-request data (no searchParams/preview), only published CMS content.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("projects", {
     path: "/projects",
-    title: "Portfolio",
-    description: "Browse the websites we've shipped — e-commerce, tourism, corporate and automotive, with live links you can check.",
+    title: "Website Design Portfolio",
+    description:
+      "Browse 400+ websites we've shipped — e-commerce, tourism, corporate and automotive — each with a live link you can open and check for yourself.",
   });
 }
 

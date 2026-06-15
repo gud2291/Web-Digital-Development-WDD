@@ -1,18 +1,22 @@
 import { CTABanner, Reveal, Stars } from "@/components/ui";
 import { ReviewsList, type ReviewData } from "@/components/public/ReviewsList";
 import { ReviewForm } from "@/components/public/ReviewForm";
+import { SchemaMarkup, businessReviewsSchema } from "@/components/SchemaMarkup";
 import { listTestimonials } from "@/server/services/testimonial.service";
 import { formatDate } from "@/lib/utils";
 import { metadataFromDb } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+// ISR (A3): cache for 1h. Safe — no per-request data (no searchParams/preview).
+// Public review submissions post to an API route, so caching the list here only
+// delays a newly-submitted review's appearance by up to the revalidate window.
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   return metadataFromDb("reviews", {
     path: "/reviews",
-    title: "Reviews",
+    title: "Client Reviews & Ratings",
     description:
-      "Unedited reviews from real Web Digital Development clients in Delhi and abroad. Each one links to the client's live website, so you can verify every word yourself.",
+      "Unedited reviews from real clients in Delhi and abroad — each links to the client's live website so you can verify every word. See why 130+ trust us.",
   });
 }
 
@@ -102,6 +106,18 @@ export default async function ReviewsPage() {
 
   return (
     <div className="page-wrapper--wide">
+      {/* C1 — Review + AggregateRating mirroring the visible score/reviews. */}
+      <SchemaMarkup
+        data={businessReviewsSchema({
+          reviews: reviews.map((r) => ({
+            author: r.name,
+            rating: r.rating,
+            body: r.message,
+            datePublished: r.createdAt,
+          })),
+          aggregate: { ratingValue: avg, reviewCount: total },
+        })}
+      />
       <section className="page-banner">
         <div className="container" style={{ textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
           <Reveal><h1 className="t-h1">What Our Clients Say</h1></Reveal>

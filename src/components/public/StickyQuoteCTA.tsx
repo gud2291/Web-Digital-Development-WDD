@@ -14,6 +14,7 @@ import { useChatbotStore } from "@/store/chatbot";
 export function StickyQuoteCTA() {
   const [scrolledEnough, setScrolledEnough] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
+  const [autoHidden, setAutoHidden] = React.useState(false);
   const chatOpen = useChatbotStore((s) => s.open);
 
   React.useEffect(() => {
@@ -38,7 +39,14 @@ export function StickyQuoteCTA() {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  const visible = scrolledEnough && !chatOpen;
+  // Auto-hide the CTA on mobile after 10 seconds of being visible
+  React.useEffect(() => {
+    if (!isMobile || !scrolledEnough || autoHidden || chatOpen) return;
+    const t = window.setTimeout(() => setAutoHidden(true), 10000);
+    return () => window.clearTimeout(t);
+  }, [isMobile, scrolledEnough, autoHidden, chatOpen]);
+
+  const visible = scrolledEnough && !chatOpen && (!isMobile || !autoHidden);
 
   return (
     <AnimatePresence>
@@ -51,11 +59,12 @@ export function StickyQuoteCTA() {
           style={{
             position: "fixed",
             // Desktop: above the chat bubble (bottom 18px). Mobile: clears the
-            // bottom bar (~60px) AND the repositioned chat bubble (72–128px),
-            // so it stacks at 140px. See Z-INDEX HIERARCHY in globals.css.
+            // bottom bar (~60px) AND the repositioned chat bubble (72–128px) 
+            // so it sits exactly on top of the chatbot avatar like a speech bubble.
             right: isMobile ? 14 : 18,
             bottom: isMobile ? 140 : 84,
             zIndex: 85,
+            transformOrigin: "bottom right",
           }}
         >
           <Link
@@ -68,6 +77,7 @@ export function StickyQuoteCTA() {
               background: "#2563EB",
               color: "#fff",
               borderRadius: 999,
+              borderBottomRightRadius: 4, // Makes it look like a speech bubble pointing to the avatar!
               padding: isMobile ? "10px 16px" : "12px 20px",
               fontSize: isMobile ? 13 : 14,
               fontWeight: 700,

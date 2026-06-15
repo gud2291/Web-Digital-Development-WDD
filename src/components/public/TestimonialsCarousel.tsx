@@ -23,7 +23,7 @@ export interface TestimonialSlide {
 }
 
 export function TestimonialsCarousel({ testimonials, title }: { testimonials: TestimonialSlide[]; title: string }) {
-  const autoplay = React.useRef(Autoplay({ delay: 7000, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const autoplay = React.useRef(Autoplay({ delay: 6500, stopOnInteraction: false, stopOnMouseEnter: true }));
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: true }, [autoplay.current]);
   const [selected, setSelected] = React.useState(0);
   const [snaps, setSnaps] = React.useState<number[]>([]);

@@ -750,9 +750,9 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "Website Designing Services in Delhi",
+      seoTitle: "Website Design Services in Delhi",
       seoDescription:
-        "Mobile-first, conversion-focused website designing services in Delhi. 400+ projects since 2019, Figma prototypes before code, and one month of post-launch support. Start a conversation today.",
+        "Mobile-first, conversion-focused website design in Delhi. 400+ projects since 2019, Figma prototypes before code, and one month of post-launch support.",
       visible: true,
       order: 1,
     },
@@ -796,7 +796,7 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "Website Development Company in Delhi | Next.js, WordPress, Custom Code",
+      seoTitle: "Web Development Company in Delhi",
       seoDescription:
         "Hand-coded website development from a Delhi studio. Next.js, React, WordPress and PHP. 6 years, 400+ launches, Lighthouse 90+ guaranteed.",
       visible: true,
@@ -841,7 +841,7 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "SEO Services in Delhi | Page-1 Google Rankings | Web Digital Development",
+      seoTitle: "SEO Services in Delhi for Page 1",
       seoDescription:
         "Professional SEO services in Delhi. Keyword-led, white-hat, monthly transparent reports. Most clients hit page 1 in 3-6 months.",
       visible: true,
@@ -882,7 +882,7 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "Digital Marketing Agency in Delhi | Google Ads, Meta Ads, Content",
+      seoTitle: "Digital Marketing Agency in Delhi",
       seoDescription:
         "Performance-led digital marketing from a Delhi studio. Paid + organic, flat monthly fee (we don't charge % of ad spend), full transparency.",
       visible: true,
@@ -924,7 +924,7 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "E-commerce Website Development in Delhi | Shopify, WooCommerce, Custom",
+      seoTitle: "E-commerce Development in Delhi",
       seoDescription:
         "E-commerce sites that sell. Shopify and WooCommerce experts in Delhi. Razorpay, GST-ready, abandoned cart recovery. 6 years building online stores.",
       visible: true,
@@ -960,7 +960,7 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "Graphic Designing Services in Delhi | Logo, Brochure, Branding",
+      seoTitle: "Graphic Design Services in Delhi",
       seoDescription:
         "Logos, brand identity, brochures and social design from a Delhi studio. Custom concepts, source files included, fast turnaround.",
       visible: true,
@@ -996,7 +996,7 @@ async function seedServices() {
         },
       ],
       pricingTiers: [],
-      seoTitle: "WordPress Website Development in Delhi | Custom Themes, Fast & SEO-Ready",
+      seoTitle: "WordPress Web Development in Delhi",
       seoDescription:
         "Custom WordPress development from a Delhi studio. No Elementor bloat — clean code, Gutenberg blocks, fast hosting, easy for your team to edit.",
       visible: true,
@@ -1022,7 +1022,7 @@ async function seedServices() {
       ],
       faqs: [],
       pricingTiers: [],
-      seoTitle: "Mobile-First Website Design Services",
+      seoTitle: "Mobile-First Website Design",
       seoDescription:
         "Mobile-first design from a Delhi studio. We design at 360px first, test on real Android + iPhone, prioritise touch + speed. Built for India's mobile-heavy traffic.",
       visible: true,
@@ -1478,7 +1478,7 @@ async function seedBlogs() {
         "If you want a quote for your business, drop us a WhatsApp at +91 8130270050 or fill in the contact form. Half-hour consultation, written quote, no pressure.",
       ]),
       published: true,
-      seoTitle: "Why Every Small Business in India Needs a Website in 2026 | WDD Blog",
+      seoTitle: "Why Your Business Needs a Website",
       seoDescription:
         "A practical, founder-written take on why Indian small businesses need a real website in 2026 — not just a Facebook page. What it costs, what to start with, what to skip.",
       order: 1,
@@ -1504,7 +1504,7 @@ async function seedBlogs() {
         "Want us to run the numbers for your business? Send us a WhatsApp with — what you sell, who buys it, and what they're worth to you. We'll come back with a realistic forecast and a quote.",
       ]),
       published: true,
-      seoTitle: "How a Well-Designed Website Pays For Itself | WDD Blog",
+      seoTitle: "How a Website Pays For Itself",
       seoDescription:
         "A founder-written breakdown of how we calculate website ROI for small Indian businesses. Customer lifetime value, conversion rates, closing rates, and the math.",
       order: 2,
@@ -1538,7 +1538,7 @@ async function seedBlogs() {
         "Building or rebuilding a site soon? Save this list. Compare it with the quote you're being offered. If your agency is skipping anything from the \"needs\" list, ask why. If they're insisting on something from the \"doesn't need\" list, ask why harder.",
       ]),
       published: true,
-      seoTitle: "7 Things Every Business Website Needs in 2026 (and 5 It Doesn't) | WDD",
+      seoTitle: "Must-Have Website Features (2026)",
       seoDescription:
         "Practical checklist from a Delhi web studio that's shipped 400+ sites. What to insist on, what to skip, and why. Save when reviewing your next website quote.",
       order: 3,
