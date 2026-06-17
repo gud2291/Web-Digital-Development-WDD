@@ -22,6 +22,24 @@ export function SchemaMarkup({ data }: SchemaProps) {
 
 // ── Helpers that build typed schema objects ────────────────────────────────
 
+/**
+ * Returns an absolute https URL for any url/image/logo/item value Google
+ * requires to be absolute. Already-absolute (http/https) values pass through;
+ * relative paths are resolved against the canonical site origin. Blank/invalid
+ * values return undefined so callers can omit the field.
+ */
+function absoluteUrl(value?: string | null): string | undefined {
+  const v = (value ?? "").trim();
+  if (!v) return undefined;
+  if (/^https?:\/\//i.test(v)) return v;
+  return `${siteConfig.url}${v.startsWith("/") ? "" : "/"}${v}`;
+}
+
+/** The canonical, always-absolute fallback image (site OG card). */
+function fallbackImage(): string {
+  return `${siteConfig.url}${siteConfig.ogImage}`;
+}
+
 export function localBusinessSchema() {
   return {
     "@context": "https://schema.org",
@@ -145,12 +163,18 @@ export interface ArticleSchemaInput {
 }
 
 export function articleSchema(a: ArticleSchemaInput) {
+  // Google caps headline at 110 chars; keep the visible title but truncate the
+  // structured-data value so the Article item stays valid.
+  const headline = a.title.length > 110 ? `${a.title.slice(0, 109).trimEnd()}…` : a.title;
+  // Article requires at least one valid absolute image — fall back to the site
+  // OG card when the post has none so the item never goes invalid.
+  const image = absoluteUrl(a.image) ?? fallbackImage();
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: a.title,
+    headline,
     description: a.description,
-    image: a.image ? [a.image] : undefined,
+    image: [image],
     // Real Person author (E-E-A-T) linked to the About page + the business; falls
     // back to the Organization only when no author name is available.
     author: a.author
@@ -172,7 +196,7 @@ export function articleSchema(a: ArticleSchemaInput) {
       : a.datePublished
         ? new Date(a.datePublished).toISOString()
         : undefined,
-    mainEntityOfPage: { "@type": "WebPage", "@id": a.url },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(a.url) ?? siteConfig.url },
   };
 }
 
@@ -183,13 +207,16 @@ export interface FaqItem {
 
 /** FAQPage JSON-LD — use on any page that renders a visible FAQ block. */
 export function faqSchema(items: FaqItem[]) {
+  // Every Question needs a non-empty name and a non-empty answer text, else the
+  // FAQPage item is invalid — drop any blank pair.
+  const valid = items.filter((f) => f.q?.trim() && f.a?.trim());
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: items.map((f) => ({
+    mainEntity: valid.map((f) => ({
       "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      name: f.q.trim(),
+      acceptedAnswer: { "@type": "Answer", text: f.a.trim() },
     })),
   };
 }
@@ -207,11 +234,11 @@ export function serviceSchema(s: ServiceSchemaInput) {
     "@type": "Service",
     name: s.name,
     description: s.description,
-    image: s.image,
-    provider: { "@id": `${siteConfig.url}#business` },
+    image: absoluteUrl(s.image),
+    provider: { "@id": `${siteConfig.url}#business`, "@type": "ProfessionalService", name: siteConfig.name },
     areaServed: "IN",
     serviceType: s.name,
-    url: s.url,
+    url: absoluteUrl(s.url) ?? siteConfig.url,
   };
 }
 
@@ -266,28 +293,40 @@ export function businessReviewsSchema(input: {
     url: siteConfig.url,
   };
 
-  if (input.aggregate && input.aggregate.reviewCount > 0) {
+  const clamp = (n: number) => Math.min(5, Math.max(1, n));
+
+  if (
+    input.aggregate &&
+    input.aggregate.reviewCount > 0 &&
+    Number.isFinite(input.aggregate.ratingValue)
+  ) {
     node.aggregateRating = {
       "@type": "AggregateRating",
       // Match the visible "X out of 5" string (one decimal place).
-      ratingValue: Number(input.aggregate.ratingValue.toFixed(1)),
+      ratingValue: Number(clamp(input.aggregate.ratingValue).toFixed(1)),
       reviewCount: input.aggregate.reviewCount,
       bestRating: 5,
       worstRating: 1,
     };
   }
 
-  if (input.reviews.length) {
-    node.review = input.reviews.map((r) => ({
+  // A Review is only valid with an author name and a numeric reviewRating, so
+  // drop any testimonial missing those before emitting.
+  const validReviews = input.reviews.filter(
+    (r) => r.author?.trim() && Number.isFinite(r.rating) && r.rating > 0
+  );
+
+  if (validReviews.length) {
+    node.review = validReviews.map((r) => ({
       "@type": "Review",
-      author: { "@type": "Person", name: r.author },
+      author: { "@type": "Person", name: r.author.trim() },
       reviewRating: {
         "@type": "Rating",
-        ratingValue: r.rating,
+        ratingValue: clamp(r.rating),
         bestRating: 5,
         worstRating: 1,
       },
-      reviewBody: r.body,
+      ...(r.body?.trim() ? { reviewBody: r.body.trim() } : {}),
       ...(r.datePublished
         ? { datePublished: new Date(r.datePublished).toISOString().slice(0, 10) }
         : {}),

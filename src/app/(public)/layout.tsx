@@ -6,10 +6,14 @@ import { SmoothScrollProvider } from "@/components/public/SmoothScrollProvider";
 import { PageTransition } from "@/components/public/PageTransition";
 import { DeferredPublicWidgets } from "@/components/public/DeferredPublicWidgets";
 import { getCachedSettings } from "@/server/services/settings.service";
+import { getCachedNavServices } from "@/server/services/service.service";
 import { siteConfig } from "@/config/site";
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getCachedSettings().catch(() => null);
+  const [settings, services] = await Promise.all([
+    getCachedSettings().catch(() => null),
+    getCachedNavServices().catch(() => []),
+  ]);
 
   const socialLinks: Record<string, string> = {
     facebook: settings?.social?.fb || siteConfig.social.facebook,
@@ -28,7 +32,7 @@ export default async function PublicLayout({ children }: { children: React.React
     <>
       <SmoothScrollProvider />
       <BrandLoader />
-      <SiteHeader socialLinks={socialLinks} />
+      <SiteHeader socialLinks={socialLinks} services={services} />
       <main>
         <PageTransition>{children}</PageTransition>
       </main>

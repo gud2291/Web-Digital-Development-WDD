@@ -14,6 +14,16 @@ const QUICK_LINKS: [string, string][] = [
   ["/contact", "Contact Us"],
 ];
 
+// Service-area pages (/locations/[slug]). Linked here so every location page has
+// a sitewide internal link instead of being reachable only via the sitemap.
+const LOCATION_LINKS: [string, string][] = [
+  ["Delhi", "/locations/delhi"],
+  ["Noida", "/locations/noida"],
+  ["Gurgaon", "/locations/gurgaon"],
+  ["Faridabad", "/locations/faridabad"],
+  ["Ghaziabad", "/locations/ghaziabad"],
+];
+
 const SERVICE_LINKS: [string, string][] = [
   ["Website Design", "/services/website-designing"],
   ["Website Development", "/services/website-development"],
@@ -67,6 +77,10 @@ export async function SiteFooter() {
           <h5>Quick Links</h5>
           {QUICK_LINKS.map(([to, label]) => (
             <Link key={to + label} href={to}>{label}</Link>
+          ))}
+          <h5 style={{ marginTop: 18 }}>Service Areas</h5>
+          {LOCATION_LINKS.map(([label, href]) => (
+            <Link key={href} href={href}>{label}</Link>
           ))}
         </div>
 

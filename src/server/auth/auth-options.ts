@@ -1,4 +1,5 @@
 import "server-only";
+import { headers } from "next/headers";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -8,6 +9,7 @@ import { serverEnv } from "@/config/env";
 import { verifyPassword } from "./bcrypt";
 import { verifyTwoFactorCode } from "./two-factor";
 import { clearLoginAttempts, getBruteForceState, recordFailedAttempt } from "./brute-force";
+import { recordLogin } from "@/server/services/admin.service";
 import { checkRateLimit } from "@/server/middleware/rateLimit";
 import { logger } from "@/server/utils/logger";
 
@@ -23,10 +25,64 @@ function ipFromAuthReq(req?: { headers?: Record<string, string> }): string {
   return headers["x-real-ip"] || "unknown";
 }
 
+/**
+ * Best-effort {ip, ua} from the ambient request headers. Used on the Google
+ * sign-in path, where NextAuth's signIn callback gets no req object — but the
+ * callback still runs inside the /api/auth route's request scope, so
+ * next/headers is available. Never throws.
+ */
+function ipUaFromRequestHeaders(): { ip: string; ua: string } {
+  try {
+    const h = headers();
+    const xff = h.get("x-forwarded-for");
+    const ip = xff ? xff.split(",")[0].trim() : h.get("x-real-ip") || "unknown";
+    return { ip, ua: h.get("user-agent") || "" };
+  } catch {
+    return { ip: "unknown", ua: "" };
+  }
+}
+
+/** Light user-agent → {browser, os} derivation for the login-activity log. */
+function parseUserAgent(ua: string): { browser: string; os: string } {
+  if (!ua) return { browser: "", os: "" };
+  let browser = "Unknown";
+  if (/edg/i.test(ua)) browser = "Edge";
+  else if (/opr|opera/i.test(ua)) browser = "Opera";
+  else if (/chrome|chromium|crios/i.test(ua)) browser = "Chrome";
+  else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+  else if (/safari/i.test(ua)) browser = "Safari";
+  let os = "Unknown";
+  if (/windows/i.test(ua)) os = "Windows";
+  else if (/android/i.test(ua)) os = "Android";
+  else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+  else if (/mac os x|macintosh/i.test(ua)) os = "macOS";
+  else if (/linux/i.test(ua)) os = "Linux";
+  return { browser, os };
+}
+
+/**
+ * Persist a successful login to the admin's loginLogs. Fire-and-forget: a
+ * recording failure must never block or slow a successful login, so all errors
+ * are swallowed and logged.
+ */
+async function safeRecordLogin(adminId: string, ip: string, ua: string): Promise<void> {
+  try {
+    const { browser, os } = parseUserAgent(ua);
+    await recordLogin(adminId, { ip, browser, os });
+  } catch (err) {
+    logger.warn({ err, adminId }, "failed to record login activity");
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60,
+    // Absolute/idle window: an untouched session expires after 8h, forcing
+    // re-login. updateAge rotates the JWT (and its iat) hourly while the admin
+    // is active, so a working session stays logged in without extending the
+    // effective lifetime beyond the 8h window.
+    maxAge: 8 * 60 * 60,
+    updateAge: 60 * 60,
   },
   secret: serverEnv.NEXTAUTH_SECRET,
   pages: {
@@ -101,6 +157,12 @@ export const authOptions: NextAuthOptions = {
         await clearLoginAttempts(admin._id.toString());
         logger.info({ adminId: admin._id.toString() }, "admin login success");
 
+        await safeRecordLogin(
+          admin._id.toString(),
+          ip,
+          (req as { headers?: Record<string, string> })?.headers?.["user-agent"] ?? ""
+        );
+
         return {
           id: admin._id.toString(),
           email: admin.email,
@@ -123,6 +185,8 @@ export const authOptions: NextAuthOptions = {
         await connectDB();
         const admin = await Admin.findOne({ email: user.email?.toLowerCase() });
         if (!admin || admin.emergencyLocked) return false;
+        const { ip, ua } = ipUaFromRequestHeaders();
+        await safeRecordLogin(admin._id.toString(), ip, ua);
         return true;
       }
       return true;
@@ -147,6 +211,28 @@ export const authOptions: NextAuthOptions = {
           token.id = admin._id.toString();
           token.role = admin.role ?? "owner";
           token.isAdmin = true;
+        }
+      }
+      // Real session revocation — on every request that carries an authenticated
+      // admin token (skip the initial sign-in pass, where `user` is present and
+      // the credentials/Google checks already ran), re-validate against the DB.
+      // Invalidate (return an empty token so middleware sees no isAdmin and
+      // redirects to /admin/login) when: the admin was deleted, is
+      // emergency-locked, or the token was issued before the admin's last
+      // password change. Scoped to admin tokens only — public/non-admin requests
+      // carry no token and never reach this DB read. Lookup is by email (matches
+      // the resolution above and avoids ObjectId casts for Google tokens).
+      if (!user && token.isAdmin && token.email) {
+        await connectDB();
+        const admin = await Admin.findOne({ email: String(token.email).toLowerCase() })
+          .select("emergencyLocked lastPasswordChange")
+          .lean();
+        const issuedAt = typeof token.iat === "number" ? token.iat : 0;
+        const changedAt = admin?.lastPasswordChange
+          ? Math.floor(new Date(admin.lastPasswordChange).getTime() / 1000)
+          : 0;
+        if (!admin || admin.emergencyLocked || issuedAt < changedAt) {
+          return {} as typeof token;
         }
       }
       return token;

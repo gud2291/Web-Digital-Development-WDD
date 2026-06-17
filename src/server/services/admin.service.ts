@@ -116,7 +116,7 @@ export async function recordLogin(
       $push: {
         loginLogs: {
           $each: [{ ip: meta.ip, browser: meta.browser ?? "", os: meta.os ?? "" }],
-          $slice: -50,
+          $slice: -10,
         },
       },
     }

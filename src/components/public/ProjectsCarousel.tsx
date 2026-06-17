@@ -15,6 +15,7 @@ import { Badge, Btn, Eyebrow } from "@/components/ui";
  */
 export interface ProjectSlide {
   title: string;
+  slug?: string;
   category: string;
   bg: string;
   icon: IconName;
@@ -83,7 +84,13 @@ export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]
                       </Badge>
                     </div>
                     <div className="project-card__body">
-                      <h4 className="t-h4">{p.title}</h4>
+                      {p.slug ? (
+                        <Link href={`/projects/${p.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
+                          <h4 className="t-h4">{p.title}</h4>
+                        </Link>
+                      ) : (
+                        <h4 className="t-h4">{p.title}</h4>
+                      )}
                       <p className="t-small" style={{ marginTop: 6 }}>{p.description}</p>
                       <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
                         {p.liveUrl ? (
@@ -92,6 +99,11 @@ export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]
                           </a>
                         ) : (
                           <Btn size="sm" variant="outline" iconRight="arrowRight">Live Preview</Btn>
+                        )}
+                        {p.slug && (
+                          <Link href={`/projects/${p.slug}`} className="svc-link" style={{ marginTop: 0 }}>
+                            View details <Icon name="arrowRight" size={14} />
+                          </Link>
                         )}
                       </div>
                     </div>

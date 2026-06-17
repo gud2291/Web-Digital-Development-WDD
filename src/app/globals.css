@@ -487,6 +487,72 @@ html.lenis, html.lenis body { height: auto; }
 }
 .site-hdr__hamburger:hover { background: #E2E8F0; }
 
+/* §SERVICE-DROPDOWN — desktop "Services" dropdown panel.
+   Anchored under the Services nav item; matches site radius/shadow/colors.
+   A small hover bridge (::before) keeps the panel open while the cursor
+   crosses the gap between the link and the panel. */
+.site-nav__item--dropdown { position: relative; }
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  box-shadow: var(--sh-lg);
+}
+.nav-dropdown::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -12px; height: 12px;
+}
+.nav-dropdown__link {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--c-text-muted);
+  white-space: nowrap;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+.nav-dropdown__link:hover { background: var(--c-primary-50); color: var(--c-primary-700); }
+
+/* §SERVICE-DROPDOWN — mobile "Services" accordion. */
+.mobile-menu__accordion-row { display: flex; align-items: center; gap: 4px; }
+.mobile-menu__link--flex { flex: 1; }
+.mobile-menu__accordion-toggle {
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  flex-shrink: 0;
+  border: none; background: transparent; color: var(--c-text-muted);
+  border-radius: 10px; cursor: pointer;
+  transition: background var(--dur-base) ease, color var(--dur-base) ease;
+}
+.mobile-menu__accordion-toggle:hover { background: var(--c-primary-50); color: var(--c-primary-700); }
+.mobile-menu__submenu {
+  display: flex; flex-direction: column;
+  padding: 2px 0 6px 14px;
+  margin-left: 6px;
+  border-left: 2px solid var(--c-border);
+}
+.mobile-menu__sublink {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 17px; font-weight: 500;
+  color: var(--c-text-muted);
+  transition: background var(--dur-base), color var(--dur-base);
+}
+.mobile-menu__sublink:hover { background: var(--c-primary-50); color: var(--c-primary-700); }
+
 /* ========== FOOTER ========== */
 .site-ftr { background: #0F172A; color: #94A3B8; padding: 80px 0 32px; border-top: 1px solid #1E293B; }
 .site-ftr__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 64px; }
@@ -505,7 +571,7 @@ html.lenis, html.lenis body { height: auto; }
 .site-ftr h5 { color: #fff; font-size: 14.5px; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
 .site-ftr a { color: #94A3B8; font-size: 14.5px; line-height: 2.2; display: block; transition: color var(--dur-base) ease, transform var(--dur-base) ease; }
 .site-ftr a:hover { color: #fff; transform: translateX(2px); }
-.site-ftr__contact-item { display: flex; align-items: center; gap: 8px; font-size: 14.5px; line-height: 2.2; color: #94A3B8; }
+.site-ftr .site-ftr__contact-item { display: flex; align-items: center; gap: 8px; font-size: 14.5px; line-height: 2.2; color: #94A3B8; }
 .site-ftr__bottom {
   border-top: 1px solid #1E293B;
   margin-top: 64px; padding-top: 28px;
@@ -979,6 +1045,10 @@ html.dark .pill, html.dark .badge--neutral { background: #16233F; color: var(--c
 html.dark .faq-item { background: #111A2E; }
 html.dark .pricing-calc__opt.is-active { background: var(--c-primary-50); color: #BFD3FF; }
 html.dark .site-hdr__hamburger, html.dark .mobile-menu__close { background: #16233F; color: var(--c-text); }
+html.dark .nav-dropdown { background: #111A2E; border-color: var(--c-border); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+html.dark .nav-dropdown__link:hover,
+html.dark .mobile-menu__sublink:hover,
+html.dark .mobile-menu__accordion-toggle:hover { background: var(--c-primary-50); color: #BFD3FF; }
 html.dark .trust-bar { border-color: var(--c-border); }
 html.dark .activity-ticker { background: #111A2E; border-color: var(--c-border); }
 html.dark .before-after__grip, html.dark .theme-toggle { background: transparent; }

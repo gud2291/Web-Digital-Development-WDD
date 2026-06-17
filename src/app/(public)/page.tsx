@@ -52,6 +52,36 @@ const FALLBACK_STATS: [string, string, string, IconName][] = [
   ["24×7", "WhatsApp Support", "#8B5CF6", "shield"],
 ];
 
+// "Who We Are" — services we bring to the table, each linked to its page.
+// [title, description, service slug] — slugs verified against seed-content.ts.
+const WHO_WE_BRING: [string, string, string][] = [
+  [
+    "Website Design & Development",
+    "Clean, modern, fully responsive websites built to impress and convert.",
+    "website-development",
+  ],
+  [
+    "Website Redesign",
+    "Breathing new life into outdated sites while preserving your brand identity.",
+    "website-designing",
+  ],
+  [
+    "Graphic Design",
+    "Logos, brochures, catalogues, and visual assets that keep your brand consistent.",
+    "graphic-designing",
+  ],
+  [
+    "SEO & Content Strategy",
+    "Keyword-focused content and on-page optimization that helps you get found on Google.",
+    "seo-services",
+  ],
+  [
+    "Online Marketing & SMO",
+    "Social media and digital marketing strategies that connect you with the right audience.",
+    "digital-marketing",
+  ],
+];
+
 const CHECKS: [string, string][] = [
   ["Custom design", "No templates. Every site is unique."],
   ["Conversion-first", "Designed to turn visitors into leads."],
@@ -236,6 +266,7 @@ export default async function HomePage() {
         })
         .map((p, i) => ({
           title: p.title,
+          slug: (p as { slug?: string }).slug || "",
           category: p.category || "Project",
           bg: PROJECT_BGS[i % PROJECT_BGS.length],
           icon: "monitor" as IconName,
@@ -245,6 +276,7 @@ export default async function HomePage() {
         }))
     : FALLBACK_PROJECTS.map(([title, category, bg, icon, liveUrl]) => ({
         title,
+        slug: "",
         category,
         bg,
         icon,
@@ -433,6 +465,123 @@ export default async function HomePage() {
             </RevealItem>
           ))}
         </RevealStagger>
+      </section>
+
+      {/* Who We Are — additive section, sits directly above the About Us section.
+          Server-rendered, keyword-rich text; main title is an h2, sub-headings h3. */}
+      <section id="s-who-we-are" className="section">
+        <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+          <Reveal>
+            <Eyebrow>WHO WE ARE</Eyebrow>
+            <h2 className="t-h2" style={{ marginTop: 14 }}>
+              Who We Are
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <p className="t-lead" style={{ marginTop: 16 }}>
+              Since 2019, we&apos;ve been doing what we love — helping businesses show up online the
+              right way.
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <p className="t-small" style={{ marginTop: 16 }}>
+              Web Digital Development is an Indian web design and development company built on one
+              simple belief: your website should work as hard as you do. From the moment a visitor
+              lands on your page, we want them to feel confident about your brand — and that takes
+              more than just good looks.
+            </p>
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="t-small" style={{ marginTop: 16 }}>
+              Over the past few years, we&apos;ve partnered with businesses across industries to build
+              websites that don&apos;t just exist online, but actually perform. Whether you&apos;re
+              starting from scratch or ready for a fresh redesign, our team brings together research,
+              strategy, creative design, and technical development to deliver something you&apos;ll be
+              genuinely proud of.
+            </p>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <h3 className="t-h3" style={{ marginTop: 40 }}>
+              What We Bring to the Table
+            </h3>
+            <p className="t-small" style={{ marginTop: 12 }}>
+              We&apos;re not a one-size-fits-all agency. Every project we take on starts with
+              understanding your business — your goals, your audience, and what makes you different.
+              From there, we put our expertise to work across:
+            </p>
+            <ul
+              className="about-preview__checks"
+              style={{ listStyle: "none", margin: 0, marginTop: 22, padding: 0 }}
+            >
+              {WHO_WE_BRING.map(([title, desc, slug]) => (
+                <li key={title} className="check-item" style={{ listStyle: "none" }}>
+                  <div className="check-item__icon">
+                    <Icon name="check" size={12} stroke={3} />
+                  </div>
+                  <div>
+                    <Link href={`/services/${slug}`} className="svc-link" style={{ marginTop: 0 }}>
+                      {title}
+                    </Link>
+                    <div className="t-small">{desc}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <h3 className="t-h3" style={{ marginTop: 40 }}>
+              Why It Matters
+            </h3>
+            <p className="t-small" style={{ marginTop: 12 }}>
+              Think about the last time you visited a website that felt clunky, slow, or just plain
+              confusing. Chances are, you left — and didn&apos;t come back.
+            </p>
+            <p className="t-small" style={{ marginTop: 16 }}>
+              That&apos;s the reality of doing business online today. Your website is often the very
+              first interaction someone has with your brand. It&apos;s your digital storefront, your
+              business card, and your most accessible point of contact — all rolled into one.
+            </p>
+            <p className="t-small" style={{ marginTop: 16 }}>
+              A well-designed website builds trust instantly. A poorly designed one can cost you
+              customers before they even read a single word. That&apos;s why we take every project
+              seriously, no matter the size.
+            </p>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <h3 className="t-h3" style={{ marginTop: 40 }}>
+              Built for Businesses That Mean Business
+            </h3>
+            <p className="t-small" style={{ marginTop: 12 }}>
+              At Web Digital Development, we&apos;ve spent years (since 2019) refining our process so
+              that what you get isn&apos;t just a beautiful website — it&apos;s a reliable digital
+              asset that supports your growth.
+            </p>
+            <p className="t-small" style={{ marginTop: 16 }}>
+              Our team of experienced designers and developers stays up to date with the latest web
+              standards, design trends, and search engine best practices. So when we hand over your
+              website, it&apos;s not just ready to launch — it&apos;s ready to perform.
+            </p>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <h3 className="t-h3" style={{ marginTop: 40 }}>
+              Let&apos;s Build Something Great Together
+            </h3>
+            <p className="t-small" style={{ marginTop: 12 }}>
+              Whether you&apos;re a startup finding your footing or an established business ready to
+              level up your online presence, we&apos;re here to help. Tell us about your project and
+              let&apos;s talk about what we can build for you.
+            </p>
+            <Link href="/contact">
+              <Btn variant="outline" iconRight="arrowRight" style={{ marginTop: 22 }}>
+                Start a Conversation
+              </Btn>
+            </Link>
+          </Reveal>
+        </div>
       </section>
 
       <SectionDivider from="#ffffff" to="#F7F9FC" />

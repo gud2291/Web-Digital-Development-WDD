@@ -17,12 +17,24 @@ interface NavItem {
   to: string;
 }
 
+interface NavService {
+  label: string;
+  slug: string;
+}
+
 const linkVariants = {
   hidden: { opacity: 0, x: 24 },
   show: { opacity: 1, x: 0 },
 };
 
-export function MobileMenu({ open, onClose, items, socialLinks }: { open: boolean; onClose: () => void; items: NavItem[]; socialLinks?: Record<string, string> }) {
+export function MobileMenu({ open, onClose, items, services = [], socialLinks }: { open: boolean; onClose: () => void; items: NavItem[]; services?: NavService[]; socialLinks?: Record<string, string> }) {
+  const [servicesExpanded, setServicesExpanded] = React.useState(false);
+
+  // Reset the accordion whenever the drawer closes.
+  React.useEffect(() => {
+    if (!open) setServicesExpanded(false);
+  }, [open]);
+
   return (
     <AnimatePresence>
       {open && (
@@ -79,13 +91,67 @@ export function MobileMenu({ open, onClose, items, socialLinks }: { open: boolea
               variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.08 } } }}
               style={{ display: "flex", flexDirection: "column", marginTop: 28, gap: 2 }}
             >
-              {items.map((n) => (
-                <motion.div key={n.to} variants={linkVariants}>
-                  <Link href={n.to} onClick={onClose} className="mobile-menu__link">
-                    {n.label}
-                  </Link>
-                </motion.div>
-              ))}
+              {items.map((n) => {
+                const isServices = n.to === "/services" && services.length > 0;
+                if (!isServices) {
+                  return (
+                    <motion.div key={n.to} variants={linkVariants}>
+                      <Link href={n.to} onClick={onClose} className="mobile-menu__link">
+                        {n.label}
+                      </Link>
+                    </motion.div>
+                  );
+                }
+                return (
+                  <motion.div key={n.to} variants={linkVariants}>
+                    <div className="mobile-menu__accordion-row">
+                      <Link href={n.to} onClick={onClose} className="mobile-menu__link mobile-menu__link--flex">
+                        {n.label}
+                      </Link>
+                      <button
+                        type="button"
+                        className="mobile-menu__accordion-toggle"
+                        aria-label={servicesExpanded ? "Collapse services" : "Expand services"}
+                        aria-expanded={servicesExpanded}
+                        onClick={() => setServicesExpanded((v) => !v)}
+                      >
+                        <Icon
+                          name="chevDown"
+                          size={20}
+                          style={{
+                            transition: "transform var(--dur-base) var(--ease-out)",
+                            transform: servicesExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                          }}
+                        />
+                      </button>
+                    </div>
+                    <AnimatePresence initial={false}>
+                      {servicesExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: [0.2, 0.7, 0.2, 1] }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          <div className="mobile-menu__submenu">
+                            {services.map((s) => (
+                              <Link
+                                key={s.slug}
+                                href={`/services/${s.slug}`}
+                                onClick={onClose}
+                                className="mobile-menu__sublink"
+                              >
+                                {s.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
             </motion.nav>
 
             <div style={{ marginTop: "auto", paddingTop: 24 }}>

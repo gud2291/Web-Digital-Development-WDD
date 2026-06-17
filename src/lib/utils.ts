@@ -40,6 +40,6 @@ export function truncate(str: string, max: number): string {
  * Absolute URL helper for SEO/OG tags.
  */
 export function absoluteUrl(path: string, baseUrl?: string): string {
-  const base = baseUrl || process.env.NEXT_PUBLIC_SITE_URL || "https://webdigitaldevelopment.in";
+  const base = baseUrl || process.env.NEXT_PUBLIC_SITE_URL || "https://webdigitaldevelopment.com";
   return `${base.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 }

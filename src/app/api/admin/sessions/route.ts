@@ -16,6 +16,16 @@ export async function GET() {
   return handle(async () => {
     const admin = await findAdminById(gate.session.user.id);
     if (!admin) return NextResponse.json({ logs: [] });
-    return NextResponse.json({ logs: admin.loginLogs ?? [] });
+    // Reshape stored loginLogs (timestamp/browser/os/ip) into the shape the
+    // SecurityPanel expects (at/ip/userAgent), combining browser+os into a
+    // single device string. Newest first for a "Recent logins" view.
+    const logs = (admin.loginLogs ?? [])
+      .map((l) => ({
+        at: l.timestamp,
+        ip: l.ip,
+        userAgent: [l.browser, l.os].filter(Boolean).join(" · "),
+      }))
+      .reverse();
+    return NextResponse.json({ logs });
   });
 }

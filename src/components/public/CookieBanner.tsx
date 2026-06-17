@@ -14,6 +14,8 @@ const INK = "var(--c-text)";
 // it directly rather than importing the server env module (which would throw in
 // the browser when it tries to validate server-only secrets).
 const GA_ID_ENV = process.env.NEXT_PUBLIC_GA_ID;
+const GTM_ID_ENV = process.env.NEXT_PUBLIC_GTM_ID;
+const CLARITY_ID_ENV = process.env.NEXT_PUBLIC_CLARITY_ID;
 
 export interface AnalyticsIds {
   ga4?: string;
@@ -37,8 +39,8 @@ export function CookieBanner({ analyticsIds }: { analyticsIds?: AnalyticsIds }) 
 
   // Prefer DB-set ID, fall back to env var
   const GA_ID = analyticsIds?.ga4 || GA_ID_ENV;
-  const GTM_ID = analyticsIds?.gtm;
-  const CLARITY_ID = analyticsIds?.clarity;
+  const GTM_ID = analyticsIds?.gtm || GTM_ID_ENV;
+  const CLARITY_ID = analyticsIds?.clarity || CLARITY_ID_ENV;
 
   return (
     <>

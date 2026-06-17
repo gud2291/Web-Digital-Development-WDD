@@ -1,5 +1,5 @@
 import "server-only";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 /**
  * On-demand ISR revalidation for the public pages that were converted from
@@ -30,11 +30,13 @@ export const revalidatePublic = {
   settings() {
     revalidatePath("/contact");
   },
-  /** Services → the service detail pages, the list, and the home "what we do" grid. */
+  /** Services → the service detail pages, the list, and the home "what we do" grid.
+   *  The "services" tag also refreshes the cached header/mobile nav dropdown. */
   services() {
     revalidatePath("/services/[slug]", "page");
     revalidatePath("/services");
     revalidatePath("/");
+    revalidateTag("services");
   },
   /** Blog → the post pages, the list, and the home "latest posts" row. */
   blog() {

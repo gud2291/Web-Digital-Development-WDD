@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge, Btn, CTABanner, PH, Reveal } from "@/components/ui";
 import { CldImage } from "@/components/CldImage";
 import { ProjectsGrid, type ProjectCardData } from "@/components/public/ProjectsGrid";
@@ -41,6 +42,7 @@ export default async function ProjectsPage() {
     ? projectsRaw.map((p, i) => ({
         id: String(p._id),
         title: p.title,
+        slug: p.slug || undefined,
         category: p.category || "Web",
         description: p.description || "",
         image: p.image || "",
@@ -54,6 +56,7 @@ export default async function ProjectsPage() {
     ? {
         id: String(featuredRaw._id),
         title: featuredRaw.title,
+        slug: featuredRaw.slug || "",
         description: featuredRaw.description || "",
         image: featuredRaw.image || "",
         liveUrl: featuredRaw.liveUrl || "",
@@ -112,13 +115,26 @@ export default async function ProjectsPage() {
                       View Case Study
                     </Btn>
                   )}
-                  <Btn
-                    size="lg"
-                    variant="ghost"
-                    style={{ color: "#fff", borderColor: "rgba(255,255,255,.3)" }}
-                  >
-                    Case Study
-                  </Btn>
+                  {featured?.slug ? (
+                    <Link href={`/projects/${featured.slug}`}>
+                      <Btn
+                        size="lg"
+                        variant="ghost"
+                        style={{ color: "#fff", borderColor: "rgba(255,255,255,.3)" }}
+                        iconRight="arrowRight"
+                      >
+                        Case Study
+                      </Btn>
+                    </Link>
+                  ) : (
+                    <Btn
+                      size="lg"
+                      variant="ghost"
+                      style={{ color: "#fff", borderColor: "rgba(255,255,255,.3)" }}
+                    >
+                      Case Study
+                    </Btn>
+                  )}
                 </div>
               </div>
               <div className="featured-project__right" style={{ position: "relative" }}>
