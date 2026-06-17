@@ -12,6 +12,15 @@ interface Props {
   label?: string;
   /** What this field accepts — controls the file picker + preview player. */
   accept?: "image" | "video";
+  /**
+   * Optional alt-text control. When `onAltChange` is provided, an alt input is
+   * rendered under the uploader so the admin can describe the image for SEO +
+   * accessibility. Left empty, callers fall back to their current alt (e.g. the
+   * title/name) at render time, so nothing regresses.
+   */
+  altValue?: string;
+  onAltChange?: (alt: string) => void;
+  altLabel?: string;
 }
 
 function isVideoUrl(url: string): boolean {
@@ -24,7 +33,15 @@ function isVideoUrl(url: string): boolean {
  * (MediaPickerModal), drag-drop onto the preview. No raw URL input — stored
  * values stay plain URL strings.
  */
-export function ImageUploader({ value, onChange, label = "Image", accept = "image" }: Props) {
+export function ImageUploader({
+  value,
+  onChange,
+  label = "Image",
+  accept = "image",
+  altValue,
+  onAltChange,
+  altLabel = "Alt text (for SEO & screen readers)",
+}: Props) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = React.useState(false);
   const [pickerOpen, setPickerOpen] = React.useState(false);
@@ -111,6 +128,18 @@ export function ImageUploader({ value, onChange, label = "Image", accept = "imag
           </div>
         </div>
       </div>
+      {onAltChange && accept !== "video" ? (
+        <div className="field" style={{ marginTop: 10 }}>
+          <label className="field__label">{altLabel}</label>
+          <input
+            className="input"
+            value={altValue ?? ""}
+            onChange={(e) => onAltChange(e.target.value)}
+            placeholder="Describe the image (leave blank to use the title)"
+            maxLength={300}
+          />
+        </div>
+      ) : null}
       <MediaPickerModal
         open={pickerOpen}
         mode="single"

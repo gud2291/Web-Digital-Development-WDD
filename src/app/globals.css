@@ -2487,3 +2487,106 @@ html[data-theme="dark"] {
   .t-h1 { font-size: 38px; }
   .t-h2 { font-size: 30px; }
 }
+
+/* Trust Bar Marquee Image Logos Grayscale and Hover Effects */
+.trust-bar__logo img {
+  height: 36px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  opacity: 0.65;
+  filter: grayscale(100%);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+.trust-bar__logo img:hover {
+  opacity: 1;
+  filter: none;
+}
+
+/* ==========================================================================
+   ADMIN HOMEPAGE EDITOR — roomy, clearly-sectioned UX (admin only).
+   All rules are scoped to `.homepage-editor` so the shared admin forms used by
+   Projects / Team / Blogs / etc. stay byte-for-byte unchanged. No public CSS.
+   ========================================================================== */
+
+/* A — use the full editor width instead of the shared 920px cap */
+.admin-form--wide { max-width: none; }
+.homepage-editor { gap: 24px; }
+
+/* B/C — stronger, clearer section separation between groups */
+.homepage-editor .admin-form-section.section-card {
+  padding: 22px 24px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: 14px;
+}
+.homepage-editor .section-card__num {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  font-size: 13px;
+}
+.homepage-editor .section-card__titles strong { font-size: 16px; }
+.homepage-editor .section-card .section-card__head + div {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border-strong);
+}
+
+/* C/D — each repeatable item is one clearly-bordered, well-spaced card */
+.homepage-editor .sortable-list { gap: 14px; }
+.homepage-editor .sortable-row {
+  border: 1px solid var(--c-border-strong);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: var(--c-bg-section);
+}
+/* the slide card sits INSIDE the bordered sortable-row — flatten it so the
+   item reads as a single card rather than a double-bordered box */
+.homepage-editor .slide-card {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+/* D — per-item header row (Client Logo N, Stat N) */
+.hp-item__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.hp-item__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.hp-item__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* E — separate the Add slide/logo/stat buttons from the items above */
+.hp-add-row {
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--c-border-strong);
+}
+
+/* dark mode */
+[data-theme="dark"] [data-admin] .homepage-editor .admin-form-section.section-card { border-color: var(--admin-border); }
+[data-theme="dark"] [data-admin] .homepage-editor .section-card .section-card__head + div { border-color: var(--admin-border); }
+[data-theme="dark"] [data-admin] .homepage-editor .sortable-row { background: var(--admin-bg-topbar); border-color: var(--admin-border); }
+[data-theme="dark"] [data-admin] .homepage-editor .slide-card { background: transparent; }
+[data-theme="dark"] [data-admin] .hp-add-row { border-color: var(--admin-border); }
+
+/* responsive — let the per-item header wrap on small screens */
+@media (max-width: 640px) {
+  .hp-item__head { flex-wrap: wrap; }
+  .homepage-editor .admin-form-section.section-card { padding: 18px 16px; }
+}

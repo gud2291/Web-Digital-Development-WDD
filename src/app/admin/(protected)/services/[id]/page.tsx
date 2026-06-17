@@ -24,6 +24,7 @@ export default async function EditServicePage({ params }: PageProps) {
           shortDescription: doc.shortDescription ?? "",
           content: doc.content ?? "",
           coverImage: doc.coverImage ?? "",
+          coverImageAlt: doc.coverImageAlt ?? "",
           icon: doc.icon ?? "monitor",
           features: doc.features ?? [],
           faqs: doc.faqs ?? [],

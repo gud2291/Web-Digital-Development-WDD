@@ -5,6 +5,7 @@ const HeroSlideSchema = new Schema(
   {
     type: { type: String, enum: ["image", "video"], default: "image" },
     image: { type: String, default: "" },
+    imageAlt: { type: String, default: "" },
     video: { type: String, default: "" },
     title: { type: String, default: "" },
     subtitle: { type: String, default: "" },
@@ -27,6 +28,7 @@ const ClientLogoSchema = new Schema(
     name: { type: String, required: true },
     image: { type: String, required: true },
     visible: { type: Boolean, default: true },
+    imageAlt: { type: String, default: "" },
   },
   { _id: false }
 );

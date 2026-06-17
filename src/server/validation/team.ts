@@ -4,6 +4,7 @@ export const createTeamSchema = z.object({
   name: z.string().min(2).max(120),
   designation: z.string().default(""),
   photo: z.string().url().optional().or(z.literal("")),
+  photoAlt: z.string().max(300).optional().or(z.literal("")),
   bio: z.string().default(""),
   linkedinUrl: z.string().url().optional().or(z.literal("")),
   visible: z.boolean().default(true),

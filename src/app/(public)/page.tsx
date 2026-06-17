@@ -273,6 +273,7 @@ export default async function HomePage() {
           liveUrl: p.liveUrl || "",
           description: p.description || "Conversion-focused redesign that lifted leads.",
           image: p.image || "",
+          imageAlt: p.imageAlt || "",
         }))
     : FALLBACK_PROJECTS.map(([title, category, bg, icon, liveUrl]) => ({
         title,
@@ -283,6 +284,7 @@ export default async function HomePage() {
         liveUrl,
         description: "Conversion-focused redesign that lifted leads by 2.4×.",
         image: "",
+        imageAlt: "",
       }));
 
   const testimonials = testimonialsRaw.length
@@ -313,6 +315,7 @@ export default async function HomePage() {
         date: formatDate(b.createdAt),
         slug: b.slug,
         image: b.featuredImage || "",
+        imageAlt: b.featuredImageAlt || "",
       }))
     : FALLBACK_BLOGS.map(([title, category, readTime, date, slug]) => ({
         title,
@@ -321,11 +324,12 @@ export default async function HomePage() {
         date,
         slug,
         image: "",
+        imageAlt: "",
       }));
 
   const trustLogos = homepage?.clientLogos?.length
-    ? homepage.clientLogos.filter((l) => l.visible).map((l) => l.name)
-    : FALLBACK_TRUST_LOGOS;
+    ? homepage.clientLogos.filter((l) => l.visible).map((l) => ({ name: l.name, image: l.image, imageAlt: l.imageAlt || "" }))
+    : FALLBACK_TRUST_LOGOS.map((name) => ({ name, image: "", imageAlt: "" }));
 
   const sectionTitles = homepage?.sectionTitles ?? null;
   const ctaBanner = homepage?.ctaBanner ?? null;
@@ -334,6 +338,7 @@ export default async function HomePage() {
   const heroSlides = (homepage?.heroSlides ?? []).map((s) => ({
     type: (s.type as string) || "image",
     image: (s.image as string) || "",
+    imageAlt: (s.imageAlt as string) || "",
     video: (s.video as string) || "",
     title: (s.title as string) || "",
     subtitle: (s.subtitle as string) || "",
@@ -467,123 +472,6 @@ export default async function HomePage() {
         </RevealStagger>
       </section>
 
-      {/* Who We Are — additive section, sits directly above the About Us section.
-          Server-rendered, keyword-rich text; main title is an h2, sub-headings h3. */}
-      <section id="s-who-we-are" className="section">
-        <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
-          <Reveal>
-            <Eyebrow>WHO WE ARE</Eyebrow>
-            <h2 className="t-h2" style={{ marginTop: 14 }}>
-              Who We Are
-            </h2>
-          </Reveal>
-          <Reveal delay={100}>
-            <p className="t-lead" style={{ marginTop: 16 }}>
-              Since 2019, we&apos;ve been doing what we love — helping businesses show up online the
-              right way.
-            </p>
-          </Reveal>
-          <Reveal delay={120}>
-            <p className="t-small" style={{ marginTop: 16 }}>
-              Web Digital Development is an Indian web design and development company built on one
-              simple belief: your website should work as hard as you do. From the moment a visitor
-              lands on your page, we want them to feel confident about your brand — and that takes
-              more than just good looks.
-            </p>
-          </Reveal>
-          <Reveal delay={140}>
-            <p className="t-small" style={{ marginTop: 16 }}>
-              Over the past few years, we&apos;ve partnered with businesses across industries to build
-              websites that don&apos;t just exist online, but actually perform. Whether you&apos;re
-              starting from scratch or ready for a fresh redesign, our team brings together research,
-              strategy, creative design, and technical development to deliver something you&apos;ll be
-              genuinely proud of.
-            </p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <h3 className="t-h3" style={{ marginTop: 40 }}>
-              What We Bring to the Table
-            </h3>
-            <p className="t-small" style={{ marginTop: 12 }}>
-              We&apos;re not a one-size-fits-all agency. Every project we take on starts with
-              understanding your business — your goals, your audience, and what makes you different.
-              From there, we put our expertise to work across:
-            </p>
-            <ul
-              className="about-preview__checks"
-              style={{ listStyle: "none", margin: 0, marginTop: 22, padding: 0 }}
-            >
-              {WHO_WE_BRING.map(([title, desc, slug]) => (
-                <li key={title} className="check-item" style={{ listStyle: "none" }}>
-                  <div className="check-item__icon">
-                    <Icon name="check" size={12} stroke={3} />
-                  </div>
-                  <div>
-                    <Link href={`/services/${slug}`} className="svc-link" style={{ marginTop: 0 }}>
-                      {title}
-                    </Link>
-                    <div className="t-small">{desc}</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <h3 className="t-h3" style={{ marginTop: 40 }}>
-              Why It Matters
-            </h3>
-            <p className="t-small" style={{ marginTop: 12 }}>
-              Think about the last time you visited a website that felt clunky, slow, or just plain
-              confusing. Chances are, you left — and didn&apos;t come back.
-            </p>
-            <p className="t-small" style={{ marginTop: 16 }}>
-              That&apos;s the reality of doing business online today. Your website is often the very
-              first interaction someone has with your brand. It&apos;s your digital storefront, your
-              business card, and your most accessible point of contact — all rolled into one.
-            </p>
-            <p className="t-small" style={{ marginTop: 16 }}>
-              A well-designed website builds trust instantly. A poorly designed one can cost you
-              customers before they even read a single word. That&apos;s why we take every project
-              seriously, no matter the size.
-            </p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <h3 className="t-h3" style={{ marginTop: 40 }}>
-              Built for Businesses That Mean Business
-            </h3>
-            <p className="t-small" style={{ marginTop: 12 }}>
-              At Web Digital Development, we&apos;ve spent years (since 2019) refining our process so
-              that what you get isn&apos;t just a beautiful website — it&apos;s a reliable digital
-              asset that supports your growth.
-            </p>
-            <p className="t-small" style={{ marginTop: 16 }}>
-              Our team of experienced designers and developers stays up to date with the latest web
-              standards, design trends, and search engine best practices. So when we hand over your
-              website, it&apos;s not just ready to launch — it&apos;s ready to perform.
-            </p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <h3 className="t-h3" style={{ marginTop: 40 }}>
-              Let&apos;s Build Something Great Together
-            </h3>
-            <p className="t-small" style={{ marginTop: 12 }}>
-              Whether you&apos;re a startup finding your footing or an established business ready to
-              level up your online presence, we&apos;re here to help. Tell us about your project and
-              let&apos;s talk about what we can build for you.
-            </p>
-            <Link href="/contact">
-              <Btn variant="outline" iconRight="arrowRight" style={{ marginTop: 22 }}>
-                Start a Conversation
-              </Btn>
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
       <SectionDivider from="#ffffff" to="#F7F9FC" />
 
       {/* About Preview */}
@@ -653,6 +541,57 @@ export default async function HomePage() {
       </section>
 
       <SectionDivider from="#F7F9FC" to="#ffffff" flip />
+
+      {/* Who We Are — condensed: short intro + linked services list + one trust
+          line. Sits directly below the About Us section. Title is an h2, the
+          sub-heading an h3 (page keeps exactly one h1 in the hero). */}
+      <section id="s-who-we-are" className="section">
+        <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+          <Reveal>
+            <Eyebrow>WHO WE ARE</Eyebrow>
+            <h2 className="t-h2" style={{ marginTop: 14 }}>
+              Who We Are
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <p className="t-lead" style={{ marginTop: 16 }}>
+              Since 2019, we&apos;ve helped businesses show up online the right way — with websites
+              that don&apos;t just exist, but actually perform.
+            </p>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <h3 className="t-h3" style={{ marginTop: 40 }}>
+              What We Bring to the Table
+            </h3>
+            <ul
+              className="about-preview__checks"
+              style={{ listStyle: "none", margin: 0, marginTop: 22, padding: 0 }}
+            >
+              {WHO_WE_BRING.map(([title, desc, slug]) => (
+                <li key={title} className="check-item" style={{ listStyle: "none" }}>
+                  <div className="check-item__icon">
+                    <Icon name="check" size={12} stroke={3} />
+                  </div>
+                  <div>
+                    <Link href={`/services/${slug}`} className="svc-link" style={{ marginTop: 0 }}>
+                      {title}
+                    </Link>
+                    <div className="t-small">{desc}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <p className="t-small" style={{ marginTop: 28 }}>
+              Since 2019 we&apos;ve delivered 400+ websites for clients across India and abroad —
+              research, design and development under one roof.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* Services Grid */}
       <section id="s-services" className="section">
@@ -757,7 +696,7 @@ export default async function HomePage() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={b.image}
-                          alt={b.title}
+                          alt={b.imageAlt || b.title}
                           style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                       </div>

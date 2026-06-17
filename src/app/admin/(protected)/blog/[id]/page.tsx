@@ -24,6 +24,7 @@ export default async function EditBlogPage({ params }: PageProps) {
           excerpt: doc.excerpt ?? "",
           content: doc.content ?? "",
           featuredImage: doc.featuredImage ?? "",
+          featuredImageAlt: doc.featuredImageAlt ?? "",
           author: doc.author ?? "Web Digital Development Team",
           category: doc.category ?? "General",
           tags: doc.tags ?? [],

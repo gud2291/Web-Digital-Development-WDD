@@ -59,6 +59,7 @@ export default async function ProjectsPage() {
         slug: featuredRaw.slug || "",
         description: featuredRaw.description || "",
         image: featuredRaw.image || "",
+        imageAlt: featuredRaw.imageAlt || "",
         liveUrl: featuredRaw.liveUrl || "",
       }
     : null;
@@ -141,7 +142,7 @@ export default async function ProjectsPage() {
                 {featured?.image ? (
                   <CldImage
                     src={featured.image}
-                    alt={featured.title}
+                    alt={featured.imageAlt || featured.title}
                     fill
                     priority
                     sizes="(max-width: 900px) 100vw, 50vw"

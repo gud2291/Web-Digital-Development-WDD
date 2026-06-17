@@ -8,6 +8,7 @@ const BlogSchema = new Schema(
     excerpt: { type: String, default: "" },
     content: { type: String, required: true },
     featuredImage: { type: String, default: "" },
+    featuredImageAlt: { type: String, default: "" },
     author: { type: String, default: "Web Digital Development Team" },
     category: { type: String, default: "General" },
     tags: { type: [String], default: [] },

@@ -7,6 +7,7 @@ export const createBlogSchema = z.object({
   excerpt: z.string().max(300).default(""),
   content: z.string().min(1),
   featuredImage: z.string().url().optional().or(z.literal("")),
+  featuredImageAlt: z.string().max(300).optional().or(z.literal("")),
   author: z.string().default("Web Digital Development Team"),
   category: z.string().default("General"),
   tags: z.array(z.string()).default([]),

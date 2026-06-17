@@ -22,6 +22,7 @@ const schema = z.object({
       z.object({
         type: z.enum(["image", "video"]).default("image"),
         image: z.string().default(""),
+        imageAlt: z.string().default(""),
         video: z.string().default(""),
         title: z.string().default(""),
         subtitle: z.string().default(""),
@@ -32,7 +33,14 @@ const schema = z.object({
     .default([]),
   stats: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).default([]),
   clientLogos: z
-    .array(z.object({ name: z.string().min(1), image: z.string().min(1), visible: z.boolean().default(true) }))
+    .array(
+      z.object({
+        name: z.string().min(1),
+        image: z.string().min(1),
+        visible: z.boolean().default(true),
+        imageAlt: z.string().default(""),
+      })
+    )
     .default([]),
   ctaBanner: z.object({ title: z.string().default(""), sub: z.string().default("") }).default({ title: "", sub: "" }),
   sectionTitles: z
@@ -68,6 +76,7 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { isSubmitting },
   } = useForm<Values>({
     resolver: zodResolver(schema),
@@ -103,7 +112,7 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
 
   return (
     <LivePreview resource="homepage" previewPath="/" state={liveValues} sectionAnchor={anchor}>
-    <form onSubmit={handleSubmit(onSubmit)} className="admin-form" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="admin-form admin-form--wide homepage-editor" noValidate>
       {/* 1 ── HERO SLIDER */}
       <SectionCard
         n={1}
@@ -151,7 +160,13 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
                   name={`heroSlides.${idx}.image` as const}
                   render={({ field }) => (
                     <div style={{ marginTop: 10 }}>
-                      <ImageUploader value={field.value} onChange={field.onChange} label="Background image (also the video poster)" />
+                      <ImageUploader
+                        value={field.value}
+                        onChange={field.onChange}
+                        label="Background image (also the video poster)"
+                        altValue={watch(`heroSlides.${idx}.imageAlt` as const)}
+                        onAltChange={(alt) => setValue(`heroSlides.${idx}.imageAlt` as const, alt)}
+                      />
                     </div>
                   )}
                 />
@@ -179,16 +194,18 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
               </SlideCard>
             )}
           />
-          <Btn
-            size="sm"
-            type="button"
-            variant="secondary"
-            onClick={() =>
-              heroArr.append({ type: "image", image: "", video: "", title: "", subtitle: "", ctaText: "", ctaUrl: "" })
-            }
-          >
-            <Icon name="plus" size={12} /> Add Slide
-          </Btn>
+          <div className="hp-add-row">
+            <Btn
+              size="sm"
+              type="button"
+              variant="secondary"
+              onClick={() =>
+                heroArr.append({ type: "image", image: "", imageAlt: "", video: "", title: "", subtitle: "", ctaText: "", ctaUrl: "" })
+              }
+            >
+              <Icon name="plus" size={12} /> Add Slide
+            </Btn>
+          </div>
         </div>
       </SectionCard>
 
@@ -207,28 +224,45 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
             onReorder={(ids) => applyFieldReorder(ids, logosArr.fields.map((f) => f.id), watch("clientLogos") ?? [], logosArr.replace)}
             render={(_f, idx) => (
               <div style={{ width: "100%" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, gap: 8 }}>
-                  <input className="input" placeholder="Brand name" style={{ maxWidth: 240 }} {...register(`clientLogos.${idx}.name` as const)} />
-                  <label className="admin-form-checkbox">
-                    <input type="checkbox" {...register(`clientLogos.${idx}.visible` as const)} /> Visible
-                  </label>
-                  <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => logosArr.remove(idx)}>
-                    <Icon name="x" size={12} />
-                  </button>
+                <div className="hp-item__head">
+                  <span className="hp-item__label">
+                    <span className="section-card__num">{idx + 1}</span>
+                    Client Logo {idx + 1}
+                  </span>
+                  <span className="hp-item__actions">
+                    <label className="admin-form-checkbox">
+                      <input type="checkbox" {...register(`clientLogos.${idx}.visible` as const)} /> Visible
+                    </label>
+                    <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => logosArr.remove(idx)}>
+                      <Icon name="x" size={12} />
+                    </button>
+                  </span>
+                </div>
+                <div className="field" style={{ marginBottom: 10 }}>
+                  <label className="field__label">Brand name</label>
+                  <input className="input" placeholder="Brand name" {...register(`clientLogos.${idx}.name` as const)} />
                 </div>
                 <Controller
                   control={control}
                   name={`clientLogos.${idx}.image` as const}
                   render={({ field }) => (
-                    <ImageUploader value={field.value} onChange={field.onChange} label="Logo image" />
+                    <ImageUploader
+                      value={field.value}
+                      onChange={field.onChange}
+                      label="Logo image"
+                      altValue={watch(`clientLogos.${idx}.imageAlt` as const)}
+                      onAltChange={(alt) => setValue(`clientLogos.${idx}.imageAlt` as const, alt)}
+                    />
                   )}
                 />
               </div>
             )}
           />
-          <Btn size="sm" type="button" variant="secondary" onClick={() => logosArr.append({ name: "", image: "", visible: true })}>
-            <Icon name="plus" size={12} /> Add logo
-          </Btn>
+          <div className="hp-add-row">
+            <Btn size="sm" type="button" variant="secondary" onClick={() => logosArr.append({ name: "", image: "", imageAlt: "", visible: true })}>
+              <Icon name="plus" size={12} /> Add logo
+            </Btn>
+          </div>
         </div>
       </SectionCard>
 
@@ -246,7 +280,8 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
             getId={(f) => f.id}
             onReorder={(ids) => applyFieldReorder(ids, statsArr.fields.map((f) => f.id), watch("stats") ?? [], statsArr.replace)}
             render={(_f, idx) => (
-              <div style={{ display: "flex", gap: 8, width: "100%" }}>
+              <div style={{ display: "flex", gap: 8, width: "100%", alignItems: "center" }}>
+                <span className="section-card__num" title={`Stat ${idx + 1}`}>{idx + 1}</span>
                 <input className="input" placeholder="Value (e.g. 400+)" style={{ maxWidth: 180 }} {...register(`stats.${idx}.value` as const)} />
                 <input className="input" placeholder="Label" {...register(`stats.${idx}.label` as const)} />
                 <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => statsArr.remove(idx)}>
@@ -255,9 +290,11 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
               </div>
             )}
           />
-          <Btn size="sm" type="button" variant="secondary" onClick={() => statsArr.append({ value: "", label: "" })}>
-            <Icon name="plus" size={12} /> Add stat
-          </Btn>
+          <div className="hp-add-row">
+            <Btn size="sm" type="button" variant="secondary" onClick={() => statsArr.append({ value: "", label: "" })}>
+              <Icon name="plus" size={12} /> Add stat
+            </Btn>
+          </div>
         </div>
       </SectionCard>
 

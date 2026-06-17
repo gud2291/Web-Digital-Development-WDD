@@ -19,6 +19,7 @@ export const createServiceSchema = z.object({
   shortDescription: z.string().max(300).default(""),
   content: z.string().default(""),
   coverImage: z.string().url().optional().or(z.literal("")),
+  coverImageAlt: z.string().max(300).optional().or(z.literal("")),
   icon: z.string().default("Globe"),
   iconName: z.string().default("Globe"),
   accentColor: z.enum(["blue", "green", "orange", "pink", "purple", "teal"]).default("blue"),

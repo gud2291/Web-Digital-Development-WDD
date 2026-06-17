@@ -9,6 +9,7 @@ const ProjectSchema = new Schema(
     category: { type: String, default: "Web", index: true },
     description: { type: String, default: "" },
     image: { type: String, default: "" },
+    imageAlt: { type: String, default: "" },
     liveUrl: { type: String, default: "" },
     featured: { type: Boolean, default: false, index: true },
     visible: { type: Boolean, default: true, index: true },

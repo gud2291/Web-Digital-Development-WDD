@@ -15,6 +15,7 @@ const schema = z.object({
   category: z.string().default("Web"),
   description: z.string().default(""),
   image: z.string().default(""),
+  imageAlt: z.string().default(""),
   liveUrl: z.string().default(""),
   featured: z.boolean().default(false),
   visible: z.boolean().default(true),
@@ -29,6 +30,7 @@ interface InitialDoc {
   category?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
   liveUrl?: string;
   featured?: boolean;
   visible?: boolean;
@@ -42,6 +44,8 @@ export function ProjectForm({ initial }: { initial?: InitialDoc }) {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<Values>({
     resolver: zodResolver(schema),
@@ -50,6 +54,7 @@ export function ProjectForm({ initial }: { initial?: InitialDoc }) {
       category: initial?.category ?? "Web",
       description: initial?.description ?? "",
       image: initial?.image ?? "",
+      imageAlt: initial?.imageAlt ?? "",
       liveUrl: initial?.liveUrl ?? "",
       featured: !!initial?.featured,
       visible: initial?.visible ?? true,
@@ -111,7 +116,13 @@ export function ProjectForm({ initial }: { initial?: InitialDoc }) {
           name="image"
           render={({ field }) => (
             <div style={{ marginTop: 14 }}>
-              <ImageUploader value={field.value} onChange={field.onChange} label="Cover image" />
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                label="Cover image"
+                altValue={watch("imageAlt")}
+                onAltChange={(alt) => setValue("imageAlt", alt)}
+              />
             </div>
           )}
         />

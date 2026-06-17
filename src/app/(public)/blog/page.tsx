@@ -57,6 +57,7 @@ export default async function BlogListPage() {
         date: formatDate(b.createdAt),
         readTime: `${b.readTime ?? 5} min`,
         image: b.featuredImage || "",
+        imageAlt: b.featuredImageAlt || "",
       }))
     : FALLBACK_POSTS;
 
@@ -97,7 +98,7 @@ export default async function BlogListPage() {
                     <div style={{ position: "relative", width: "100%", height: 380, borderRadius: 12, overflow: "hidden" }}>
                       <CldImage
                         src={featured.featuredImage}
-                        alt={featured.title}
+                        alt={featured.featuredImageAlt || featured.title}
                         fill
                         priority
                         sizes="(max-width: 1200px) 100vw, 1200px"

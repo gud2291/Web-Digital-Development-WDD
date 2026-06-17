@@ -3,6 +3,7 @@ import { z } from "zod";
 const heroSlideSchema = z.object({
   type: z.enum(["image", "video"]).default("image"),
   image: z.string().default(""),
+  imageAlt: z.string().default(""),
   video: z.string().default(""),
   title: z.string().default(""),
   subtitle: z.string().default(""),
@@ -19,6 +20,7 @@ const clientLogoSchema = z.object({
   name: z.string().min(1),
   image: z.string().min(1),
   visible: z.boolean().default(true),
+  imageAlt: z.string().default(""),
 });
 
 const sectionTitlesSchema = z.object({

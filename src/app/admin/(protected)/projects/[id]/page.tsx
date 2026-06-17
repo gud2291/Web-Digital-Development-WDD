@@ -23,6 +23,7 @@ export default async function EditProjectPage({ params }: PageProps) {
           category: doc.category ?? "Web",
           description: doc.description ?? "",
           image: doc.image ?? "",
+          imageAlt: doc.imageAlt ?? "",
           liveUrl: doc.liveUrl ?? "",
           featured: !!doc.featured,
           visible: !!doc.visible,

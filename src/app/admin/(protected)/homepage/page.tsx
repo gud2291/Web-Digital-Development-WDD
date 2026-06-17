@@ -18,6 +18,7 @@ export default async function HomepageAdminPage() {
           heroSlides: (doc?.heroSlides ?? []).map((s) => ({
             type: (s.type as "image" | "video") ?? "image",
             image: s.image ?? "",
+            imageAlt: s.imageAlt ?? "",
             video: s.video ?? "",
             title: s.title ?? "",
             subtitle: s.subtitle ?? "",
@@ -29,6 +30,7 @@ export default async function HomepageAdminPage() {
             name: l.name,
             image: l.image,
             visible: l.visible ?? true,
+            imageAlt: l.imageAlt ?? "",
           })),
           ctaBanner: {
             title: doc?.ctaBanner?.title ?? "",

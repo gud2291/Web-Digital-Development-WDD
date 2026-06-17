@@ -14,6 +14,7 @@ export interface BlogCardData {
   date: string;
   readTime: string;
   image: string;
+  imageAlt?: string;
 }
 
 interface Props {
@@ -129,7 +130,7 @@ export function BlogListClient({ initialPosts, initialPage, totalPages }: Props)
                     <div style={{ position: "relative", width: "100%", height: 280, borderRadius: "12px 12px 0 0", overflow: "hidden" }}>
                       <CldImage
                         src={b.image}
-                        alt={b.title}
+                        alt={b.imageAlt || b.title}
                         fill
                         sizes="(max-width: 900px) 100vw, 33vw"
                         style={{ objectFit: "cover" }}
@@ -173,6 +174,7 @@ interface RawBlogItem {
   createdAt: string;
   readTime?: number;
   featuredImage?: string;
+  featuredImageAlt?: string;
 }
 
 function toCard(b: RawBlogItem): BlogCardData {
@@ -188,5 +190,6 @@ function toCard(b: RawBlogItem): BlogCardData {
     }),
     readTime: `${b.readTime ?? 5} min`,
     image: b.featuredImage || "",
+    imageAlt: b.featuredImageAlt || "",
   };
 }

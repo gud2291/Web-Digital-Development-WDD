@@ -22,6 +22,7 @@ export interface ProjectSlide {
   liveUrl: string;
   description: string;
   image: string;
+  imageAlt?: string;
 }
 
 export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]; title: string }) {
@@ -73,7 +74,7 @@ export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]
                     <div className="project-card__img" style={{ background: p.bg, position: "relative", overflow: "hidden" }}>
                       {p.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.image} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <img src={p.image} alt={p.imageAlt || p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       ) : (
                         <div className="project-card__icon-wrap">
                           <Icon name={p.icon} size={36} />

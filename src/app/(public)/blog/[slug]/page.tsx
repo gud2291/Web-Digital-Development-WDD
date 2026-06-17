@@ -69,6 +69,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
         category: "General",
         excerpt: "",
         featuredImage: "",
+        featuredImageAlt: "",
         seoTitle: "",
         seoDescription: "",
         published: true,
@@ -142,7 +143,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
             <div style={{ position: "relative", width: "100%", height: 420, borderRadius: 16, overflow: "hidden" }}>
               <CldImage
                 src={post.featuredImage}
-                alt={post.title}
+                alt={post.featuredImageAlt || post.title}
                 fill
                 priority
                 sizes="(max-width: 1040px) 100vw, 1040px"
@@ -209,7 +210,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
                         <div style={{ position: "relative", width: "100%", height: 170, borderRadius: "12px 12px 0 0", overflow: "hidden" }}>
                           <CldImage
                             src={p.featuredImage}
-                            alt={p.title}
+                            alt={p.featuredImageAlt || p.title}
                             fill
                             sizes="(max-width: 900px) 100vw, 33vw"
                             style={{ objectFit: "cover" }}

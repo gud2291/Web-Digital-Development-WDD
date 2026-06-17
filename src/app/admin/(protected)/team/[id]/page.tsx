@@ -21,6 +21,7 @@ export default async function EditTeamPage({ params }: PageProps) {
           name: doc.name,
           designation: doc.designation ?? "",
           photo: doc.photo ?? "",
+          photoAlt: doc.photoAlt ?? "",
           bio: doc.bio ?? "",
           linkedinUrl: doc.linkedinUrl ?? "",
           visible: !!doc.visible,

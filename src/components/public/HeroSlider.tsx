@@ -10,6 +10,7 @@ import { MagneticButton } from "@/components/public/MagneticButton";
 export interface HeroSlideData {
   type: string;
   image: string;
+  imageAlt?: string;
   video: string;
   title: string;
   subtitle: string;
@@ -174,7 +175,7 @@ export function HeroSlider({ slides, badgeText, interval = 6000 }: HeroSliderPro
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={s.image}
-                  alt={s.title || `Slide ${i + 1}`}
+                  alt={s.imageAlt || s.title || `Slide ${i + 1}`}
                   loading={i === 0 ? "eager" : "lazy"}
                   decoding="async"
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}

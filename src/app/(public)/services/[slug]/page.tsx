@@ -101,6 +101,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         shortDescription: "",
         content: "",
         coverImage: "",
+        coverImageAlt: "",
         icon: "monitor",
         features: [],
         faqs: [],
@@ -186,7 +187,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 <div style={{ position: "relative", width: "100%", height: 380, borderRadius: 16, overflow: "hidden" }}>
                   <CldImage
                     src={svc.coverImage}
-                    alt={svc.title}
+                    alt={svc.coverImageAlt || svc.title}
                     fill
                     priority
                     sizes="(max-width: 900px) 100vw, 50vw"

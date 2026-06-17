@@ -19,6 +19,7 @@ const schema = z.object({
   excerpt: z.string().max(300).optional().default(""),
   content: z.string().min(1, "Content is required"),
   featuredImage: z.string().optional().default(""),
+  featuredImageAlt: z.string().optional().default(""),
   author: z.string().default("Web Digital Development Team"),
   category: z.string().default("General"),
   tags: z.string().default(""),
@@ -37,6 +38,7 @@ interface InitialDoc {
   excerpt?: string;
   content?: string;
   featuredImage?: string;
+  featuredImageAlt?: string;
   author?: string;
   category?: string;
   tags?: string[];
@@ -68,6 +70,7 @@ export function BlogForm({ initial }: Props) {
       excerpt: initial?.excerpt ?? "",
       content: initial?.content ?? "",
       featuredImage: initial?.featuredImage ?? "",
+      featuredImageAlt: initial?.featuredImageAlt ?? "",
       author: initial?.author ?? "Web Digital Development Team",
       category: initial?.category ?? "General",
       tags: (initial?.tags ?? []).join(", "),
@@ -154,7 +157,13 @@ export function BlogForm({ initial }: Props) {
           control={control}
           name="featuredImage"
           render={({ field }) => (
-            <ImageUploader value={field.value} onChange={field.onChange} label="Featured image" />
+            <ImageUploader
+              value={field.value}
+              onChange={field.onChange}
+              label="Featured image"
+              altValue={watch("featuredImageAlt")}
+              onAltChange={(alt) => setValue("featuredImageAlt", alt)}
+            />
           )}
         />
         <div className="admin-form-row admin-form-row--3" style={{ marginTop: 14 }}>

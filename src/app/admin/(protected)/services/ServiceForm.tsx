@@ -22,6 +22,7 @@ const schema = z.object({
   shortDescription: z.string().max(300).default(""),
   content: z.string().default(""),
   coverImage: z.string().default(""),
+  coverImageAlt: z.string().default(""),
   icon: z.string().default("monitor"),
   iconName: z.string().default("Globe"),
   accentColor: z.enum(["blue", "green", "orange", "pink", "purple", "teal"]).default("blue"),
@@ -51,6 +52,7 @@ interface InitialDoc {
   shortDescription?: string;
   content?: string;
   coverImage?: string;
+  coverImageAlt?: string;
   icon?: string;
   iconName?: string;
   accentColor?: string;
@@ -88,6 +90,7 @@ export function ServiceForm({ initial }: Props) {
       shortDescription: initial?.shortDescription ?? "",
       content: initial?.content ?? "",
       coverImage: initial?.coverImage ?? "",
+      coverImageAlt: initial?.coverImageAlt ?? "",
       icon: initial?.icon ?? "monitor",
       iconName: initial?.iconName ?? "Globe",
       accentColor: (initial?.accentColor ?? "blue") as Values["accentColor"],
@@ -218,7 +221,13 @@ export function ServiceForm({ initial }: Props) {
           name="coverImage"
           render={({ field }) => (
             <div style={{ marginTop: 14 }}>
-              <ImageUploader value={field.value} onChange={field.onChange} label="Cover image" />
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                label="Cover image"
+                altValue={watch("coverImageAlt")}
+                onAltChange={(alt) => setValue("coverImageAlt", alt)}
+              />
             </div>
           )}
         />

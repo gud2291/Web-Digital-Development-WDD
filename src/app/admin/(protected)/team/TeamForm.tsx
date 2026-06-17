@@ -13,6 +13,7 @@ const schema = z.object({
   name: z.string().min(2).max(120),
   designation: z.string().default(""),
   photo: z.string().default(""),
+  photoAlt: z.string().default(""),
   bio: z.string().default(""),
   linkedinUrl: z.string().default(""),
   visible: z.boolean().default(true),
@@ -25,6 +26,7 @@ interface InitialDoc {
   name?: string;
   designation?: string;
   photo?: string;
+  photoAlt?: string;
   bio?: string;
   linkedinUrl?: string;
   visible?: boolean;
@@ -38,6 +40,8 @@ export function TeamForm({ initial }: { initial?: InitialDoc }) {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<Values>({
     resolver: zodResolver(schema),
@@ -45,6 +49,7 @@ export function TeamForm({ initial }: { initial?: InitialDoc }) {
       name: initial?.name ?? "",
       designation: initial?.designation ?? "",
       photo: initial?.photo ?? "",
+      photoAlt: initial?.photoAlt ?? "",
       bio: initial?.bio ?? "",
       linkedinUrl: initial?.linkedinUrl ?? "",
       visible: initial?.visible ?? true,
@@ -94,7 +99,13 @@ export function TeamForm({ initial }: { initial?: InitialDoc }) {
           name="photo"
           render={({ field }) => (
             <div style={{ marginTop: 14 }}>
-              <ImageUploader value={field.value} onChange={field.onChange} label="Photo" />
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                label="Photo"
+                altValue={watch("photoAlt")}
+                onAltChange={(alt) => setValue("photoAlt", alt)}
+              />
             </div>
           )}
         />

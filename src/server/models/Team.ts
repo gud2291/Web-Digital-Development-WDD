@@ -6,6 +6,7 @@ const TeamSchema = new Schema(
     name: { type: String, required: true, trim: true },
     designation: { type: String, default: "" },
     photo: { type: String, default: "" },
+    photoAlt: { type: String, default: "" },
     bio: { type: String, default: "" },
     linkedinUrl: { type: String, default: "" },
     visible: { type: Boolean, default: true, index: true },

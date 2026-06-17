@@ -26,6 +26,7 @@ const ServiceSchema = new Schema(
     shortDescription: { type: String, default: "" },
     content: { type: String, default: "" },
     coverImage: { type: String, default: "" },
+    coverImageAlt: { type: String, default: "" },
     icon: { type: String, default: "Globe" },
     // §12.6 — lucide icon name + accent colour for the service card.
     iconName: { type: String, default: "Globe" },

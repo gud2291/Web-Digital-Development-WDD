@@ -147,7 +147,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 >
                   <CldImage
                     src={project.image}
-                    alt={project.title}
+                    alt={project.imageAlt || project.title}
                     fill
                     priority
                     sizes="(max-width: 900px) 100vw, 50vw"
