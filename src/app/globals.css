@@ -157,9 +157,12 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ========== LAYOUT ========== */
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
-.section { padding: 86px 0; }
-.section--sm { padding: 54px 0; }
+.section { padding: 56px 0; }
+.section--sm { padding: 24px 0; }
 .section--alt { background: var(--c-bg-section); }
+.section--no-pb { padding-bottom: 0; }
+.section--pt-10 { padding-top: 10px; }
+.section--pt-24 { padding-top: 24px; }
 
 /* ========== BUTTONS ========== */
 .btn {
@@ -1231,7 +1234,7 @@ html[data-theme="dark"] {
 .section--timeline {
   background: var(--c-bg);
   color: var(--c-text);
-  padding: 90px 0;
+  padding: 60px 0;
   position: relative;
 }
 
@@ -1551,7 +1554,7 @@ html[data-theme="dark"] {
   :root { --gutter: 14px; --header-h: 64px; }
   .t-h1 { font-size: 38px; } .t-h2 { font-size: 30px; } .t-h3 { font-size: 24px; } .t-h4 { font-size: 20px; }
   .t-lead { font-size: 16.5px; }
-  .section { padding: 54px 0; } .section--sm { padding: 38px 0; }
+  .section { padding: 24px 0; } .section--sm { padding: 8px 0; }
   .page-banner { padding: 48px 0 36px; }
 
   .site-hdr__hamburger { display: grid; }

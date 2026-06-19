@@ -52,35 +52,7 @@ const FALLBACK_STATS: [string, string, string, IconName][] = [
   ["24×7", "WhatsApp Support", "#8B5CF6", "shield"],
 ];
 
-// "Who We Are" — services we bring to the table, each linked to its page.
-// [title, description, service slug] — slugs verified against seed-content.ts.
-const WHO_WE_BRING: [string, string, string][] = [
-  [
-    "Website Design & Development",
-    "Clean, modern, fully responsive websites built to impress and convert.",
-    "website-development",
-  ],
-  [
-    "Website Redesign",
-    "Breathing new life into outdated sites while preserving your brand identity.",
-    "website-designing",
-  ],
-  [
-    "Graphic Design",
-    "Logos, brochures, catalogues, and visual assets that keep your brand consistent.",
-    "graphic-designing",
-  ],
-  [
-    "SEO & Content Strategy",
-    "Keyword-focused content and on-page optimization that helps you get found on Google.",
-    "seo-services",
-  ],
-  [
-    "Online Marketing & SMO",
-    "Social media and digital marketing strategies that connect you with the right audience.",
-    "digital-marketing",
-  ],
-];
+
 
 const CHECKS: [string, string][] = [
   ["Custom design", "No templates. Every site is unique."],
@@ -544,59 +516,8 @@ export default async function HomePage() {
             />
           </div>
         </div>
-      </section>
 
-      <SectionDivider from="#F7F9FC" to="#ffffff" flip />
 
-      {/* Who We Are — condensed: short intro + linked services list + one trust
-          line. Sits directly below the About Us section. Title is an h2, the
-          sub-heading an h3 (page keeps exactly one h1 in the hero). */}
-      <section id="s-who-we-are" className="section">
-        <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
-          <Reveal>
-            <Eyebrow>WHO WE ARE</Eyebrow>
-            <h2 className="t-h2" style={{ marginTop: 14 }}>
-              Who We Are
-            </h2>
-          </Reveal>
-          <Reveal delay={100}>
-            <p className="t-lead" style={{ marginTop: 16 }}>
-              Since 2019, we&apos;ve helped businesses show up online the right way — with websites
-              that don&apos;t just exist, but actually perform.
-            </p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <h3 className="t-h3" style={{ marginTop: 40 }}>
-              What We Bring to the Table
-            </h3>
-            <ul
-              className="about-preview__checks"
-              style={{ listStyle: "none", margin: 0, marginTop: 22, padding: 0 }}
-            >
-              {WHO_WE_BRING.map(([title, desc, slug]) => (
-                <li key={title} className="check-item" style={{ listStyle: "none" }}>
-                  <div className="check-item__icon">
-                    <Icon name="check" size={12} stroke={3} />
-                  </div>
-                  <div>
-                    <Link href={`/services/${slug}`} className="svc-link" style={{ marginTop: 0 }}>
-                      {title}
-                    </Link>
-                    <div className="t-small">{desc}</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-
-          <Reveal delay={140}>
-            <p className="t-small" style={{ marginTop: 28 }}>
-              Since 2019 we&apos;ve delivered 400+ websites for clients across India and abroad —
-              research, design and development under one roof.
-            </p>
-          </Reveal>
-        </div>
       </section>
 
       {/* Services Grid */}
@@ -735,7 +656,7 @@ export default async function HomePage() {
 
       {/* FAQ — §C2/AEO. Visible Q&A + matching FAQPage JSON-LD (mirrors HOME_FAQ). */}
       <section id="s-faq" className="section section--alt">
-        <div className="container" style={{ maxWidth: 820, margin: "0 auto" }}>
+        <div className="container">
           <Reveal>
             <SectionHead kicker="FAQ" title="Frequently Asked Questions" />
           </Reveal>

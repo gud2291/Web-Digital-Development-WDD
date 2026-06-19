@@ -203,8 +203,8 @@ export default async function AboutPage() {
       {/* Who We Are — fuller version that complements (doesn't repeat) the Our
           Story founder narrative above. h2 title, h3 sub-headings; service links
           point to each /services/[slug]. Page keeps its single h1 in the banner. */}
-      <section className="section">
-        <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+      <section className="section section--pt-24">
+        <div className="container">
           <Reveal>
             <Eyebrow>WHO WE ARE</Eyebrow>
             <h2 className="t-h2" style={{ marginTop: 14 }}>
