@@ -1,6 +1,7 @@
 import "server-only";
 import { Resend } from "resend";
 import { serverEnv } from "@/config/env";
+import { siteConfig } from "@/config/site";
 
 /**
  * Lazy Resend client. Constructing at module load fails build-time page
@@ -25,7 +26,7 @@ export interface SendEmailParams {
 
 export async function sendEmail(params: SendEmailParams) {
   const { data, error } = await getResend().emails.send({
-    from: serverEnv.RESEND_FROM_EMAIL,
+    from: `${siteConfig.name} <${serverEnv.RESEND_FROM_EMAIL}>`,
     to: Array.isArray(params.to) ? params.to : [params.to],
     subject: params.subject,
     html: params.html,

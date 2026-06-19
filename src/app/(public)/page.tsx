@@ -279,6 +279,14 @@ export default async function HomePage() {
         photo: "",
       }));
 
+  // Real aggregate from the testimonials actually rendered above (no invented
+  // numbers): average rating to one decimal + the count. Shown visibly under the
+  // carousel heading AND emitted as aggregateRating so the JSON-LD mirrors the page.
+  const reviewCount = testimonials.length;
+  const ratingAvg = reviewCount
+    ? testimonials.reduce((sum, t) => sum + (t.rating ?? 0), 0) / reviewCount
+    : 0;
+
   const blogs = blogResult.items?.length
     ? blogResult.items.slice(0, 3).map((b) => ({
         title: b.title,
@@ -570,10 +578,12 @@ export default async function HomePage() {
         <TestimonialsCarousel
           testimonials={testimonials}
           title={sectionTitles?.testimonials || "What Our Clients Say"}
+          ratingSummary={{ average: ratingAvg, count: reviewCount }}
         />
-        {/* C1 — Review items for the testimonials shown above. No aggregateRating
-            here: the homepage shows individual reviews but not a computed on-page
-            average (see /reviews for the AggregateRating). */}
+        {/* C1 — Review items + AggregateRating for the testimonials shown above.
+            The aggregate (real average + count of the rendered testimonials) is
+            also displayed visibly under the carousel heading, so the JSON-LD
+            mirrors on-page content per Google's review-snippet policy. */}
         <SchemaMarkup
           data={businessReviewsSchema({
             reviews: testimonials.map((t) => ({
@@ -581,6 +591,7 @@ export default async function HomePage() {
               rating: t.rating,
               body: t.quote,
             })),
+            aggregate: { ratingValue: ratingAvg, reviewCount },
           })}
         />
       </div>

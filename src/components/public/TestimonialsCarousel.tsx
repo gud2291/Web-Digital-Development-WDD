@@ -22,7 +22,17 @@ export interface TestimonialSlide {
   photo: string;
 }
 
-export function TestimonialsCarousel({ testimonials, title }: { testimonials: TestimonialSlide[]; title: string }) {
+export function TestimonialsCarousel({
+  testimonials,
+  title,
+  ratingSummary,
+}: {
+  testimonials: TestimonialSlide[];
+  title: string;
+  // Visible average + count shown under the heading. Must mirror the
+  // AggregateRating emitted in the homepage JSON-LD (Google "visible content" rule).
+  ratingSummary?: { average: number; count: number };
+}) {
   const autoplay = React.useRef(Autoplay({ delay: 6500, stopOnInteraction: false, stopOnMouseEnter: true }));
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: true }, [autoplay.current]);
   const [selected, setSelected] = React.useState(0);
@@ -47,6 +57,25 @@ export function TestimonialsCarousel({ testimonials, title }: { testimonials: Te
     <section className="section section--alt">
       <div className="container">
         <SectionHead kicker="REVIEWS" title={title} />
+        {ratingSummary && ratingSummary.count > 0 && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+              marginTop: -28,
+              marginBottom: 40,
+              flexWrap: "wrap",
+            }}
+          >
+            <Stars value={Math.round(ratingSummary.average)} size={18} />
+            <span className="t-small" style={{ fontWeight: 600 }}>
+              {ratingSummary.average.toFixed(1)} out of 5 · based on {ratingSummary.count}{" "}
+              {ratingSummary.count === 1 ? "review" : "reviews"}
+            </span>
+          </div>
+        )}
         <div className="embla embla--testi">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
