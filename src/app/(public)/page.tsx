@@ -485,13 +485,19 @@ export default async function HomePage() {
               </h2>
             </Reveal>
             <Reveal delay={100}>
-              <p className="t-lead" style={{ marginTop: 16 }}>
-                I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi, in 2019 —
-                with one laptop and one belief. A small business deserves a website as good as a big
-                company gets, without the big-company invoice. Six years on, there are six of us in
-                one office. We&apos;ve shipped 400+ websites for clients across India and abroad. And I
-                still review every design before it goes live.
-              </p>
+              {siteContent?.about?.description ? (
+                <p className="t-lead" style={{ marginTop: 16, whiteSpace: "pre-line", display: "-webkit-box", WebkitLineClamp: 8, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                  {siteContent.about.description}
+                </p>
+              ) : (
+                <p className="t-lead" style={{ marginTop: 16 }}>
+                  I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi, in 2019 —
+                  with one laptop and one belief. A small business deserves a website as good as a big
+                  company gets, without the big-company invoice. Six years on, there are six of us in
+                  one office. We&apos;ve shipped 400+ websites for clients across India and abroad. And I
+                  still review every design before it goes live.
+                </p>
+              )}
             </Reveal>
             <Reveal delay={150}>
               {/* §E2 — semantic list (was divs). Inline reset keeps the exact grid

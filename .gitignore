@@ -25,6 +25,9 @@ next-env.d.ts
 # Vercel
 .vercel
 
+# AI / IDE
+.claude
+
 # Misc
 .DS_Store
 *.pem

@@ -13,9 +13,10 @@ export interface LocationPageResult {
 }
 
 export async function listLocationPages(): Promise<LocationPageResult[]> {
-  const db = await connectDB();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const collection = (db as any).collection("locationpages");
+  const mongoose = await connectDB();
+  const db = mongoose.connection.db;
+  if (!db) return [];
+  const collection = db.collection("locationpages");
   const docs = (await collection.find({ visible: true }).toArray()) as Array<Record<string, unknown>>;
   return docs.map((d) => ({
     slug: d.slug as string,

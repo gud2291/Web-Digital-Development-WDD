@@ -10,6 +10,11 @@ export const createProjectSchema = z.object({
   featured: z.boolean().default(false),
   visible: z.boolean().default(true),
   tech: z.array(z.string()).default([]),
+  clientBackground: z.string().default(""),
+  objective: z.string().default(""),
+  solution: z.string().default(""),
+  timeline: z.string().default(""),
+  features: z.array(z.string()).default([]),
 });
 
 export const updateProjectSchema = createProjectSchema.partial();

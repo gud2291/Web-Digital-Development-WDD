@@ -15,6 +15,11 @@ const ProjectSchema = new Schema(
     visible: { type: Boolean, default: true, index: true },
     order: { type: Number, default: 0 },
     tech: { type: [String], default: [] },
+    clientBackground: { type: String, default: "" },
+    objective: { type: String, default: "" },
+    solution: { type: String, default: "" },
+    timeline: { type: String, default: "" },
+    features: { type: [String], default: [] },
   },
   { timestamps: true }
 );

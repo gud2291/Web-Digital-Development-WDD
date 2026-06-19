@@ -28,6 +28,11 @@ export default async function EditProjectPage({ params }: PageProps) {
           featured: !!doc.featured,
           visible: !!doc.visible,
           tech: doc.tech ?? [],
+          clientBackground: doc.clientBackground ?? "",
+          objective: doc.objective ?? "",
+          solution: doc.solution ?? "",
+          timeline: doc.timeline ?? "",
+          features: doc.features ?? [],
         }}
       />
     </>

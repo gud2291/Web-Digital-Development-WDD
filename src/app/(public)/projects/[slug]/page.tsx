@@ -186,6 +186,122 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         </section>
       )}
 
+      {/* ── Overview / About the client ── */}
+      {project.clientBackground && (
+        <section className="section">
+          <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+            <Reveal>
+              <SectionHead
+                kicker="OVERVIEW"
+                title="About the client"
+                align="left"
+              />
+            </Reveal>
+            <Reveal delay={60}>
+              <p className="t-lead" style={{ whiteSpace: "pre-line" }}>
+                {project.clientBackground}
+              </p>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* ── The Challenge ── */}
+      {project.objective && (
+        <section className="section section--alt">
+          <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+            <Reveal>
+              <SectionHead
+                kicker="THE CHALLENGE"
+                title="The problem we set out to solve"
+                align="left"
+              />
+            </Reveal>
+            <Reveal delay={60}>
+              <p className="t-lead" style={{ whiteSpace: "pre-line" }}>
+                {project.objective}
+              </p>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* ── Our Solution ── */}
+      {project.solution && (
+        <section className="section">
+          <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+            <Reveal>
+              <SectionHead
+                kicker="OUR SOLUTION"
+                title="What we built"
+                align="left"
+              />
+            </Reveal>
+            <Reveal delay={60}>
+              <p className="t-lead" style={{ whiteSpace: "pre-line" }}>
+                {project.solution}
+              </p>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* ── Key Features ── */}
+      {project.features && project.features.length > 0 && (
+        <section className="section section--alt">
+          <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
+            <Reveal>
+              <SectionHead
+                kicker="KEY FEATURES"
+                title="What's inside"
+                align="left"
+              />
+            </Reveal>
+            <Reveal delay={60}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                  gap: 16,
+                  marginTop: 8,
+                }}
+              >
+                {project.features.map((f) => (
+                  <div
+                    key={f}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 12,
+                    }}
+                  >
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 28,
+                        height: 28,
+                        borderRadius: 999,
+                        background: "#EFF6FF",
+                        color: "#1E40AF",
+                        marginTop: 2,
+                      }}
+                    >
+                      <Icon name="check" size={15} />
+                    </span>
+                    <span className="t-small" style={{ color: "var(--c-text)" }}>
+                      {f}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
       {/* ── Tech stack ── */}
       {project.tech && project.tech.length > 0 && (
         <section className="section">
@@ -223,6 +339,28 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   </span>
                 ))}
               </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* ── Timeline ── */}
+      {project.timeline && (
+        <section className="section section--alt">
+          <div
+            className="container"
+            style={{ maxWidth: 880, margin: "0 auto", textAlign: "center" }}
+          >
+            <Reveal>
+              <Badge>
+                <Icon name="clock" size={12} />
+                &nbsp;TIMELINE
+              </Badge>
+            </Reveal>
+            <Reveal delay={60}>
+              <p className="t-lead" style={{ marginTop: 14 }}>
+                {project.timeline}
+              </p>
             </Reveal>
           </div>
         </section>
