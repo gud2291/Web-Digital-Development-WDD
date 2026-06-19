@@ -235,7 +235,19 @@ export function serviceSchema(s: ServiceSchemaInput) {
     name: s.name,
     description: s.description,
     image: absoluteUrl(s.image),
-    provider: { "@id": `${siteConfig.url}#business`, "@type": "ProfessionalService", name: siteConfig.name },
+    provider: {
+      "@id": `${siteConfig.url}#business`,
+      "@type": "ProfessionalService",
+      name: siteConfig.name,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: siteConfig.address.street,
+        addressLocality: siteConfig.address.city,
+        addressRegion: siteConfig.address.region,
+        postalCode: siteConfig.address.postalCode,
+        addressCountry: siteConfig.address.country,
+      },
+    },
     areaServed: "IN",
     serviceType: s.name,
     url: absoluteUrl(s.url) ?? siteConfig.url,
@@ -291,6 +303,14 @@ export function businessReviewsSchema(input: {
     "@id": `${siteConfig.url}#business`,
     name: siteConfig.name,
     url: siteConfig.url,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: siteConfig.address.street,
+      addressLocality: siteConfig.address.city,
+      addressRegion: siteConfig.address.region,
+      postalCode: siteConfig.address.postalCode,
+      addressCountry: siteConfig.address.country,
+    },
   };
 
   const clamp = (n: number) => Math.min(5, Math.max(1, n));
