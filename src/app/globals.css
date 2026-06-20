@@ -93,6 +93,32 @@ html.lenis, html.lenis body { height: auto; }
      60  Chat bubble            .chat-bubble (launcher)
    ========================================================================== */
 
+/* ========== ACCESSIBILITY: SKIP LINK ========== */
+/* Visually hidden until keyboard-focused, then it slides into the top-left
+   above every overlay so keyboard users can jump straight to <main>. */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 10000;
+  transform: translateY(-150%);
+  background: var(--c-primary-700);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--sh-lg);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: none;
+  box-shadow: var(--sh-focus), var(--sh-lg);
+}
+
 /* ========== TYPOGRAPHY ========== */
 .t-h1 { font-size: 58px; line-height: 1.10; font-weight: 800; letter-spacing: -0.025em; color: var(--c-text); }
 .t-h2 { font-size: 42px; line-height: 1.20; font-weight: 700; letter-spacing: -0.02em; color: var(--c-text); }
@@ -2651,4 +2677,18 @@ html[data-theme="dark"] {
 @media (max-width: 640px) {
   .hp-item__head { flex-wrap: wrap; }
   .homepage-editor .admin-form-section.section-card { padding: 18px 16px; }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY — minimum 48×48px touch targets on mobile for icon-only
+   controls. Only the button box grows (extra padding); the inner icon size is
+   unchanged, so the visuals stay the same. Placed last so it wins the cascade.
+   ========================================================================== */
+@media (max-width: 767px) {
+  .fab--top { width: 48px !important; height: 48px !important; }
+  .theme-toggle,
+  .site-hdr__hamburger,
+  .mobile-menu__close,
+  .share-btn { width: 48px; height: 48px; }
+  .site-ftr .site-ftr__social { width: 48px; height: 48px; }
 }

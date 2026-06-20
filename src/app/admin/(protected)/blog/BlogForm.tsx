@@ -21,6 +21,7 @@ const schema = z.object({
   featuredImage: z.string().optional().default(""),
   featuredImageAlt: z.string().optional().default(""),
   author: z.string().default("Web Digital Development Team"),
+  authorFollowUrl: z.string().url("Enter a valid URL").optional().or(z.literal("")),
   category: z.string().default("General"),
   tags: z.string().default(""),
   readTime: z.coerce.number().int().min(1).max(120).default(5),
@@ -40,6 +41,7 @@ interface InitialDoc {
   featuredImage?: string;
   featuredImageAlt?: string;
   author?: string;
+  authorFollowUrl?: string;
   category?: string;
   tags?: string[];
   readTime?: number;
@@ -72,6 +74,7 @@ export function BlogForm({ initial }: Props) {
       featuredImage: initial?.featuredImage ?? "",
       featuredImageAlt: initial?.featuredImageAlt ?? "",
       author: initial?.author ?? "Web Digital Development Team",
+      authorFollowUrl: initial?.authorFollowUrl ?? "",
       category: initial?.category ?? "General",
       tags: (initial?.tags ?? []).join(", "),
       readTime: initial?.readTime ?? 5,
@@ -183,6 +186,11 @@ export function BlogForm({ initial }: Props) {
         <div className="field" style={{ marginTop: 14 }}>
           <label className="field__label">Tags (comma-separated)</label>
           <input className="input" {...register("tags")} />
+        </div>
+        <div className="field" style={{ marginTop: 14 }}>
+          <label className="field__label">Author follow link (Instagram/LinkedIn/etc.)</label>
+          <input className="input" {...register("authorFollowUrl")} placeholder="https://…" />
+          {errors.authorFollowUrl && <span className="admin-form-err">{errors.authorFollowUrl.message}</span>}
         </div>
         <label className="admin-form-checkbox" style={{ marginTop: 14 }}>
           <input type="checkbox" {...register("published")} />

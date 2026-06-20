@@ -75,7 +75,7 @@ export function NewsletterSignup({ variant = "card", source = "footer" }: { vari
           aria-label="Email address"
           {...register("email")}
         />
-        <button type="submit" className="newsletter__btn" disabled={isSubmitting}>
+        <button type="submit" className="newsletter__btn" disabled={isSubmitting} aria-label="Subscribe">
           {isSubmitting ? "…" : compact ? <Icon name="arrowRight" size={16} /> : "Subscribe"}
         </button>
       </div>

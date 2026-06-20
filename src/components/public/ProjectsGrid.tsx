@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { Badge, Reveal } from "@/components/ui";
 import { TiltCard } from "@/components/public/TiltCard";
+import { cldOptimize } from "@/lib/cloudinary";
 
 export interface ProjectCardData {
   id: string;
@@ -65,7 +66,7 @@ export function ProjectsGrid({ projects, categories }: Props) {
                         position: "absolute",
                         inset: 0,
                         background: p.image
-                          ? `center/cover url(${p.image}) no-repeat, ${p.bg}`
+                          ? `center/cover url(${cldOptimize(p.image, "w_600")}) no-repeat, ${p.bg}`
                           : p.bg,
                       }}
                     />

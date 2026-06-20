@@ -48,7 +48,7 @@ const PROCESS_STEPS: [string, string][] = [
 const FALLBACK_FAQ: [string, string][] = [
   ["How long does a website take?", "Most projects ship in 3–5 weeks. Larger e-commerce sites can take 6–8."],
   ["Do you provide hosting?", "Yes — we set up reliable, secure hosting and handle domain configuration."],
-  ["Will my website rank on Google?", "All our websites are SEO-ready. For aggressive growth, pair with our SEO package."],
+  ["Will my website rank on Google?", "All our sites are SEO-ready. For aggressive growth, pair with our SEO package."],
   ["Can I update content myself?", "Absolutely. We hand over a CMS dashboard and walk you through everything."],
   ["What if I need changes later?", "Pick our monthly maintenance plan — content edits, updates and security included."],
 ];

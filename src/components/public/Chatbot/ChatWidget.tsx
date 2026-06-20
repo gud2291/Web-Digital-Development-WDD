@@ -3,6 +3,7 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "@/components/Icon";
+import { CldImage } from "@/components/CldImage";
 import { useChatbotStore } from "@/store/chatbot";
 import { ChatWindow } from "./ChatWindow";
 
@@ -77,10 +78,11 @@ export function ChatWidget() {
         {open ? (
           <Icon name="x" size={22} />
         ) : effectiveConfig.avatar ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <CldImage
             src={effectiveConfig.avatar}
             alt="Aria"
+            width={56}
+            height={56}
             style={{
               width: "100%",
               height: "100%",

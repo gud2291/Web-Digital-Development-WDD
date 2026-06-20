@@ -14,7 +14,7 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://webdigitaldevelopment.com",
   ogImage: "/og-image.png",
   twitterHandle: "@webdigitaldev",
-  email: "support@webdigitaldevelopment.in",
+  email: "support@webdigitaldevelopment.com",
   phone: "+91 81302 70050",
   whatsapp: "918130270050",
   address: {

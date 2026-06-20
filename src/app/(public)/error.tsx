@@ -68,7 +68,7 @@ export default function PublicError({
         {error.digest ? (
           <p
             className="t-small"
-            style={{ marginTop: 14, fontSize: 11, color: "#94A3B8", fontFamily: "var(--ff-mono)" }}
+            style={{ marginTop: 14, fontSize: 11, color: "#64748B", fontFamily: "var(--ff-mono)" }}
           >
             Ref: {error.digest}
           </p>

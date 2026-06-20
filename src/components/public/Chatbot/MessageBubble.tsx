@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { ChatMessage } from "@/store/chatbot";
+import { CldImage } from "@/components/CldImage";
 import { TypingDots } from "./TypingDots";
 
 interface Props {
@@ -26,8 +27,7 @@ export function MessageBubble({ message, botName, botAvatar }: Props) {
       {!isUser && (
         <div className="msg-avatar" aria-hidden>
           {botAvatar ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={botAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <CldImage src={botAvatar} alt="" width={28} height={28} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           ) : (
             botInitials(botName)
           )}

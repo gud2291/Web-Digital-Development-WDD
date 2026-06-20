@@ -33,6 +33,8 @@ import { metadataFromDb } from "@/lib/seo";
 import { HeroSceneWrapper } from "@/components/3d/HeroSceneWrapper";
 import { HeroSlider } from "@/components/public/HeroSlider";
 import { SafeImage } from "@/components/public/SafeImage";
+import { CldImage } from "@/components/CldImage";
+import { cldOptimize } from "@/lib/cloudinary";
 import { FAQList } from "@/components/FAQList";
 import { SchemaMarkup, faqSchema, businessReviewsSchema, speakableSchema } from "@/components/SchemaMarkup";
 
@@ -474,7 +476,7 @@ export default async function HomePage() {
                   I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi, in 2019 —
                   with one laptop and one belief. A small business deserves a website as good as a big
                   company gets, without the big-company invoice. Six years on, there are six of us in
-                  one office. We&apos;ve shipped 400+ websites for clients across India and abroad. And I
+                  one office. We&apos;ve shipped 400+ sites for clients across India and abroad. And I
                   still review every design before it goes live.
                 </p>
               )}
@@ -515,7 +517,7 @@ export default async function HomePage() {
             }}
           >
             <SafeImage
-              src={aboutHeroImage}
+              src={cldOptimize(aboutHeroImage, "w_1200")}
               alt="Web Digital Development studio workspace in Delhi"
               fallbackLabel="Web Digital Development Studio, Delhi"
               loading="lazy"
@@ -631,11 +633,12 @@ export default async function HomePage() {
                           overflow: "hidden",
                         }}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <CldImage
                           src={b.image}
                           alt={b.imageAlt || b.title}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                          fill
+                          sizes="(max-width: 900px) 100vw, 33vw"
+                          style={{ objectFit: "cover" }}
                         />
                       </div>
                     ) : (

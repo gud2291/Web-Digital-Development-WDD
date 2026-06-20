@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Btn, Reveal } from "@/components/ui";
 
 export default function NotFound() {
@@ -15,10 +16,13 @@ export default function NotFound() {
     >
       <div className="container" style={{ textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
         <Reveal>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/assets/404-illustration.png"
             alt="404 - Page Not Found"
+            width={1024}
+            height={1024}
+            priority
+            sizes="(max-width: 420px) 100vw, 420px"
             style={{ maxWidth: 420, width: "100%", height: "auto", margin: "0 auto" }}
           />
         </Reveal>

@@ -7,6 +7,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Icon, type IconName } from "@/components/Icon";
 import { Badge, Btn, Eyebrow } from "@/components/ui";
+import { CldImage } from "@/components/CldImage";
 
 /**
  * Swipeable projects carousel (CLAUDE.md §12.11). Embla with 4s autoplay that
@@ -73,8 +74,13 @@ export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]
                   <article className="card project-card card--interactive" style={{ height: "100%" }}>
                     <div className="project-card__img" style={{ background: p.bg, position: "relative", overflow: "hidden" }}>
                       {p.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.image} alt={p.imageAlt || p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <CldImage
+                          src={p.image}
+                          alt={p.imageAlt || p.title}
+                          fill
+                          sizes="(max-width: 600px) 90vw, (max-width: 900px) 45vw, 30vw"
+                          style={{ objectFit: "cover" }}
+                        />
                       ) : (
                         <div className="project-card__icon-wrap">
                           <Icon name={p.icon} size={36} />

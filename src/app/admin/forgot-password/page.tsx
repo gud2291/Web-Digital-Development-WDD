@@ -115,7 +115,7 @@ export default function ForgotPasswordPage() {
                 className="input"
                 type="email"
                 autoComplete="email"
-                placeholder="admin@webdigitaldevelopment.in"
+                placeholder="admin@webdigitaldevelopment.com"
                 {...register("email")}
               />
               {errors.email && (

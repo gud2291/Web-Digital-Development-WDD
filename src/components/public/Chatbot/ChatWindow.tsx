@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/Icon";
+import { CldImage } from "@/components/CldImage";
 import { useChatbotStore } from "@/store/chatbot";
 import { useChatbot } from "@/hooks/useChatbot";
 import { MessageBubble } from "./MessageBubble";
@@ -62,8 +63,7 @@ export function ChatWindow({ config, onClose }: Props) {
       <header className="chat-window__header">
         <div className="chat-window__avatar" aria-hidden>
           {config.avatar ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={config.avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <CldImage src={config.avatar} alt="" width={36} height={36} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           ) : (
             botInitials(config.name)
           )}
@@ -85,8 +85,7 @@ export function ChatWindow({ config, onClose }: Props) {
           <div className="msg-row msg-row--bot">
             <div className="msg-avatar" aria-hidden>
               {config.avatar ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={config.avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <CldImage src={config.avatar} alt="" width={28} height={28} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               ) : (
                 botInitials(config.name)
               )}

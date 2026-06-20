@@ -389,7 +389,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         className="project-card__img"
                         style={{
                           background: r.image
-                            ? `center/cover url(${r.image}) no-repeat, ${PROJECT_BGS[idx % PROJECT_BGS.length]}`
+                            ? `center/cover url(${cldOptimize(r.image, "w_600")}) no-repeat, ${PROJECT_BGS[idx % PROJECT_BGS.length]}`
                             : PROJECT_BGS[idx % PROJECT_BGS.length],
                         }}
                       >

@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Btn } from "@/components/ui";
 import { MagneticButton } from "@/components/public/MagneticButton";
+import { CldImage } from "@/components/CldImage";
 
 export interface HeroSlideData {
   type: string;
@@ -172,13 +173,15 @@ export function HeroSlider({ slides, badgeText, interval = 6000 }: HeroSliderPro
                   <source src={s.video} type="video/mp4" />
                 </video>
               ) : s.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                // Above-the-fold hero — never lazy. First slide gets priority
+                // (preload + eager) as the LCP candidate; the rest load eagerly.
+                <CldImage
                   src={s.image}
                   alt={s.imageAlt || s.title || `Slide ${i + 1}`}
-                  loading={i === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  fill
+                  sizes="100vw"
+                  {...(i === 0 ? { priority: true } : { loading: "eager" as const })}
+                  style={{ objectFit: "cover", display: "block" }}
                 />
               ) : isVideo && s.video ? (
                 <video

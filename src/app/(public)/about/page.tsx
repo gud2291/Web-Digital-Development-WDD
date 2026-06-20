@@ -8,6 +8,7 @@ import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { listTeam } from "@/server/services/team.service";
 import { metadataFromDb } from "@/lib/seo";
 import { SafeImage } from "@/components/public/SafeImage";
+import { cldOptimize } from "@/lib/cloudinary";
 import { SchemaMarkup, aboutPageSchema } from "@/components/SchemaMarkup";
 
 // ISR: cached HTML; site-content & team admin saves call revalidatePath("/about")
@@ -195,7 +196,7 @@ export default async function AboutPage() {
             </Reveal>
           </div>
           <div style={{ position: "relative", height: "100%", minHeight: 400, width: "100%", borderRadius: 16, overflow: "hidden" }}>
-            <SafeImage src={about?.heroImage || "https://res.cloudinary.com/dt4i2xbs8/image/upload/f_auto,q_auto/wdd/about/our-story"} alt="Web Digital Development studio workspace in Delhi" fallbackLabel="WDD Studio, Delhi" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+            <SafeImage src={cldOptimize(about?.heroImage || "https://res.cloudinary.com/dt4i2xbs8/image/upload/f_auto,q_auto/wdd/about/our-story", "w_1200")} alt="Web Digital Development studio workspace in Delhi" fallbackLabel="WDD Studio, Delhi" loading="eager" fetchPriority="high" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
           </div>
         </div>
       </section>
@@ -369,7 +370,7 @@ export default async function AboutPage() {
                   <div
                     style={{
                       aspectRatio: "1/1",
-                      background: m.photo ? `center/cover url(${m.photo}) no-repeat, ${m.bg}` : m.bg,
+                      background: m.photo ? `center/cover url(${cldOptimize(m.photo, "w_600")}) no-repeat, ${m.bg}` : m.bg,
                       borderRadius: "12px 12px 0 0",
                     }}
                   />

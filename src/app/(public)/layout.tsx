@@ -30,10 +30,11 @@ export default async function PublicLayout({ children }: { children: React.React
 
   return (
     <>
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <SmoothScrollProvider />
       <BrandLoader />
       <SiteHeader socialLinks={socialLinks} services={services} />
-      <main>
+      <main id="main-content">
         <PageTransition>{children}</PageTransition>
       </main>
       <SiteFooter />

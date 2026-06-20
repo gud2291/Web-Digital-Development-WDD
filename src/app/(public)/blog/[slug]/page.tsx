@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
-import { Badge, Btn, PH, Reveal, SectionHead } from "@/components/ui";
+import { Badge, PH, Reveal, SectionHead } from "@/components/ui";
 import { CldImage } from "@/components/CldImage";
 import { getBlogBySlug, getRelatedBlogs, listBlogs } from "@/server/services/blog.service";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
@@ -66,6 +66,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
         readTime: 5,
         tags: [],
         author: "Web Digital Development Team",
+        authorFollowUrl: "",
         category: "General",
         excerpt: "",
         featuredImage: "",
@@ -83,6 +84,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
   );
 
   const author = post.author || "Web Digital Development Team";
+  const followUrl = post.authorFollowUrl || siteConfig.social.instagram || "";
 
   const fullUrl = `${siteConfig.url}/blog/${post.slug}`;
 
@@ -183,7 +185,16 @@ export default async function BlogDetailPage({ params }: PageProps) {
                   <div style={{ fontWeight: 700, fontSize: 18 }}>{author}</div>
                   <div className="t-small">Web Digital Development team — building websites for Indian SMBs.</div>
                 </div>
-                <Btn size="sm" variant="outline">Follow</Btn>
+                {followUrl && (
+                  <a
+                    className="btn btn--outline btn--sm"
+                    href={followUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Follow
+                  </a>
+                )}
               </div>
             </article>
           </Reveal>

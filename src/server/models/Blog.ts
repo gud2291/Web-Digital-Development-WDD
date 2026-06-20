@@ -10,6 +10,7 @@ const BlogSchema = new Schema(
     featuredImage: { type: String, default: "" },
     featuredImageAlt: { type: String, default: "" },
     author: { type: String, default: "Web Digital Development Team" },
+    authorFollowUrl: { type: String, default: "" },
     category: { type: String, default: "General" },
     tags: { type: [String], default: [] },
     readTime: { type: Number, default: 5 },

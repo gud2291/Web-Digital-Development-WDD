@@ -35,7 +35,7 @@ export async function POST(req: Request) {
             .join("\n");
 
     const name = data.name?.trim() || "Chatbot visitor";
-    const email = data.email?.trim() || `chatbot+${data.sessionId}@webdigitaldevelopment.in`;
+    const email = data.email?.trim() || `chatbot+${data.sessionId}@webdigitaldevelopment.com`;
     const phone = data.phone?.trim() || "";
     const message = `[Talk to Human request from chatbot]\n\nSession: ${data.sessionId}\n\nConversation:\n${historyText}`;
 

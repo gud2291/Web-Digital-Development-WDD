@@ -6,6 +6,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Icon } from "@/components/Icon";
 import { Stars, SectionHead } from "@/components/ui";
+import { CldImage } from "@/components/CldImage";
 
 /**
  * Testimonials carousel (CLAUDE.md §12.12). Embla with 7s autoplay that pauses
@@ -92,8 +93,7 @@ export function TestimonialsCarousel({
                     <div className="testimonial-card__author">
                       {t.photo ? (
                         <div className="avatar" style={{ overflow: "hidden", position: "relative" }}>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={t.photo} alt={t.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          <CldImage src={t.photo} alt={t.name} fill sizes="48px" style={{ objectFit: "cover" }} />
                         </div>
                       ) : (
                         <div className="avatar" style={{ background: t.color }}>{t.initials}</div>

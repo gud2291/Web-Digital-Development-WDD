@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { CldImage } from "@/components/CldImage";
 
 /**
  * Before/after drag-comparison slider (CLAUDE.md §13.2). The "after" image sits
@@ -67,12 +68,10 @@ export function BeforeAfter({
       aria-valuemax={100}
       aria-label="Before / after comparison"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={after} alt={afterLabel} className="before-after__img" draggable={false} />
+      <CldImage src={after} alt={afterLabel} fill sizes="(max-width: 980px) 100vw, 980px" className="before-after__img" draggable={false} />
       <span className="before-after__badge before-after__badge--after">{afterLabel}</span>
       <div className="before-after__clip" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={before} alt={beforeLabel} className="before-after__img" draggable={false} />
+        <CldImage src={before} alt={beforeLabel} fill sizes="(max-width: 980px) 100vw, 980px" className="before-after__img" draggable={false} />
         <span className="before-after__badge before-after__badge--before">{beforeLabel}</span>
       </div>
       <div className="before-after__handle" style={{ left: `${pos}%` }}>
