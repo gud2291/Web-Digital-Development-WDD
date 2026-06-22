@@ -2701,10 +2701,16 @@ html[data-theme="dark"] {
    ========================================================================== */
 
 /* 1 + 2 — neutralise Google's injected UI.
-   Scope the banner hide to body's DIRECT child so the in-gadget .goog-te-combo
-   (inside the off-screen #google_translate_element) stays drivable. */
+   The off-screen #google_translate_element carries the `inert` attribute (set in
+   GoogleTranslateInit), which removes IT + all its focusable descendants (the
+   gadget anchor + .goog-te-combo) from the tab order AND the accessibility tree
+   — without aria-hidden. The rules below remove Google's chrome that is injected
+   OUTSIDE that container (the top banner) from the tab order too. Scope the
+   banner hide to body's DIRECT child so the in-gadget .goog-te-combo (inside the
+   off-screen container) is never display:none and stays drivable. */
 .goog-te-banner-frame,
 body > .skiptranslate,
+body > .goog-te-gadget,
 .skiptranslate iframe { display: none !important; }
 body { top: 0 !important; }            /* Google sets body{top:40px} for its banner */
 .goog-te-gadget { font-size: 0 !important; }   /* hide "Powered by" text */

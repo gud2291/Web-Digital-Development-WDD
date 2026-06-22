@@ -111,7 +111,17 @@ interface GoogleTranslateWindow {
 }
 
 export function GoogleTranslateInit() {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+
   React.useEffect(() => {
+    // Use `inert` (not aria-hidden) so the off-screen container and Google's
+    // injected focusable chrome (select/anchor) are removed from BOTH the tab
+    // order and the accessibility tree — fixing the Lighthouse
+    // "aria-hidden elements contain focusable descendants" finding. Set it via
+    // the DOM so it applies reliably under React 18. Programmatic events on
+    // .goog-te-combo (which the switcher dispatches) still fire under inert.
+    containerRef.current?.setAttribute("inert", "");
+
     const w = window as unknown as GoogleTranslateWindow;
 
     // Builds the hidden widget (which creates the .goog-te-combo we drive).
@@ -144,7 +154,7 @@ export function GoogleTranslateInit() {
     }
   }, []);
 
-  return <div id="google_translate_element" aria-hidden suppressHydrationWarning />;
+  return <div id="google_translate_element" ref={containerRef} suppressHydrationWarning />;
 }
 
 // ---- icons ----------------------------------------------------------------

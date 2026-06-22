@@ -158,11 +158,11 @@ const s = StyleSheet.create({
   payLabel: { fontSize: 9.5, fontWeight: "bold", color: C.ink },
   paySub: { fontSize: 8, color: C.subtle, marginTop: 1, lineHeight: 1.3 },
 
-  // Domain & hosting (dark)
-  hostCard: { marginTop: 14, borderRadius: 10, overflow: "hidden" },
-  hostBody: { backgroundColor: C.darkSoft, padding: 11 },
+  // Domain & hosting
+  hostCard: { marginTop: 14, borderWidth: 1, borderColor: C.border, borderRadius: 10, overflow: "hidden" },
+  hostBody: { backgroundColor: C.white, padding: 11 },
   hostRow: { flexDirection: "row", alignItems: "center", gap: 9, marginBottom: 8 },
-  hostText: { flex: 1, color: "#E0F2FE", fontSize: 8.5, lineHeight: 1.35 },
+  hostText: { flex: 1, color: C.muted, fontSize: 8.5, lineHeight: 1.35 },
 
   // Badges strip
   badgeStrip: { flexDirection: "row", alignItems: "center", marginTop: 16, backgroundColor: C.panel, borderWidth: 1, borderColor: C.line, borderRadius: 10, paddingVertical: 12, paddingHorizontal: 4 },
@@ -361,14 +361,14 @@ export function QuotationDocument(data: QuotationDocData) {
               {/* Domain & hosting */}
               {domainRows.length > 0 && (
                 <View style={s.hostCard}>
-                  <View style={[s.cardHeader, { backgroundColor: C.dark }]}>
-                    <Glyph name="globe" size={13} color={C.green500} />
-                    <Text style={s.cardHeaderText}>DOMAIN &amp; HOSTING</Text>
+                  <View style={[s.cardHeader, { backgroundColor: C.white, borderBottomWidth: 1, borderBottomColor: C.border }]}>
+                    <Glyph name="globe" size={13} color={C.green800} />
+                    <Text style={[s.cardHeaderText, { color: C.green800 }]}>DOMAIN &amp; HOSTING</Text>
                   </View>
                   <View style={s.hostBody}>
                     {domainRows.map((r, i) => (
                       <View key={i} style={[s.hostRow, i === domainRows.length - 1 ? { marginBottom: 0 } : {}]}>
-                        <CircleIcon name={r.icon} d={20} ring={C.green500} glyph={C.green500} bg="transparent" stroke={2} />
+                        <CircleIcon name={r.icon} d={20} ring={C.green100} glyph={C.green600} bg={C.green50} stroke={1.8} />
                         <Text style={s.hostText}>{r.text}</Text>
                       </View>
                     ))}
