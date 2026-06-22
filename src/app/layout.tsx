@@ -100,7 +100,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={jakarta.variable} suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ES7T2N9MMW"
           strategy="afterInteractive"

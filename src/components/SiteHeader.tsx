@@ -8,6 +8,7 @@ import { Icon } from "./Icon";
 import { Btn, Logo } from "./ui";
 import { MobileMenu } from "@/components/public/MobileMenu";
 import { ThemeToggle } from "@/components/public/ThemeToggle";
+import { LanguageSwitcher } from "@/components/public/LanguageSwitcher";
 
 const NAV_ITEMS = [
   { label: "Home", to: "/" },
@@ -155,6 +156,7 @@ export function SiteHeader({
         </nav>
 
         <div className="site-hdr__actions">
+          <LanguageSwitcher variant="desktop" />
           <ThemeToggle />
           <Link href="/contact" className="site-hdr__cta-desktop">
             <Btn icon="phone" size="sm">Book a Consultation</Btn>

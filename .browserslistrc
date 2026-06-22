@@ -1,0 +1,14 @@
+# Modern, safe browser target.
+# These floors are ~4-5 years old (2021-2022), so they still cover every
+# actively-used browser and modern mobile device, while letting Next.js / SWC
+# stop shipping legacy-JS polyfills (Array.prototype.at/flat/flatMap,
+# Object.fromEntries/hasOwn, String.trimStart/trimEnd, etc.).
+# IE11 and other dead/unmaintained browsers are dropped.
+chrome >= 93
+edge >= 93
+firefox >= 92
+safari >= 15.4
+ios_saf >= 15.4
+and_chr >= 100
+samsung >= 17
+not dead

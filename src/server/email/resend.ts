@@ -22,6 +22,7 @@ export interface SendEmailParams {
   replyTo?: string;
   cc?: string[];
   bcc?: string[];
+  attachments?: { filename: string; content: Buffer | string }[];
 }
 
 export async function sendEmail(params: SendEmailParams) {
@@ -34,6 +35,7 @@ export async function sendEmail(params: SendEmailParams) {
     replyTo: params.replyTo,
     cc: params.cc,
     bcc: params.bcc,
+    attachments: params.attachments,
   } as Parameters<Resend["emails"]["send"]>[0]);
 
   if (error) {

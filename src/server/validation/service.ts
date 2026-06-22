@@ -26,6 +26,13 @@ export const createServiceSchema = z.object({
   features: z.array(z.string()).default([]),
   faqs: z.array(faqSchema).default([]),
   pricingTiers: z.array(pricingTierSchema).default([]),
+  // §QUOTATION-PDF — optional/additive quotation fields (per service).
+  quotationEnabled: z.boolean().default(false),
+  quotationTitle: z.string().max(200).optional().or(z.literal("")),
+  quotationCostRange: z.string().max(120).optional().or(z.literal("")),
+  quotationScope: z.array(z.string()).default([]),
+  quotationDeliveryTime: z.string().max(120).optional().or(z.literal("")),
+  quotationHostingCost: z.string().max(120).optional().or(z.literal("")),
   seoTitle: z.string().max(120).optional().or(z.literal("")),
   seoDescription: z.string().max(200).optional().or(z.literal("")),
   visible: z.boolean().default(true),

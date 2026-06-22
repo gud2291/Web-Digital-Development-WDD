@@ -27,6 +27,8 @@ const NAV: NavItem[] = [
   { label: "Blog Manager", href: "/admin/blog", icon: "file", area: "content" },
   { label: "Projects", href: "/admin/projects", icon: "award", area: "content" },
   { label: "Services", href: "/admin/services", icon: "monitor", area: "content" },
+  { label: "Quotation", href: "/admin/quotation", icon: "file", area: "system" },
+  { label: "Quotation Records", href: "/admin/quotations", icon: "award", area: "inbox" },
   { label: "Team", href: "/admin/team", icon: "users", area: "content" },
   { label: "Testimonials", href: "/admin/testimonials", icon: "heart", area: "content" },
   { label: "Homepage", href: "/admin/homepage", icon: "home", area: "content" },
@@ -77,7 +79,7 @@ export function AdminSidebar({ open, onClose, badges }: Props) {
           {NAV.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== "/admin/dashboard" && pathname?.startsWith(item.href));
+              (item.href !== "/admin/dashboard" && !!pathname?.startsWith(`${item.href}/`));
             const count = item.badgeKey ? badges?.[item.badgeKey] : undefined;
             return (
               <Link

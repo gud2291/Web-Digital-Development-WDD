@@ -2692,3 +2692,117 @@ html[data-theme="dark"] {
   .share-btn { width: 48px; height: 48px; }
   .site-ftr .site-ftr__social { width: 48px; height: 48px; }
 }
+
+/* ==========================================================================
+   LANGUAGE SWITCHER (Google Translate) — appended, additive.
+   1) Hide all of Google's default chrome (banner, iframe, tooltip) so the page
+      layout never shifts. 2) Keep the required mount node off-screen. 3) Style
+      the on-brand custom dropdown to match the nav (light + dark, responsive).
+   ========================================================================== */
+
+/* 1 + 2 — neutralise Google's injected UI.
+   Scope the banner hide to body's DIRECT child so the in-gadget .goog-te-combo
+   (inside the off-screen #google_translate_element) stays drivable. */
+.goog-te-banner-frame,
+body > .skiptranslate,
+.skiptranslate iframe { display: none !important; }
+body { top: 0 !important; }            /* Google sets body{top:40px} for its banner */
+.goog-te-gadget { font-size: 0 !important; }   /* hide "Powered by" text */
+.goog-te-gadget .goog-te-combo { font-size: 12px; }
+/* the floating tooltip / hover highlight Google adds to translated text */
+.goog-tooltip,
+.goog-tooltip:hover { display: none !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+#goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+
+#google_translate_element {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 3 — on-brand custom dropdown */
+.lang-switcher { position: relative; }
+.lang-switcher__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--c-border);
+  background: transparent;
+  color: var(--c-text);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-base) ease, border-color var(--dur-base) ease;
+}
+.lang-switcher__btn:hover { background: var(--c-bg-section); border-color: var(--c-border-strong); }
+.lang-switcher__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 120;
+  min-width: 190px;
+  padding: 6px;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  box-shadow: var(--sh-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.lang-switcher__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 11px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: var(--c-text);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-base) ease, color var(--dur-base) ease;
+}
+.lang-switcher__item:hover { background: var(--c-bg-section); }
+.lang-switcher__item--active { color: var(--c-primary-700); font-weight: 700; background: var(--c-primary-50); }
+.lang-switcher__item-en { font-size: 11.5px; color: var(--c-text-subtle); }
+
+/* Desktop switcher hides on small screens — the mobile menu has its own. */
+@media (max-width: 768px) {
+  .lang-switcher--desktop { display: none; }
+}
+
+/* Mobile variant — full-width control inside the drawer; menu flows in-line. */
+.lang-switcher--mobile { width: 100%; }
+.lang-switcher--mobile .lang-switcher__btn { width: 100%; justify-content: space-between; height: 46px; }
+.lang-switcher--mobile .lang-switcher__menu {
+  position: static;
+  right: auto;
+  margin-top: 8px;
+  width: 100%;
+  min-width: 0;
+  box-shadow: none;
+  max-height: 260px;
+}
+
+/* Dark mode — match the rest of the dark UI */
+html.dark .lang-switcher__btn { background: transparent; color: var(--c-text); border-color: var(--c-border); }
+html.dark .lang-switcher__btn:hover { background: var(--c-bg-section); }
+html.dark .lang-switcher__menu { background: #111A2E; border-color: var(--c-border); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+html.dark .lang-switcher__item:hover { background: var(--c-primary-50); color: #BFD3FF; }
+html.dark .lang-switcher__item--active { color: #BFD3FF; background: var(--c-primary-50); }

@@ -101,7 +101,7 @@ export default async function BlogListPage() {
                         alt={featured.featuredImageAlt || featured.title}
                         fill
                         priority
-                        sizes="(max-width: 1200px) 100vw, 1200px"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
                         style={{ objectFit: "cover" }}
                       />
                     </div>

@@ -5,6 +5,7 @@ import { BrandLoader } from "@/components/public/BrandLoader";
 import { SmoothScrollProvider } from "@/components/public/SmoothScrollProvider";
 import { PageTransition } from "@/components/public/PageTransition";
 import { DeferredPublicWidgets } from "@/components/public/DeferredPublicWidgets";
+import { GoogleTranslateInit } from "@/components/public/LanguageSwitcher";
 import { getCachedSettings } from "@/server/services/settings.service";
 import { getCachedNavServices } from "@/server/services/service.service";
 import { siteConfig } from "@/config/site";
@@ -34,7 +35,9 @@ export default async function PublicLayout({ children }: { children: React.React
       <SmoothScrollProvider />
       <BrandLoader />
       <SiteHeader socialLinks={socialLinks} services={services} />
-      <main id="main-content">
+      {/* Google Translate Element loader + hidden mount node (client-side only). */}
+      <GoogleTranslateInit />
+      <main id="main-content" suppressHydrationWarning>
         <PageTransition>{children}</PageTransition>
       </main>
       <SiteFooter />

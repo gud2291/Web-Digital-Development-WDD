@@ -145,7 +145,7 @@ export default async function ProjectsPage() {
                     alt={featured.imageAlt || featured.title}
                     fill
                     priority
-                    sizes="(max-width: 900px) 100vw, 50vw"
+                    sizes="(max-width: 1024px) 100vw, 540px"
                     style={{ objectFit: "cover", objectPosition: "top left" }}
                   />
                 ) : (

@@ -132,7 +132,7 @@ export function BlogListClient({ initialPosts, initialPage, totalPages }: Props)
                         src={b.image}
                         alt={b.imageAlt || b.title}
                         fill
-                        sizes="(max-width: 900px) 100vw, 33vw"
+                        sizes="(max-width: 768px) 95vw, (max-width: 1024px) 47vw, 380px"
                         style={{ objectFit: "cover" }}
                       />
                     </div>

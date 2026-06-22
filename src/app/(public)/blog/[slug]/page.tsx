@@ -223,7 +223,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
                             src={p.featuredImage}
                             alt={p.featuredImageAlt || p.title}
                             fill
-                            sizes="(max-width: 900px) 100vw, 33vw"
+                            sizes="(max-width: 768px) 95vw, (max-width: 1024px) 47vw, 400px"
                             style={{ objectFit: "cover" }}
                           />
                         </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "@/components/Icon";
 import { Btn, Logo } from "@/components/ui";
+import { LanguageSwitcher } from "@/components/public/LanguageSwitcher";
 import { siteConfig } from "@/config/site";
 
 /**
@@ -155,7 +156,8 @@ export function MobileMenu({ open, onClose, items, services = [], socialLinks }:
             </motion.nav>
 
             <div style={{ marginTop: "auto", paddingTop: 24 }}>
-              <Link href="/contact" onClick={onClose}>
+              <LanguageSwitcher variant="mobile" />
+              <Link href="/contact" onClick={onClose} style={{ display: "block", marginTop: 14 }}>
                 <Btn icon="phone" style={{ width: "100%" }}>
                   Book a Consultation
                 </Btn>

@@ -41,6 +41,13 @@ const schema = z.object({
   seoTitle: z.string().max(120).default(""),
   seoDescription: z.string().max(200).default(""),
   visible: z.boolean().default(true),
+  // §QUOTATION-PDF — per-service quotation fields.
+  quotationEnabled: z.boolean().default(false),
+  quotationTitle: z.string().max(200).default(""),
+  quotationCostRange: z.string().max(120).default(""),
+  quotationScope: z.array(z.object({ value: z.string().min(1) })).default([]),
+  quotationDeliveryTime: z.string().max(120).default(""),
+  quotationHostingCost: z.string().max(120).default(""),
 });
 
 type Values = z.infer<typeof schema>;
@@ -62,6 +69,12 @@ interface InitialDoc {
   seoTitle?: string;
   seoDescription?: string;
   visible?: boolean;
+  quotationEnabled?: boolean;
+  quotationTitle?: string;
+  quotationCostRange?: string;
+  quotationScope?: string[];
+  quotationDeliveryTime?: string;
+  quotationHostingCost?: string;
 }
 
 interface Props {
@@ -105,6 +118,12 @@ export function ServiceForm({ initial }: Props) {
       seoTitle: initial?.seoTitle ?? "",
       seoDescription: initial?.seoDescription ?? "",
       visible: initial?.visible ?? true,
+      quotationEnabled: initial?.quotationEnabled ?? false,
+      quotationTitle: initial?.quotationTitle ?? "",
+      quotationCostRange: initial?.quotationCostRange ?? "",
+      quotationScope: (initial?.quotationScope ?? []).map((v) => ({ value: v })),
+      quotationDeliveryTime: initial?.quotationDeliveryTime ?? "",
+      quotationHostingCost: initial?.quotationHostingCost ?? "",
     },
   });
 
@@ -117,6 +136,7 @@ export function ServiceForm({ initial }: Props) {
   const featuresArr = useFieldArray({ control, name: "features" });
   const faqsArr = useFieldArray({ control, name: "faqs" });
   const tiersArr = useFieldArray({ control, name: "pricingTiers" });
+  const scopeArr = useFieldArray({ control, name: "quotationScope" });
 
   const onSubmit = async (values: Values) => {
     const payload = {
@@ -128,6 +148,7 @@ export function ServiceForm({ initial }: Props) {
         popular: t.popular,
         features: t.features.map((f) => f.value),
       })),
+      quotationScope: values.quotationScope.map((s) => s.value),
     };
     try {
       if (isEdit) {
@@ -308,6 +329,64 @@ export function ServiceForm({ initial }: Props) {
         <Btn size="sm" type="button" variant="secondary" style={{ marginTop: 12 }} onClick={() => faqsArr.append({ q: "", a: "" })}>
           <Icon name="plus" size={12} /> Add FAQ
         </Btn>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Quotation</h3>
+        <p className="t-small" style={{ marginBottom: 10 }}>
+          Powers the downloadable quotation PDF. Enable to show this service in the public quote form.
+          Delivery time &amp; hosting cost fall back to the global Quotation settings when left empty.
+        </p>
+        <label className="admin-form-checkbox" style={{ marginBottom: 14 }}>
+          <input type="checkbox" {...register("quotationEnabled")} /> Enable quotation for this service
+        </label>
+        <div className="admin-form-row">
+          <div className="field">
+            <label className="field__label">Quotation title</label>
+            <input className="input" placeholder="e.g. Complete Website Development" {...register("quotationTitle")} />
+          </div>
+          <div className="field">
+            <label className="field__label">Cost range</label>
+            <input className="input" placeholder="e.g. ₹35,000 – ₹45,000" {...register("quotationCostRange")} />
+            <span className="admin-form-help">Shown in the big &ldquo;Total Project Cost&rdquo; box on the PDF.</span>
+          </div>
+        </div>
+        <div className="admin-form-row" style={{ marginTop: 14 }}>
+          <div className="field">
+            <label className="field__label">Delivery time override</label>
+            <input className="input" placeholder="(optional — falls back to global)" {...register("quotationDeliveryTime")} />
+          </div>
+          <div className="field">
+            <label className="field__label">Hosting cost override</label>
+            <input className="input" placeholder="(optional — falls back to global)" {...register("quotationHostingCost")} />
+          </div>
+        </div>
+        <div style={{ marginTop: 14 }}>
+          <div className="field__label" style={{ marginBottom: 6 }}>Included in scope of work</div>
+          <p className="admin-form-help" style={{ marginBottom: 10 }}>
+            Each line appears as a green check item under &ldquo;Included in Scope of Work&rdquo; on the PDF.
+            Drag or use ↑/↓ to reorder.
+          </p>
+          <SortableList
+            items={scopeArr.fields}
+            getId={(f) => f.id}
+            onReorder={(ids) =>
+              applyFieldReorder(ids, scopeArr.fields.map((f) => f.id), watch("quotationScope") ?? [], scopeArr.replace)
+            }
+            empty={<span className="t-small">No scope items yet — add one below.</span>}
+            render={(_f, idx) => (
+              <div style={{ width: "100%", display: "flex", gap: 8 }}>
+                <input className="input" placeholder="e.g. Up to 8 pages with premium UI" {...register(`quotationScope.${idx}.value` as const)} />
+                <button type="button" className="admin-icon-btn admin-icon-btn--danger" aria-label="Remove scope item" onClick={() => scopeArr.remove(idx)}>
+                  <Icon name="x" size={12} />
+                </button>
+              </div>
+            )}
+          />
+          <Btn size="sm" type="button" variant="secondary" style={{ marginTop: 12 }} onClick={() => scopeArr.append({ value: "" })}>
+            <Icon name="plus" size={12} /> Add scope item
+          </Btn>
+        </div>
       </div>
 
       <div className="admin-form-section">

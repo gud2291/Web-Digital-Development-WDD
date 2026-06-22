@@ -32,6 +32,12 @@ export default async function EditServicePage({ params }: PageProps) {
           seoTitle: doc.seoTitle ?? "",
           seoDescription: doc.seoDescription ?? "",
           visible: !!doc.visible,
+          quotationEnabled: !!doc.quotationEnabled,
+          quotationTitle: doc.quotationTitle ?? "",
+          quotationCostRange: doc.quotationCostRange ?? "",
+          quotationScope: doc.quotationScope ?? [],
+          quotationDeliveryTime: doc.quotationDeliveryTime ?? "",
+          quotationHostingCost: doc.quotationHostingCost ?? "",
         }}
       />
     </>

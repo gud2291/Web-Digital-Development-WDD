@@ -173,14 +173,15 @@ export function HeroSlider({ slides, badgeText, interval = 6000 }: HeroSliderPro
                   <source src={s.video} type="video/mp4" />
                 </video>
               ) : s.image ? (
-                // Above-the-fold hero — never lazy. First slide gets priority
-                // (preload + eager) as the LCP candidate; the rest load eagerly.
+                // First slide is the LCP — priority/eager, never lazy. The rest
+                // are off-screen until the carousel advances, so they load lazily
+                // to lighten the initial (especially mobile) load.
                 <CldImage
                   src={s.image}
                   alt={s.imageAlt || s.title || `Slide ${i + 1}`}
                   fill
                   sizes="100vw"
-                  {...(i === 0 ? { priority: true } : { loading: "eager" as const })}
+                  {...(i === 0 ? { priority: true } : { loading: "lazy" as const })}
                   style={{ objectFit: "cover", display: "block" }}
                 />
               ) : isVideo && s.video ? (

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { Btn } from "@/components/ui";
 import { Icon } from "@/components/Icon";
@@ -181,6 +182,13 @@ export function InquiriesClient({ initial }: Props) {
               </div>
             </div>
             <div className="admin-modal__actions">
+              <Link
+                href={`/admin/quotation/generate?name=${encodeURIComponent(viewing.name)}&email=${encodeURIComponent(
+                  viewing.email
+                )}&phone=${encodeURIComponent(viewing.phone || "")}`}
+              >
+                <Btn variant="secondary" type="button" icon="file">Create quotation</Btn>
+              </Link>
               <a href={`mailto:${viewing.email}`}>
                 <Btn variant="secondary" type="button" icon="mail">Reply by email</Btn>
               </a>

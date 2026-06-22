@@ -38,6 +38,16 @@ const ServiceSchema = new Schema(
     features: { type: [String], default: [] },
     faqs: { type: [FAQSubSchema], default: [] },
     pricingTiers: { type: [PricingTierSchema], default: [] },
+    // §QUOTATION-PDF — optional, additive fields powering the downloadable
+    // quotation PDF. Only services with `quotationEnabled` appear in the quote
+    // form dropdown. deliveryTime/hostingCost override the global defaults when
+    // set (empty → fall back to QuotationSettings).
+    quotationEnabled: { type: Boolean, default: false },
+    quotationTitle: { type: String, default: "" },
+    quotationCostRange: { type: String, default: "" },
+    quotationScope: { type: [String], default: [] },
+    quotationDeliveryTime: { type: String, default: "" },
+    quotationHostingCost: { type: String, default: "" },
     seoTitle: { type: String, default: "" },
     seoDescription: { type: String, default: "" },
     visible: { type: Boolean, default: true, index: true },

@@ -190,7 +190,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     alt={svc.coverImageAlt || svc.title}
                     fill
                     priority
-                    sizes="(max-width: 900px) 100vw, 50vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 580px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>
