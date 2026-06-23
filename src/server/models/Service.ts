@@ -50,6 +50,11 @@ const ServiceSchema = new Schema(
     quotationHostingCost: { type: String, default: "" },
     seoTitle: { type: String, default: "" },
     seoDescription: { type: String, default: "" },
+    // §INTERNAL-LINKING — optional, additive. Slugs of related Services / Blogs
+    // chosen in the admin "Related links" picker; power the public "Related"
+    // section. Empty by default — existing services keep working untouched.
+    relatedServices: { type: [String], default: [] },
+    relatedBlogs: { type: [String], default: [] },
     visible: { type: Boolean, default: true, index: true },
     order: { type: Number, default: 0 },
   },

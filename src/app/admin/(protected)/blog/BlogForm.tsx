@@ -10,6 +10,7 @@ import { Btn } from "@/components/ui";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { TipTapEditor } from "@/components/admin/TipTapEditor";
 import { LivePreview } from "@/components/admin/LivePreview";
+import { RelatedLinksPicker, type RelatedOption } from "@/components/admin/RelatedLinksPicker";
 import { adminApi } from "@/lib/adminApi";
 import { slugify } from "@/lib/utils";
 
@@ -28,6 +29,8 @@ const schema = z.object({
   published: z.boolean().default(false),
   seoTitle: z.string().max(120).optional().default(""),
   seoDescription: z.string().max(200).optional().default(""),
+  relatedServices: z.array(z.string()).default([]),
+  relatedBlogs: z.array(z.string()).default([]),
 });
 
 type Values = z.infer<typeof schema>;
@@ -48,13 +51,18 @@ interface InitialDoc {
   published?: boolean;
   seoTitle?: string;
   seoDescription?: string;
+  relatedServices?: string[];
+  relatedBlogs?: string[];
 }
 
 interface Props {
   initial?: InitialDoc;
+  /** §INTERNAL-LINKING — options for the "Related links" picker. */
+  serviceOptions?: RelatedOption[];
+  blogOptions?: RelatedOption[];
 }
 
-export function BlogForm({ initial }: Props) {
+export function BlogForm({ initial, serviceOptions = [], blogOptions = [] }: Props) {
   const router = useRouter();
   const isEdit = !!initial?._id;
   const {
@@ -81,6 +89,8 @@ export function BlogForm({ initial }: Props) {
       published: initial?.published ?? false,
       seoTitle: initial?.seoTitle ?? "",
       seoDescription: initial?.seoDescription ?? "",
+      relatedServices: initial?.relatedServices ?? [],
+      relatedBlogs: initial?.relatedBlogs ?? [],
     },
   });
 
@@ -208,6 +218,40 @@ export function BlogForm({ initial }: Props) {
           <label className="field__label">SEO description</label>
           <textarea className="textarea" {...register("seoDescription")} style={{ minHeight: 70 }} />
         </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Related pages / Internal links</h3>
+        <p className="t-small" style={{ marginBottom: 4 }}>
+          Link this post to genuinely relevant services and other posts. These appear in the
+          &ldquo;Related&rdquo; section on the public article — good for readers and for SEO.
+        </p>
+        <Controller
+          control={control}
+          name="relatedServices"
+          render={({ field }) => (
+            <RelatedLinksPicker
+              label="Related services"
+              help="Services this article is about (e.g. an SEO post → the SEO service)."
+              options={serviceOptions}
+              value={field.value ?? []}
+              onChange={field.onChange}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="relatedBlogs"
+          render={({ field }) => (
+            <RelatedLinksPicker
+              label="Related posts"
+              help="Other articles worth reading next. Leave empty to auto-suggest by topic."
+              options={blogOptions}
+              value={field.value ?? []}
+              onChange={field.onChange}
+            />
+          )}
+        />
       </div>
 
       <div className="admin-form-actions">

@@ -5,7 +5,9 @@ import { Badge, Btn, CTABanner, Eyebrow, PH, Reveal, SectionHead } from "@/compo
 import { ServiceIcon } from "@/components/public/ServiceIcon";
 import { FAQList } from "@/components/FAQList";
 import { CldImage } from "@/components/CldImage";
-import { getServiceBySlug, listServices } from "@/server/services/service.service";
+import { getServiceBySlug, getServicesBySlugs, listServices } from "@/server/services/service.service";
+import { getBlogsBySlugs } from "@/server/services/blog.service";
+import { RelatedSection, type RelatedItem } from "@/components/public/RelatedSection";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { metadataFromDb, buildMetadata } from "@/lib/seo";
 import { safeIcon } from "@/lib/iconMap";
@@ -123,6 +125,28 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const icon = safeIcon(svc.icon, "monitor");
 
   const fullUrl = `${siteConfig.url}/services/${svc.slug}`;
+
+  // §INTERNAL-LINKING — related services + topical blog posts (admin-picked).
+  const [relatedServiceDocs, relatedBlogDocs] = await Promise.all([
+    getServicesBySlugs((svc.relatedServices as string[] | undefined) ?? []).catch(() => []),
+    getBlogsBySlugs((svc.relatedBlogs as string[] | undefined) ?? []).catch(() => []),
+  ]);
+  const relatedItems: RelatedItem[] = [
+    ...relatedServiceDocs
+      .filter((s) => s.slug !== svc.slug)
+      .map((s) => ({
+        href: `/services/${s.slug}`,
+        title: s.title as string,
+        label: "Service",
+        desc: (s.shortDescription as string) || undefined,
+      })),
+    ...relatedBlogDocs.map((b) => ({
+      href: `/blog/${b.slug}`,
+      title: b.title as string,
+      label: "Reading",
+      desc: (b.excerpt as string) || undefined,
+    })),
+  ];
 
   return (
     <>
@@ -273,6 +297,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      <RelatedSection
+        kicker="EXPLORE MORE"
+        title="Related services & reading"
+        sub="Closely related services and helpful articles to plan your next step."
+        items={relatedItems}
+      />
 
       <CTABanner />
     </>

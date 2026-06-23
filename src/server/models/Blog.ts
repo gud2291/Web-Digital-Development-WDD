@@ -17,6 +17,11 @@ const BlogSchema = new Schema(
     published: { type: Boolean, default: false, index: true },
     seoTitle: { type: String, default: "" },
     seoDescription: { type: String, default: "" },
+    // §INTERNAL-LINKING — optional, additive. Slugs of related Services / Blogs
+    // chosen in the admin "Related links" picker; power the public "Related"
+    // section. Empty by default — existing posts keep working untouched.
+    relatedServices: { type: [String], default: [] },
+    relatedBlogs: { type: [String], default: [] },
     order: { type: Number, default: 0 },
   },
   { timestamps: true }

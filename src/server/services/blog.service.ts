@@ -46,6 +46,19 @@ export async function getBlogById(id: string) {
 }
 
 /**
+ * §INTERNAL-LINKING — fetch published blogs by a list of slugs, returned in the
+ * same order as the input (so admin-picked order is preserved). Empty input →
+ * empty result, no DB round-trip.
+ */
+export async function getBlogsBySlugs(slugs: string[]) {
+  if (!slugs?.length) return [];
+  await connectDB();
+  const docs = await Blog.find({ slug: { $in: slugs }, published: true }).lean();
+  const bySlug = new Map(docs.map((d) => [d.slug as string, d]));
+  return slugs.map((s) => bySlug.get(s)).filter(Boolean) as typeof docs;
+}
+
+/**
  * Related posts (§14.4): same category first, then matching tags, then most
  * recent — de-duplicated, capped at `limit`.
  */

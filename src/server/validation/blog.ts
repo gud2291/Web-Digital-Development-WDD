@@ -16,6 +16,9 @@ export const createBlogSchema = z.object({
   published: z.boolean().default(false),
   seoTitle: z.string().max(120).optional().or(z.literal("")),
   seoDescription: z.string().max(200).optional().or(z.literal("")),
+  // §INTERNAL-LINKING — optional related-link slugs (admin picker).
+  relatedServices: z.array(z.string()).default([]),
+  relatedBlogs: z.array(z.string()).default([]),
 });
 
 export const updateBlogSchema = createBlogSchema.partial();

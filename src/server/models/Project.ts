@@ -20,6 +20,10 @@ const ProjectSchema = new Schema(
     solution: { type: String, default: "" },
     timeline: { type: String, default: "" },
     features: { type: [String], default: [] },
+    // §INTERNAL-LINKING — optional, additive. Slugs of the Service(s) this
+    // project used; power the public "Service used" related section. Empty by
+    // default — existing projects keep working untouched.
+    relatedServices: { type: [String], default: [] },
   },
   { timestamps: true }
 );

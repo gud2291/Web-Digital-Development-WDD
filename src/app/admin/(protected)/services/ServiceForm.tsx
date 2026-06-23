@@ -13,6 +13,7 @@ import { TipTapEditor } from "@/components/admin/TipTapEditor";
 import { SortableList } from "@/components/admin/SortableList";
 import { applyFieldReorder } from "@/components/admin/reorderFieldArray";
 import { LivePreview } from "@/components/admin/LivePreview";
+import { RelatedLinksPicker, type RelatedOption } from "@/components/admin/RelatedLinksPicker";
 import { adminApi } from "@/lib/adminApi";
 import { slugify } from "@/lib/utils";
 
@@ -40,6 +41,8 @@ const schema = z.object({
     .default([]),
   seoTitle: z.string().max(120).default(""),
   seoDescription: z.string().max(200).default(""),
+  relatedServices: z.array(z.string()).default([]),
+  relatedBlogs: z.array(z.string()).default([]),
   visible: z.boolean().default(true),
   // §QUOTATION-PDF — per-service quotation fields.
   quotationEnabled: z.boolean().default(false),
@@ -68,6 +71,8 @@ interface InitialDoc {
   pricingTiers?: { name: string; price: string; features?: string[]; popular?: boolean }[];
   seoTitle?: string;
   seoDescription?: string;
+  relatedServices?: string[];
+  relatedBlogs?: string[];
   visible?: boolean;
   quotationEnabled?: boolean;
   quotationTitle?: string;
@@ -79,13 +84,16 @@ interface InitialDoc {
 
 interface Props {
   initial?: InitialDoc;
+  /** §INTERNAL-LINKING — options for the "Related links" picker. */
+  serviceOptions?: RelatedOption[];
+  blogOptions?: RelatedOption[];
 }
 
 const ICON_CHOICES = ["monitor", "code", "search", "cart", "megaphone", "smartphone", "rocket", "shield", "sparkle"];
 const LUCIDE_ICON_CHOICES = ["Palette", "Code2", "Search", "TrendingUp", "ShoppingCart", "PenTool", "Globe", "Smartphone"];
 const ACCENT_CHOICES = ["blue", "green", "orange", "pink", "purple", "teal"];
 
-export function ServiceForm({ initial }: Props) {
+export function ServiceForm({ initial, serviceOptions = [], blogOptions = [] }: Props) {
   const router = useRouter();
   const isEdit = !!initial?._id;
   const {
@@ -117,6 +125,8 @@ export function ServiceForm({ initial }: Props) {
       })),
       seoTitle: initial?.seoTitle ?? "",
       seoDescription: initial?.seoDescription ?? "",
+      relatedServices: initial?.relatedServices ?? [],
+      relatedBlogs: initial?.relatedBlogs ?? [],
       visible: initial?.visible ?? true,
       quotationEnabled: initial?.quotationEnabled ?? false,
       quotationTitle: initial?.quotationTitle ?? "",
@@ -399,6 +409,40 @@ export function ServiceForm({ initial }: Props) {
           <label className="field__label">SEO description</label>
           <textarea className="textarea" {...register("seoDescription")} style={{ minHeight: 70 }} />
         </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Related pages / Internal links</h3>
+        <p className="t-small" style={{ marginBottom: 4 }}>
+          Cross-link this service to closely related services and topical blog posts. They show
+          in the &ldquo;Related&rdquo; section on the public service page.
+        </p>
+        <Controller
+          control={control}
+          name="relatedServices"
+          render={({ field }) => (
+            <RelatedLinksPicker
+              label="Related services"
+              help="1–2 genuinely related services (e.g. Website Design ↔ Website Development)."
+              options={serviceOptions}
+              value={field.value ?? []}
+              onChange={field.onChange}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="relatedBlogs"
+          render={({ field }) => (
+            <RelatedLinksPicker
+              label="Related blog posts"
+              help="1–3 articles on this topic readers may find helpful."
+              options={blogOptions}
+              value={field.value ?? []}
+              onChange={field.onChange}
+            />
+          )}
+        />
       </div>
 
       <div className="admin-form-actions">

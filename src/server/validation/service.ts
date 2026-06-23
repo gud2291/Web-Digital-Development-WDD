@@ -35,6 +35,9 @@ export const createServiceSchema = z.object({
   quotationHostingCost: z.string().max(120).optional().or(z.literal("")),
   seoTitle: z.string().max(120).optional().or(z.literal("")),
   seoDescription: z.string().max(200).optional().or(z.literal("")),
+  // §INTERNAL-LINKING — optional related-link slugs (admin picker).
+  relatedServices: z.array(z.string()).default([]),
+  relatedBlogs: z.array(z.string()).default([]),
   visible: z.boolean().default(true),
 });
 

@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { Badge, PH, Reveal, SectionHead } from "@/components/ui";
 import { CldImage } from "@/components/CldImage";
-import { getBlogBySlug, getRelatedBlogs, listBlogs } from "@/server/services/blog.service";
+import { getBlogBySlug, getBlogsBySlugs, getRelatedBlogs, listBlogs } from "@/server/services/blog.service";
+import { getServicesBySlugs } from "@/server/services/service.service";
+import { RelatedSection, type RelatedItem } from "@/components/public/RelatedSection";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { BlogShareButtons } from "@/components/public/BlogShareButtons";
 import { NewsletterSignup } from "@/components/public/NewsletterSignup";
@@ -79,9 +81,27 @@ export default async function BlogDetailPage({ params }: PageProps) {
     : await getBlogBySlug(params.slug).catch(() => null);
   if (!post) notFound();
 
-  const relatedPosts = await getRelatedBlogs(post.slug, post.category, post.tags, 3).catch(
-    () => [] as Awaited<ReturnType<typeof getRelatedBlogs>>
-  );
+  // §INTERNAL-LINKING — prefer admin-picked related posts; fall back to the
+  // topic-based getRelatedBlogs helper when none are chosen.
+  const pickedBlogSlugs = (post.relatedBlogs as string[] | undefined) ?? [];
+  const relatedPosts = pickedBlogSlugs.length
+    ? await getBlogsBySlugs(pickedBlogSlugs).catch(
+        () => [] as Awaited<ReturnType<typeof getBlogsBySlugs>>
+      )
+    : await getRelatedBlogs(post.slug, post.category, post.tags, 3).catch(
+        () => [] as Awaited<ReturnType<typeof getRelatedBlogs>>
+      );
+
+  // §INTERNAL-LINKING — services this article is about ("Get help with this").
+  const relatedServiceDocs = await getServicesBySlugs(
+    (post.relatedServices as string[] | undefined) ?? []
+  ).catch(() => []);
+  const relatedServiceItems: RelatedItem[] = relatedServiceDocs.map((s) => ({
+    href: `/services/${s.slug}`,
+    title: s.title as string,
+    label: "Service",
+    desc: (s.shortDescription as string) || undefined,
+  }));
 
   const author = post.author || "Web Digital Development Team";
   const followUrl = post.authorFollowUrl || siteConfig.social.instagram || "";
@@ -205,6 +225,13 @@ export default async function BlogDetailPage({ params }: PageProps) {
           </Reveal>
         </div>
       </section>
+
+      <RelatedSection
+        kicker="GET HELP WITH THIS"
+        title="Services that can help"
+        sub="Work with our team on the topics covered in this article."
+        items={relatedServiceItems}
+      />
 
       {relatedPosts.length > 0 && (
         <section className="section section--alt">

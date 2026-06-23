@@ -15,6 +15,8 @@ export const createProjectSchema = z.object({
   solution: z.string().default(""),
   timeline: z.string().default(""),
   features: z.array(z.string()).default([]),
+  // §INTERNAL-LINKING — optional related-link slugs (admin picker).
+  relatedServices: z.array(z.string()).default([]),
 });
 
 export const updateProjectSchema = createProjectSchema.partial();

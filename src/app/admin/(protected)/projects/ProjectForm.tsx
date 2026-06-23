@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { Btn } from "@/components/ui";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { RelatedLinksPicker, type RelatedOption } from "@/components/admin/RelatedLinksPicker";
 import { adminApi } from "@/lib/adminApi";
 
 const schema = z.object({
@@ -25,6 +26,7 @@ const schema = z.object({
   solution: z.string().default(""),
   timeline: z.string().default(""),
   features: z.string().default(""),
+  relatedServices: z.array(z.string()).default([]),
 });
 
 type Values = z.infer<typeof schema>;
@@ -45,9 +47,17 @@ interface InitialDoc {
   solution?: string;
   timeline?: string;
   features?: string[];
+  relatedServices?: string[];
 }
 
-export function ProjectForm({ initial }: { initial?: InitialDoc }) {
+export function ProjectForm({
+  initial,
+  serviceOptions = [],
+}: {
+  initial?: InitialDoc;
+  /** §INTERNAL-LINKING — options for the "Related links" picker. */
+  serviceOptions?: RelatedOption[];
+}) {
   const router = useRouter();
   const isEdit = !!initial?._id;
   const {
@@ -74,6 +84,7 @@ export function ProjectForm({ initial }: { initial?: InitialDoc }) {
       solution: initial?.solution ?? "",
       timeline: initial?.timeline ?? "",
       features: (initial?.features ?? []).join(", "),
+      relatedServices: initial?.relatedServices ?? [],
     },
   });
 
@@ -195,6 +206,26 @@ export function ProjectForm({ initial }: { initial?: InitialDoc }) {
             />
           </div>
         </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Related pages / Internal links</h3>
+        <p className="t-small" style={{ marginBottom: 4 }}>
+          Pick the service(s) this project used. They show as &ldquo;Service used&rdquo; on the
+          public case-study page and link visitors to the matching service.
+        </p>
+        <Controller
+          control={control}
+          name="relatedServices"
+          render={({ field }) => (
+            <RelatedLinksPicker
+              label="Service(s) used"
+              options={serviceOptions}
+              value={field.value ?? []}
+              onChange={field.onChange}
+            />
+          )}
+        />
       </div>
 
       <div className="admin-form-actions">

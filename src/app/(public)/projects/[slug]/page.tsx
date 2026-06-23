@@ -9,6 +9,8 @@ import {
   getProjectBySlug,
   listProjects,
 } from "@/server/services/project.service";
+import { getServicesBySlugs } from "@/server/services/service.service";
+import { RelatedSection, type RelatedItem } from "@/components/public/RelatedSection";
 import { metadataFromDb, buildMetadata } from "@/lib/seo";
 import { SchemaMarkup, breadcrumbSchema } from "@/components/SchemaMarkup";
 
@@ -62,6 +64,17 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const related = allProjects
     .filter((p) => String(p._id) !== String(project._id))
     .slice(0, 3);
+
+  // §INTERNAL-LINKING — the service(s) this project used ("Service used").
+  const serviceUsedDocs = await getServicesBySlugs(
+    (project.relatedServices as string[] | undefined) ?? []
+  ).catch(() => []);
+  const serviceUsedItems: RelatedItem[] = serviceUsedDocs.map((s) => ({
+    href: `/services/${s.slug}`,
+    title: s.title as string,
+    label: "Service used",
+    desc: (s.shortDescription as string) || undefined,
+  }));
 
   return (
     <>
@@ -365,6 +378,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* ── §INTERNAL-LINKING: Service(s) used ── */}
+      <RelatedSection
+        kicker="SERVICE USED"
+        title="How we built this"
+        sub="The service behind this project — explore what we can do for you."
+        items={serviceUsedItems}
+      />
 
       {/* ── Related Projects ── */}
       {related.length > 0 && (

@@ -46,6 +46,19 @@ export async function getServiceById(id: string) {
   return Service.findById(id).lean();
 }
 
+/**
+ * §INTERNAL-LINKING — fetch visible services by a list of slugs, returned in the
+ * same order as the input (so admin-picked order is preserved). Empty input →
+ * empty result, no DB round-trip.
+ */
+export async function getServicesBySlugs(slugs: string[]) {
+  if (!slugs?.length) return [];
+  await connectDB();
+  const docs = await Service.find({ slug: { $in: slugs }, visible: true }).lean();
+  const bySlug = new Map(docs.map((d) => [d.slug as string, d]));
+  return slugs.map((s) => bySlug.get(s)).filter(Boolean) as typeof docs;
+}
+
 export async function createService(data: CreateServiceInput) {
   await connectDB();
   return Service.create(data);
