@@ -1771,12 +1771,12 @@ html[data-theme="dark"] {
 .admin-status--visible { background: #DCFCE7; color: #15803D; border-color: #BBF7D0; }
 .admin-status--hidden { background: #F1F5F9; color: #475569; border-color: #E2E8F0; }
 
-.admin-modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: grid; place-items: center; z-index: 100; padding: 20px; }
-.admin-modal { background: #fff; border-radius: 14px; box-shadow: var(--sh-lg); max-width: 520px; width: 100%; padding: 24px; }
+.admin-modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: grid; place-items: center; z-index: 100; padding: 20px; overflow: hidden; }
+.admin-modal { background: #fff; border-radius: 14px; box-shadow: var(--sh-lg); max-width: 520px; width: 100%; padding: 24px; display: flex; flex-direction: column; max-height: calc(100vh - 40px); }
 .admin-modal--lg { max-width: 920px; }
-.admin-modal h3 { font-size: 18px; font-weight: 700; }
-.admin-modal__body { margin-top: 12px; }
-.admin-modal__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.admin-modal h3 { font-size: 18px; font-weight: 700; flex-shrink: 0; }
+.admin-modal__body { margin-top: 12px; overflow-y: auto; flex: 1; min-height: 0; }
+.admin-modal__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; flex-shrink: 0; }
 
 .tiptap-editor { border: 1px solid var(--c-border); border-radius: 8px; background: #fff; }
 .tiptap-toolbar { display: flex; gap: 4px; padding: 8px; border-bottom: 1px solid var(--c-border); flex-wrap: wrap; }
