@@ -9,6 +9,17 @@ const FAQSubSchema = new Schema(
   { _id: false }
 );
 
+// §ECOMMERCE-PAGE — optional, additive process step (title + short description).
+// Rendered as numbered cards on services that populate `processSteps`; all other
+// services leave it empty and render exactly as before.
+const ProcessStepSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
 const PricingTierSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -38,6 +49,13 @@ const ServiceSchema = new Schema(
     features: { type: [String], default: [] },
     faqs: { type: [FAQSubSchema], default: [] },
     pricingTiers: { type: [PricingTierSchema], default: [] },
+    // §ECOMMERCE-PAGE — optional, additive content blocks. `industries` and
+    // `processSteps` render as card sections only when non-empty; `contentSecondary`
+    // is a secondary rich-text block (e.g. "Why choose us"). Empty by default so the
+    // other service pages render byte-for-byte as before.
+    industries: { type: [String], default: [] },
+    processSteps: { type: [ProcessStepSchema], default: [] },
+    contentSecondary: { type: String, default: "" },
     // §QUOTATION-PDF — optional, additive fields powering the downloadable
     // quotation PDF. Only services with `quotationEnabled` appear in the quote
     // form dropdown. deliveryTime/hostingCost override the global defaults when

@@ -2811,4 +2811,43 @@ html.dark .lang-switcher__btn { background: transparent; color: var(--c-text); b
 html.dark .lang-switcher__btn:hover { background: var(--c-bg-section); }
 html.dark .lang-switcher__menu { background: #111A2E; border-color: var(--c-border); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
 html.dark .lang-switcher__item:hover { background: var(--c-primary-50); color: #BFD3FF; }
+
+/* ─── §ECOMMERCE-PAGE — rich service content + card sections ──────────────────
+   Scoped, additive styles used only by services that populate the optional
+   industries/processSteps/contentSecondary fields. Theme-aware (light + dark)
+   via the existing CSS variables, so they never affect other pages. */
+.ecom-rich { color: var(--c-text-muted); max-width: 860px; }
+.ecom-rich > *:first-child { margin-top: 0; }
+.ecom-rich h2 { font-size: 32px; line-height: 1.22; font-weight: 700; letter-spacing: -0.02em; color: var(--c-text); margin: 40px 0 14px; }
+.ecom-rich h3 { font-size: 21px; line-height: 1.35; font-weight: 600; color: var(--c-text); margin: 26px 0 10px; }
+.ecom-rich p { margin: 0 0 14px; line-height: 1.72; font-size: 17px; }
+.ecom-rich p.lead { font-size: 19px; font-weight: 500; color: var(--c-text); }
+.ecom-rich strong { color: var(--c-text); font-weight: 600; }
+.ecom-rich a { color: var(--c-primary-600); font-weight: 600; text-decoration: none; border-bottom: 1px solid transparent; transition: color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out); }
+.ecom-rich a:hover { color: var(--c-primary-700); border-bottom-color: currentColor; }
+.ecom-rich ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+.ecom-rich ul li { position: relative; padding-left: 30px; line-height: 1.6; font-size: 17px; }
+.ecom-rich ul li::before {
+  content: "✓"; position: absolute; left: 0; top: 2px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--c-primary-50); color: var(--c-primary-600);
+  font-size: 11px; font-weight: 800; display: grid; place-items: center;
+}
+html.dark .ecom-rich a,
+html[data-theme="dark"] .ecom-rich a { color: #60A5FA; }
+html.dark .ecom-rich a:hover,
+html[data-theme="dark"] .ecom-rich a:hover { color: #93C5FD; }
+html.dark .ecom-rich ul li::before,
+html[data-theme="dark"] .ecom-rich ul li::before { color: #93C5FD; }
+
+.ecom-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 8px; }
+.ecom-card-grid--tight { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.ecom-card__icon { width: 44px; height: 44px; border-radius: 10px; background: var(--c-primary-50); color: var(--c-primary-600); display: grid; place-items: center; margin-bottom: 12px; flex-shrink: 0; }
+.ecom-card__icon--sm { width: 34px; height: 34px; border-radius: 8px; margin-bottom: 0; }
+html.dark .ecom-card__icon,
+html[data-theme="dark"] .ecom-card__icon { color: #93C5FD; }
+
+.ecom-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 8px; }
+.ecom-step { display: flex; gap: 14px; align-items: flex-start; padding: 20px; height: 100%; }
+.ecom-step__num { width: 36px; height: 36px; border-radius: 10px; background: var(--c-primary-600); color: #fff; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
 html.dark .lang-switcher__item--active { color: #BFD3FF; background: var(--c-primary-50); }

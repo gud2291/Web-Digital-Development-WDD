@@ -74,6 +74,26 @@ interface PageProps {
   params: { slug: string };
 }
 
+// §ECOMMERCE-PAGE — map a feature label to a relevant icon for the feature cards
+// (rich treatment only). Keyword-based with a safe `check` fallback.
+function featureIcon(label: string): IconName {
+  const t = label.toLowerCase();
+  if (/(mobile|responsive)/.test(t)) return "smartphone";
+  if (/(razorpay|cart|catalog)/.test(t)) return "cart";
+  if (/phonepe|phone/.test(t)) return "phone";
+  if (/(ssl|secure|payment|gateway)/.test(t)) return "shield";
+  if (/(cod|cash on delivery|account|customer|wishlist)/.test(t)) return t.includes("wishlist") ? "heart" : t.includes("account") || t.includes("customer") ? "user" : "badgeCheck";
+  if (/(ship|courier|deliver)/.test(t)) return "rocket";
+  if (/(inventory|stock|catalogue)/.test(t)) return "layers";
+  if (/search/.test(t)) return "search";
+  if (/(track|order)/.test(t)) return "map";
+  if (/(coupon|discount|offer)/.test(t)) return "star";
+  if (/whatsapp/.test(t)) return "whatsapp";
+  if (/(analytics|google)/.test(t)) return "target";
+  if (/seo/.test(t)) return "zap";
+  return "check";
+}
+
 export async function generateStaticParams() {
   const services = await listServices().catch(() => []);
   return services.filter((s) => s.slug).map((s) => ({ slug: s.slug as string }));
@@ -123,6 +143,16 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   // so every service page has visible, snippet-eligible Q&A (and matching schema).
   const faqs = svc.faqs?.length ? svc.faqs : FALLBACK_SERVICE_FAQS;
   const icon = safeIcon(svc.icon, "monitor");
+
+  // §ECOMMERCE-PAGE — optional, additive card sections. `rich` services render an
+  // expanded layout (full-width content + feature/industry/process cards + custom
+  // CTA). Services without `industries` fall through to the original layout below
+  // unchanged.
+  const industries = (svc.industries as string[] | undefined) ?? [];
+  const processSteps =
+    (svc.processSteps as { title: string; description?: string }[] | undefined) ?? [];
+  const contentSecondary = (svc.contentSecondary as string | undefined) ?? "";
+  const rich = industries.length > 0;
 
   const fullUrl = `${siteConfig.url}/services/${svc.slug}`;
 
@@ -226,6 +256,127 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
+      {rich ? (
+        <>
+          {/* §ECOMMERCE-PAGE — full-width rich content (intro + why + solutions). */}
+          {svc.content && (
+            <section className="section">
+              <div className="container">
+                <Reveal>
+                  <div
+                    className="ecom-rich"
+                    dangerouslySetInnerHTML={{ __html: svc.content }}
+                  />
+                </Reveal>
+              </div>
+            </section>
+          )}
+
+          {/* Feature icon cards. */}
+          {features.length > 0 && (
+            <section className="section section--alt">
+              <div className="container">
+                <Reveal>
+                  <SectionHead
+                    kicker="FEATURES"
+                    title="Ecommerce Features That Help You Sell More"
+                    sub="Everything your online store needs to attract, convert and retain customers — built in from day one."
+                    align="left"
+                  />
+                </Reveal>
+                <div className="ecom-card-grid">
+                  {features.map((f, idx) => (
+                    <Reveal key={f} delay={(idx % 4) * 50}>
+                      <div className="card" style={{ padding: 22, height: "100%" }}>
+                        <div className="ecom-card__icon">
+                          <Icon name={featureIcon(f)} />
+                        </div>
+                        <div style={{ fontWeight: 600, color: "var(--c-text)" }}>{f}</div>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Industries we serve. */}
+          {industries.length > 0 && (
+            <section className="section">
+              <div className="container">
+                <Reveal>
+                  <SectionHead
+                    kicker="INDUSTRIES"
+                    title="Industries We Serve"
+                    sub="We build ecommerce websites for businesses across India and beyond — each tailored to how that industry actually sells."
+                    align="left"
+                  />
+                </Reveal>
+                <div className="ecom-card-grid ecom-card-grid--tight">
+                  {industries.map((it, idx) => (
+                    <Reveal key={it} delay={(idx % 4) * 40}>
+                      <div
+                        className="card"
+                        style={{ padding: 16, display: "flex", alignItems: "center", gap: 12, height: "100%" }}
+                      >
+                        <div className="ecom-card__icon ecom-card__icon--sm">
+                          <Icon name="badgeCheck" size={16} />
+                        </div>
+                        <span style={{ fontWeight: 600, color: "var(--c-text)" }}>{it}</span>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Why choose us (secondary rich content). */}
+          {contentSecondary && (
+            <section className="section section--alt">
+              <div className="container">
+                <Reveal>
+                  <div
+                    className="ecom-rich"
+                    dangerouslySetInnerHTML={{ __html: contentSecondary }}
+                  />
+                </Reveal>
+              </div>
+            </section>
+          )}
+
+          {/* Development process steps. */}
+          {processSteps.length > 0 && (
+            <section className="section">
+              <div className="container">
+                <Reveal>
+                  <SectionHead
+                    kicker="HOW IT WORKS"
+                    title="Our Ecommerce Development Process"
+                    sub="A clear, proven path from first conversation to a store that keeps growing after launch."
+                    align="left"
+                  />
+                </Reveal>
+                <div className="ecom-steps">
+                  {processSteps.map((s, i) => (
+                    <Reveal key={s.title} delay={(i % 4) * 50}>
+                      <div className="card ecom-step">
+                        <div className="ecom-step__num">{i + 1}</div>
+                        <div>
+                          <div style={{ fontWeight: 600, color: "var(--c-text)" }}>{s.title}</div>
+                          {s.description && (
+                            <p className="t-small" style={{ marginTop: 4 }}>{s.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+        </>
+      ) : (
       <section className="section">
         <div className="container two-col">
           <Reveal>
@@ -286,6 +437,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           </Reveal>
         </div>
       </section>
+      )}
 
       {faqs.length > 0 && (
         <section className="section section--alt">
@@ -305,7 +457,33 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         items={relatedItems}
       />
 
-      <CTABanner />
+      {rich ? (
+        // §ECOMMERCE-PAGE — custom CTA with two actions → /contact.
+        <section style={{ padding: "32px 0 80px" }}>
+          <div className="cta-banner container">
+            <div className="cta-banner__text">
+              <h2>Ready to Build Your Online Store?</h2>
+              <p>
+                Tell us about your products and goals and we&apos;ll recommend the right
+                approach, timeline and budget — no pressure, no jargon. You&apos;ll hear back
+                within one working day.
+              </p>
+            </div>
+            <div className="cta-banner__actions">
+              <Link href="/contact">
+                <Btn size="lg" iconRight="arrowRight" style={{ background: "#fff", color: "#1D4ED8" }}>
+                  Get Free Consultation
+                </Btn>
+              </Link>
+              <Link href="/contact">
+                <Btn size="lg" variant="secondary">Request a Quote</Btn>
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <CTABanner />
+      )}
     </>
   );
 }

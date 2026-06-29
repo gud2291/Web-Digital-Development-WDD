@@ -41,6 +41,12 @@ const schema = z.object({
     .default([]),
   seoTitle: z.string().max(120).default(""),
   seoDescription: z.string().max(200).default(""),
+  // §ECOMMERCE-PAGE — optional/additive card content (rendered only when filled).
+  industries: z.array(z.object({ value: z.string().min(1) })).default([]),
+  processSteps: z
+    .array(z.object({ title: z.string().min(1), description: z.string().default("") }))
+    .default([]),
+  contentSecondary: z.string().default(""),
   relatedServices: z.array(z.string()).default([]),
   relatedBlogs: z.array(z.string()).default([]),
   visible: z.boolean().default(true),
@@ -71,6 +77,9 @@ interface InitialDoc {
   pricingTiers?: { name: string; price: string; features?: string[]; popular?: boolean }[];
   seoTitle?: string;
   seoDescription?: string;
+  industries?: string[];
+  processSteps?: { title: string; description?: string }[];
+  contentSecondary?: string;
   relatedServices?: string[];
   relatedBlogs?: string[];
   visible?: boolean;
@@ -125,6 +134,12 @@ export function ServiceForm({ initial, serviceOptions = [], blogOptions = [] }: 
       })),
       seoTitle: initial?.seoTitle ?? "",
       seoDescription: initial?.seoDescription ?? "",
+      industries: (initial?.industries ?? []).map((v) => ({ value: v })),
+      processSteps: (initial?.processSteps ?? []).map((s) => ({
+        title: s.title,
+        description: s.description ?? "",
+      })),
+      contentSecondary: initial?.contentSecondary ?? "",
       relatedServices: initial?.relatedServices ?? [],
       relatedBlogs: initial?.relatedBlogs ?? [],
       visible: initial?.visible ?? true,
@@ -147,11 +162,14 @@ export function ServiceForm({ initial, serviceOptions = [], blogOptions = [] }: 
   const faqsArr = useFieldArray({ control, name: "faqs" });
   const tiersArr = useFieldArray({ control, name: "pricingTiers" });
   const scopeArr = useFieldArray({ control, name: "quotationScope" });
+  const industriesArr = useFieldArray({ control, name: "industries" });
+  const processArr = useFieldArray({ control, name: "processSteps" });
 
   const onSubmit = async (values: Values) => {
     const payload = {
       ...values,
       features: values.features.map((f) => f.value),
+      industries: values.industries.map((i) => i.value),
       pricingTiers: values.pricingTiers.map((t) => ({
         name: t.name,
         price: t.price,
@@ -182,6 +200,7 @@ export function ServiceForm({ initial, serviceOptions = [], blogOptions = [] }: 
       state={{
         ...liveValues,
         features: (liveValues.features ?? []).map((f) => f.value),
+        industries: (liveValues.industries ?? []).map((i) => i.value),
         pricingTiers: (liveValues.pricingTiers ?? []).map((t) => ({
           ...t,
           features: (t.features ?? []).map((f) => f.value),
@@ -279,6 +298,69 @@ export function ServiceForm({ initial, serviceOptions = [], blogOptions = [] }: 
             <Icon name="plus" size={12} /> Add feature
           </Btn>
         </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Industries served</h3>
+        <p className="t-small" style={{ marginBottom: 10 }}>
+          Optional. Each industry renders as a card in an &ldquo;Industries We Serve&rdquo; section
+          on the public page. Leave empty to hide the section entirely.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {industriesArr.fields.map((f, idx) => (
+            <div key={f.id} style={{ display: "flex", gap: 8 }}>
+              <input className="input" {...register(`industries.${idx}.value` as const)} placeholder="e.g. Manufacturers" />
+              <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => industriesArr.remove(idx)}>
+                <Icon name="x" size={12} />
+              </button>
+            </div>
+          ))}
+          <Btn size="sm" type="button" variant="secondary" onClick={() => industriesArr.append({ value: "" })}>
+            <Icon name="plus" size={12} /> Add industry
+          </Btn>
+        </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Process steps</h3>
+        <p className="t-small" style={{ marginBottom: 10 }}>
+          Optional. Each step renders as a numbered card in a process section on the public page.
+          Leave empty to hide the section.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {processArr.fields.map((f, idx) => (
+            <div key={f.id} style={{ border: "1px solid var(--c-border)", borderRadius: 10, padding: 12 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input className="input" placeholder="Step title" {...register(`processSteps.${idx}.title` as const)} />
+                <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => processArr.remove(idx)}>
+                  <Icon name="x" size={12} />
+                </button>
+              </div>
+              <textarea
+                className="textarea"
+                placeholder="Short description (optional)"
+                style={{ marginTop: 8, minHeight: 56 }}
+                {...register(`processSteps.${idx}.description` as const)}
+              />
+            </div>
+          ))}
+          <Btn size="sm" type="button" variant="secondary" onClick={() => processArr.append({ title: "", description: "" })}>
+            <Icon name="plus" size={12} /> Add step
+          </Btn>
+        </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Secondary content</h3>
+        <p className="t-small" style={{ marginBottom: 10 }}>
+          Optional. A second rich-text block (e.g. &ldquo;Why choose us&rdquo;) shown after the
+          industries section. Leave empty to hide it.
+        </p>
+        <Controller
+          control={control}
+          name="contentSecondary"
+          render={({ field }) => <TipTapEditor value={field.value} onChange={field.onChange} />}
+        />
       </div>
 
       <div className="admin-form-section">

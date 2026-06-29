@@ -26,6 +26,12 @@ export const createServiceSchema = z.object({
   features: z.array(z.string()).default([]),
   faqs: z.array(faqSchema).default([]),
   pricingTiers: z.array(pricingTierSchema).default([]),
+  // §ECOMMERCE-PAGE — optional/additive content blocks (per service).
+  industries: z.array(z.string()).default([]),
+  processSteps: z
+    .array(z.object({ title: z.string().min(1), description: z.string().default("") }))
+    .default([]),
+  contentSecondary: z.string().default(""),
   // §QUOTATION-PDF — optional/additive quotation fields (per service).
   quotationEnabled: z.boolean().default(false),
   quotationTitle: z.string().max(200).optional().or(z.literal("")),
