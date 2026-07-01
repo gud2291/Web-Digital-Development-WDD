@@ -771,7 +771,7 @@ html[data-theme="dark"] .page-banner .btn--secondary:hover {
 /* ========== TRUST BAR ========== */
 .trust-bar { border-top: 1px solid #E5EAF2; border-bottom: 1px solid #E5EAF2; }
 .trust-bar__inner { display: flex; align-items: center; justify-content: space-between; padding: 22px var(--gutter); gap: 24px; }
-.trust-bar__label { font-size: 14px; font-weight: 600; color: #0F172A; min-width: 140px; white-space: nowrap; }
+.trust-bar__label { font-size: 14px; font-weight: 600; color: var(--c-text); min-width: 140px; white-space: nowrap; }
 .trust-bar__logos { display: flex; align-items: center; gap: 48px; flex: 1; justify-content: space-evenly; opacity: .62; }
 .trust-bar__logo { font-family: var(--ff-mono); font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: #64748B; white-space: nowrap; }
 
@@ -799,7 +799,7 @@ html[data-theme="dark"] .page-banner .btn--secondary:hover {
 }
 /* §14.11 — slower, dignified pace (45s) + vertical breathing room on cells */
 .trust-marquee__track { display: flex; align-items: center; gap: 48px; width: max-content; padding: 6px 0; animation: marquee 45s linear infinite; }
-.trust-marquee:hover .trust-marquee__track { animation-play-state: paused; }
+
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ===== §12.11 / §12.12 EMBLA CAROUSELS ===== */
@@ -986,8 +986,76 @@ html[data-theme="dark"] .page-banner .btn--secondary:hover {
 .featured-blog__body { padding: 48px; }
 .blog-author { display: flex; gap: 10px; align-items: center; margin-top: 16px; }
 
+/* Blog covers on mobile: desktop keeps its fixed pixel heights (inline), but on
+   small screens the fixed height crops the image. Swap to a 16:9 aspect ratio so
+   covers scale to the card width and render fully — no crop, no layout shift. */
+@media (max-width: 768px) {
+  .blog-card__media,
+  .featured-blog__media {
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+  }
+}
+
 /* ========== BLOG DETAIL ========== */
-.blog-detail__meta { display: flex; align-items: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+/* Override blog header banner via CSS to match the premium .page-banner style */
+section:has(.blog-detail__meta) {
+  background: var(--grad-band) !important;
+  padding: 64px 0 48px !important;
+}
+section:has(.blog-detail__meta) > .container {
+  text-align: center !important;
+  max-width: 780px !important;
+  margin: 0 auto !important;
+}
+section:has(.blog-detail__meta) .breadcrumb {
+  justify-content: center !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+section:has(.blog-detail__meta) .breadcrumb a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: color var(--dur-fast) ease;
+}
+section:has(.blog-detail__meta) .breadcrumb a:hover {
+  color: #fff !important;
+}
+section:has(.blog-detail__meta) .breadcrumb b {
+  color: #fff !important;
+}
+section:has(.blog-detail__meta) .breadcrumb svg {
+  stroke: rgba(255, 255, 255, 0.65) !important;
+}
+section:has(.blog-detail__meta) .badge {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+section:has(.blog-detail__meta) h1.t-h1 {
+  color: #fff !important;
+  text-align: center !important;
+}
+.blog-detail__meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.75);
+}
+section:has(.blog-detail__meta) .blog-detail__meta .blog-author {
+  color: #fff !important;
+}
+section:has(.blog-detail__meta) .blog-detail__meta .blog-author div {
+  color: #fff !important;
+}
+section:has(.blog-detail__meta) .blog-detail__meta .t-small {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+section:has(.blog-detail__meta) .blog-detail__meta .avatar {
+  border: 2px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
 .blog-detail__body { max-width: 880px; margin: 0 auto; }
 .article-content { font-size: 19px; line-height: 1.75; color: #334155; }
 .article-content h3 { font-size: 28px; font-weight: 700; margin-top: 36px; color: #0F172A; }
@@ -2766,6 +2834,7 @@ body { top: 0 !important; }            /* Google sets body{top:40px} for its ban
   gap: 2px;
   max-height: 320px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .lang-switcher__item {
   display: flex;

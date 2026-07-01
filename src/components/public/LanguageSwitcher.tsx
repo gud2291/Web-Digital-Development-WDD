@@ -23,20 +23,38 @@ export interface LangOption {
   code: string;
   native: string;
   en: string;
+  /** ISO 3166-1 alpha-2 country code for flagcdn.com */
+  countryCode: string;
 }
 
 const LANGS: LangOption[] = [
-  { code: "en", native: "English", en: "English" },
-  { code: "es", native: "Español", en: "Spanish" },
-  { code: "fr", native: "Français", en: "French" },
-  { code: "de", native: "Deutsch", en: "German" },
-  { code: "pt", native: "Português", en: "Portuguese" },
-  { code: "ru", native: "Русский", en: "Russian" },
-  { code: "zh-CN", native: "中文", en: "Chinese" },
-  { code: "ja", native: "日本語", en: "Japanese" },
-  { code: "ar", native: "العربية", en: "Arabic" },
-  { code: "hi", native: "हिन्दी", en: "Hindi" },
+  { code: "en", native: "English", en: "English", countryCode: "gb" },
+  { code: "es", native: "Español", en: "Spanish", countryCode: "es" },
+  { code: "fr", native: "Français", en: "French", countryCode: "fr" },
+  { code: "de", native: "Deutsch", en: "German", countryCode: "de" },
+  { code: "pt", native: "Português", en: "Portuguese", countryCode: "br" },
+  { code: "ru", native: "Русский", en: "Russian", countryCode: "ru" },
+  { code: "zh-CN", native: "中文", en: "Chinese", countryCode: "cn" },
+  { code: "ja", native: "日本語", en: "Japanese", countryCode: "jp" },
+  { code: "ar", native: "العربية", en: "Arabic", countryCode: "sa" },
+  { code: "hi", native: "हिन्दी", en: "Hindi", countryCode: "in" },
 ];
+
+/** Renders a small real flag image from the local public/flags folder */
+function FlagImg({ countryCode, size = 20 }: { countryCode: string; size?: number }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`/flags/${countryCode}.svg`}
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={Math.round(size * 0.75)}
+      style={{ borderRadius: 2, objectFit: "cover", flexShrink: 0 }}
+    />
+  );
+}
+
 
 // ---- cookie + translation helpers (client-only) ---------------------------
 
@@ -161,7 +179,7 @@ export function GoogleTranslateInit() {
 
 function GlobeIcon() {
   return (
-    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <path d="M2 12h20" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -235,7 +253,7 @@ export function LanguageSwitcher({ variant = "desktop" }: { variant?: "desktop" 
         aria-label="Change language"
         onClick={() => setOpen((v) => !v)}
       >
-        <GlobeIcon />
+        {current.code === "en" ? <GlobeIcon /> : <FlagImg countryCode={current.countryCode} size={18} />}
         {/* `notranslate` so Google never re-labels the switcher itself */}
         <span className="notranslate" translate="no">{current.native}</span>
         <ChevIcon open={open} />
@@ -253,7 +271,10 @@ export function LanguageSwitcher({ variant = "desktop" }: { variant?: "desktop" 
               translate="no"
               onClick={() => choose(l.code)}
             >
-              <span>{l.native}</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                {l.code === "en" ? <GlobeIcon /> : <FlagImg countryCode={l.countryCode} size={18} />}
+                {l.native}
+              </span>
               <span className="lang-switcher__item-en">{l.en}</span>
             </button>
           ))}

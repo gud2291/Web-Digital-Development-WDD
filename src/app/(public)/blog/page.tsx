@@ -95,7 +95,7 @@ export default async function BlogListPage() {
               <Link href={`/blog/${featured.slug}`}>
                 <div className="card hover-lift featured-blog">
                   {featured.featuredImage ? (
-                    <div style={{ position: "relative", width: "100%", height: 380, borderRadius: 12, overflow: "hidden" }}>
+                    <div className="featured-blog__media" style={{ position: "relative", width: "100%", height: 380, borderRadius: 12, overflow: "hidden" }}>
                       <CldImage
                         src={featured.featuredImage}
                         alt={featured.featuredImageAlt || featured.title}

@@ -127,7 +127,7 @@ export function BlogListClient({ initialPosts, initialPage, totalPages }: Props)
               <Link href={`/blog/${b.slug}`}>
                 <article className="card card--hover blog-card card--interactive">
                   {b.image ? (
-                    <div style={{ position: "relative", width: "100%", height: 280, borderRadius: "12px 12px 0 0", overflow: "hidden" }}>
+                    <div className="blog-card__media" style={{ position: "relative", width: "100%", height: 280, borderRadius: "12px 12px 0 0", overflow: "hidden" }}>
                       <CldImage
                         src={b.image}
                         alt={b.imageAlt || b.title}
