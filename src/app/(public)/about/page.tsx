@@ -9,7 +9,8 @@ import { listTeam } from "@/server/services/team.service";
 import { metadataFromDb } from "@/lib/seo";
 import { SafeImage } from "@/components/public/SafeImage";
 import { cldOptimize } from "@/lib/cloudinary";
-import { SchemaMarkup, aboutPageSchema } from "@/components/SchemaMarkup";
+import { SchemaMarkup, aboutPageSchema, faqSchema } from "@/components/SchemaMarkup";
+import { FAQList } from "@/components/FAQList";
 
 // ISR: cached HTML; site-content & team admin saves call revalidatePath("/about")
 // so edits appear immediately. Drafts render via draftMode() for editors only.
@@ -92,6 +93,41 @@ const WHO_WE_BRING: [string, string, string][] = [
     "Online Marketing & SMO",
     "Social media and digital marketing strategies that connect you with the right audience.",
     "digital-marketing",
+  ],
+];
+
+const ABOUT_FAQ: [string, string][] = [
+  [
+    "Why choose Web Digital Development?",
+    "We are a client-first web design and development studio in Delhi with over 6 years of experience, delivering 400+ custom websites for 250+ clients across India and globally. Unlike generic agencies, we don't use rigid templates; every site is crafted with hand-tailored design, fast performance, search engine optimization, and direct founder-led quality control. We focus on transparent pricing, clear timelines, and long-term support to ensure your website directly drives lead generation and business growth.",
+  ],
+  [
+    "How much does a website cost?",
+    "Website costs depend on your project scope, features, and custom requirements. Basic business landing pages typically start around ₹15,000 to ₹25,000, multi-page corporate websites range between ₹25,000 and ₹60,000, while custom e-commerce stores and advanced web apps vary based on specific functionality like payment gateways, user dashboards, and custom integrations. We provide a transparent, fixed-price quote after an initial consultation—with zero hidden charges.",
+  ],
+  [
+    "How long does development take?",
+    "Most standard business websites are completed and launched within 2 to 4 weeks. Smaller landing pages can be ready in 7 to 10 days, while larger e-commerce sites or custom web applications may take 4 to 6 weeks. We establish clear project milestones from day one and deliver regular progress updates so your website launches on schedule without compromising on quality or testing.",
+  ],
+  [
+    "Do you redesign existing websites?",
+    "Yes, we specialize in complete website redesigns. We modernize outdated visuals, improve mobile responsiveness, speed up page load times, and revamp the user experience (UX) while carefully preserving your existing SEO rankings, backlink structure, and brand domain authority. We also assist with seamless domain migration and content strategy updates.",
+  ],
+  [
+    "Do you build WordPress websites?",
+    "Yes, we build fully customized, secure, and easy-to-manage WordPress websites tailored to your brand. In addition to WordPress, we also build high-performance custom websites using modern web tech stacks like Next.js, React, Node.js, and HTML5/CSS3, giving you the flexibility to choose the best technology for your performance, scalability, and content management needs.",
+  ],
+  [
+    "Will my website be mobile friendly?",
+    "Absolutely. Every website we design is 100% mobile-responsive and optimized for all screen sizes—including smartphones, tablets, laptops, and desktops. We follow a mobile-first design strategy to guarantee fast loading speeds, intuitive navigation, smooth touch interactions, and an exceptional user experience on every device.",
+  ],
+  [
+    "Do you provide SEO?",
+    "Yes, all our websites include comprehensive on-page SEO best practices as standard—including clean semantic HTML, meta title & description optimization, image optimization, schema markup (structured data), and fast loading speeds for Search Engine, Generative Engine (GEO), and Answer Engine (AEO) visibility. We also offer dedicated SEO services, including keyword research, technical SEO audits, content strategy, and ongoing search ranking optimization.",
+  ],
+  [
+    "Do you offer website maintenance?",
+    "Yes, we provide comprehensive post-launch website maintenance and technical support plans. Our services include regular security updates, core & plugin updates, automated backups, performance monitoring, content updates, and quick bug fixes to keep your website fast, secure, and running smoothly 24/7.",
   ],
 ];
 
@@ -396,6 +432,17 @@ export default async function AboutPage() {
       </section>
 
       <SectionDivider from="#F7F9FC" to="#ffffff" flip />
+
+      {/* FAQ Section — Structured with FAQList and SchemaMarkup for SEO / GEO / AEO */}
+      <section id="s-faq" className="section">
+        <div className="container">
+          <Reveal>
+            <SectionHead kicker="FAQ" title="Frequently Asked Questions" />
+          </Reveal>
+          <SchemaMarkup data={faqSchema(ABOUT_FAQ.map(([q, a]) => ({ q, a })))} />
+          <FAQList items={ABOUT_FAQ} />
+        </div>
+      </section>
 
       <CTABanner
         title="Let's Build Something Great Together."
