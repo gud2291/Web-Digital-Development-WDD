@@ -10,6 +10,14 @@ const TimelineItemSchema = new Schema(
   { _id: false }
 );
 
+const FounderHighlightSchema = new Schema(
+  {
+    value: { type: String, default: "" },
+    label: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
 const AboutSchema = new Schema(
   {
     heroImage: { type: String, default: "" },
@@ -17,6 +25,15 @@ const AboutSchema = new Schema(
     description: { type: String, default: "" },
     whyChooseUs: { type: [String], default: [] },
     timeline: { type: [TimelineItemSchema], default: [] },
+    // Founder & CEO section — all optional, page renders sensible fallbacks when empty.
+    founderName: { type: String, default: "" },
+    founderTitle: { type: String, default: "" },
+    founderPhoto: { type: String, default: "" },
+    founderPhotoAlt: { type: String, default: "" },
+    founderNote: { type: String, default: "" },
+    mission: { type: String, default: "" },
+    vision: { type: String, default: "" },
+    founderHighlights: { type: [FounderHighlightSchema], default: [] },
   },
   { _id: false }
 );

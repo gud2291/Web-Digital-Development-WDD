@@ -66,6 +66,32 @@ const TIMELINE_THEMES = [
 
 const TEAM_BG_COLORS = ["#DBE7FE", "#FCE7F3", "#FEF3C7", "#DCFCE7", "#EFF6FF", "#FEE2E2"];
 
+// Founder & CEO section — sensible fallbacks so the section renders cleanly
+// before an admin fills in the site-content fields.
+const FOUNDER_NAME_FALLBACK = "Gudia Yadav";
+const FOUNDER_TITLE_FALLBACK = "Founder & CEO";
+const FOUNDER_PHOTO_ALT_FALLBACK = "Gudia Yadav, Founder & CEO of Web Digital Development";
+const FOUNDER_NOTE_FALLBACK =
+  "When I started Web Digital Development in 2019, I believed a world-class website shouldn't be a luxury only big brands can afford. That belief still drives everything we do. Every project that leaves our studio passes across my desk — because your website carries my name as much as yours. My promise is simple: premium design, honest pricing, and real support that doesn't disappear after launch.";
+const FOUNDER_MISSION_FALLBACK =
+  "To help small and mid-sized businesses across India and beyond build fast, beautiful, high-performing websites they're genuinely proud of — pairing premium design with honest pricing and support that stays with them long after launch.";
+const FOUNDER_VISION_FALLBACK =
+  "To become India's most trusted web design studio — the first name a growing business thinks of when it wants a website that looks world-class and actually drives real growth.";
+const FOUNDER_HIGHLIGHTS_FALLBACK: { value: string; label: string }[] = [
+  { value: "2019", label: "Building since" },
+  { value: "400+", label: "Projects shipped" },
+  { value: "Hands-on", label: "On every build" },
+];
+
+function founderInitials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
+}
+
 // "What We Bring to the Table" — each service linked to its /services/[slug] page.
 // Slugs match the homepage list (verified against seed-content.ts).
 const WHO_WE_BRING: [string, string, string][] = [
@@ -165,6 +191,17 @@ export default async function AboutPage() {
         linkedin: m.linkedinUrl || "",
       }))
     : FALLBACK_TEAM.map(([name, role, bg]) => ({ name, role, bg, photo: "", linkedin: "" }));
+
+  const founderName = about?.founderName || FOUNDER_NAME_FALLBACK;
+  const founderTitle = about?.founderTitle || FOUNDER_TITLE_FALLBACK;
+  const founderPhoto = about?.founderPhoto || "";
+  const founderPhotoAlt = about?.founderPhotoAlt || FOUNDER_PHOTO_ALT_FALLBACK;
+  const founderNote = about?.founderNote || FOUNDER_NOTE_FALLBACK;
+  const mission = about?.mission || FOUNDER_MISSION_FALLBACK;
+  const vision = about?.vision || FOUNDER_VISION_FALLBACK;
+  const founderHighlights: { value: string; label: string }[] = about?.founderHighlights?.length
+    ? about.founderHighlights.slice(0, 3).map((h) => ({ value: h.value || "", label: h.label || "" }))
+    : FOUNDER_HIGHLIGHTS_FALLBACK;
 
   return (
     <>
@@ -351,26 +388,154 @@ export default async function AboutPage() {
 
       <SectionDivider from="#F7F9FC" to="#ffffff" flip />
 
+      {/* Founder & CEO — premium section, sits directly above "Our Journey".
+          Photo one side (framed with an offset accent block for depth, and an
+          initials fallback when no photo is set), name/title/note/signature/
+          highlights the other. Mission and Vision below as equal-height,
+          icon-topped cards with a hover lift. Section title is h2; Mission and
+          Vision labels are h3. */}
+      <section className="section section--founder">
+        <div className="container two-col">
+          <div style={{ position: "relative", height: "100%", minHeight: 400 }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                top: 12,
+                left: 12,
+                width: "100%",
+                height: "100%",
+                borderRadius: 24,
+                background: "linear-gradient(135deg, var(--c-primary-600), var(--c-primary-700))",
+                zIndex: 0,
+              }}
+            />
+            <div
+              style={{
+                position: "relative",
+                zIndex: 1,
+                height: "100%",
+                width: "100%",
+                borderRadius: 24,
+                overflow: "hidden",
+                border: "1px solid var(--c-border)",
+                boxShadow: "var(--sh-card-hover)",
+              }}
+            >
+              <Reveal>
+                {founderPhoto ? (
+                  <SafeImage
+                    src={cldOptimize(founderPhoto, "w_800")}
+                    alt={founderPhotoAlt}
+                    fallbackLabel={founderName}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }}
+                  />
+                ) : (
+                  <div
+                    role="img"
+                    aria-label={founderPhotoAlt}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "linear-gradient(135deg, #1B4DA8 0%, #2563EB 100%)",
+                      color: "#DBEAFE",
+                      fontSize: 56,
+                      fontWeight: 800,
+                    }}
+                  >
+                    {founderInitials(founderName)}
+                  </div>
+                )}
+              </Reveal>
+            </div>
+          </div>
+          <div>
+            <Reveal>
+              <Eyebrow>LEADERSHIP</Eyebrow>
+              <h2 className="t-h2" style={{ marginTop: 8 }}>{founderTitle}</h2>
+            </Reveal>
+            <Reveal delay={80}>
+              <div style={{ marginTop: 16, fontSize: 20, fontWeight: 700 }}>{founderName}</div>
+              <div className="t-small" style={{ marginTop: 2 }}>{founderTitle} · Web Digital Development</div>
+            </Reveal>
+            <Reveal delay={140}>
+              <blockquote className="pull-quote" style={{ marginTop: 22, lineHeight: 1.7 }}>
+                {founderNote}
+              </blockquote>
+              <div
+                style={{
+                  marginTop: 12,
+                  fontStyle: "italic",
+                  fontWeight: 700,
+                  fontSize: 15,
+                  color: "var(--c-primary-700)",
+                }}
+              >
+                — {founderName}, {founderTitle}
+              </div>
+            </Reveal>
+            <Reveal delay={180}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 28, marginTop: 28 }}>
+                {founderHighlights.map((h, i) => (
+                  <div key={h.label + i}>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: "var(--c-primary-700)" }}>{h.value}</div>
+                    <div className="t-small" style={{ marginTop: 2 }}>{h.label}</div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </div>
+
+        <div className="container" style={{ marginTop: 48 }}>
+          <div className="two-col">
+            <Reveal>
+              <div className="card card--hover" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                <div className="svc-icon" style={{ background: "var(--c-primary-50)", color: "#2563EB" }}>
+                  <Icon name="target" />
+                </div>
+                <h3 className="t-h3">Mission</h3>
+                <p className="t-small" style={{ marginTop: 10 }}>{mission}</p>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <div className="card card--hover" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                <div className="svc-icon" style={{ background: "var(--c-primary-50)", color: "#2563EB" }}>
+                  <Icon name="eye" />
+                </div>
+                <h3 className="t-h3">Vision</h3>
+                <p className="t-small" style={{ marginTop: 10 }}>{vision}</p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       <section className="section section--timeline">
         <div className="container">
           <Reveal>
             <SectionHead kicker="OUR JOURNEY" title="From a 2-person studio to 24+ team" />
           </Reveal>
-          
+
           <div className="zigzag-timeline">
             {timeline.map(([y, t, d], idx) => {
               const isLeft = idx % 2 === 0;
               const theme = TIMELINE_THEMES[idx % TIMELINE_THEMES.length];
               return (
                 <Reveal key={y + idx} delay={idx * 80}>
-                  <div 
+                  <div
                     className={`zigzag-item ${isLeft ? "zigzag-item--left" : "zigzag-item--right"}`}
                     style={{
                       "--step-color": `var(--timeline-color-${idx % TIMELINE_THEMES.length})`,
                       "--step-glow": `var(--timeline-glow-${idx % TIMELINE_THEMES.length})`,
                     } as React.CSSProperties}
                   >
-                    
+
                     {/* Circle Node */}
                     <div className="zigzag-item__col zigzag-item__col--triangle">
                       <div className="timeline-circle-node">

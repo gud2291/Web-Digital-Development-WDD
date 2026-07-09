@@ -6,12 +6,25 @@ const timelineItemSchema = z.object({
   description: z.string().default(""),
 });
 
+const founderHighlightSchema = z.object({
+  value: z.string().default(""),
+  label: z.string().default(""),
+});
+
 const aboutSchema = z.object({
   heroImage: z.string().default(""),
   heading: z.string().default(""),
   description: z.string().default(""),
   whyChooseUs: z.array(z.string()).default([]),
   timeline: z.array(timelineItemSchema).default([]),
+  founderName: z.string().default(""),
+  founderTitle: z.string().default(""),
+  founderPhoto: z.string().default(""),
+  founderPhotoAlt: z.string().default(""),
+  founderNote: z.string().default(""),
+  mission: z.string().default(""),
+  vision: z.string().default(""),
+  founderHighlights: z.array(founderHighlightSchema).default([]),
 });
 
 const bannerSchema = z.object({

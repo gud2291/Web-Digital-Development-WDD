@@ -24,6 +24,14 @@ const schema = z.object({
     timeline: z
       .array(z.object({ year: z.string().default(""), title: z.string().default(""), description: z.string().default("") }))
       .default([]),
+    founderName: z.string().default(""),
+    founderTitle: z.string().default(""),
+    founderPhoto: z.string().default(""),
+    founderPhotoAlt: z.string().default(""),
+    founderNote: z.string().default(""),
+    mission: z.string().default(""),
+    vision: z.string().default(""),
+    founderHighlights: z.array(z.object({ value: z.string().default(""), label: z.string().default("") })).default([]),
   }),
   contactPage: z.object({
     mapEmbedUrl: z.string().default(""),
@@ -52,6 +60,14 @@ interface InitialDoc {
     description?: string;
     whyChooseUs?: string[];
     timeline?: { year?: string; title?: string; description?: string }[];
+    founderName?: string;
+    founderTitle?: string;
+    founderPhoto?: string;
+    founderPhotoAlt?: string;
+    founderNote?: string;
+    mission?: string;
+    vision?: string;
+    founderHighlights?: { value?: string; label?: string }[];
   };
   contactPage?: {
     mapEmbedUrl?: string;
@@ -92,6 +108,17 @@ export function SiteContentForm({ initial }: { initial: InitialDoc }) {
           title: t.title ?? "",
           description: t.description ?? "",
         })),
+        founderName: initial.about?.founderName ?? "",
+        founderTitle: initial.about?.founderTitle ?? "",
+        founderPhoto: initial.about?.founderPhoto ?? "",
+        founderPhotoAlt: initial.about?.founderPhotoAlt ?? "",
+        founderNote: initial.about?.founderNote ?? "",
+        mission: initial.about?.mission ?? "",
+        vision: initial.about?.vision ?? "",
+        founderHighlights: (initial.about?.founderHighlights ?? []).map((h) => ({
+          value: h.value ?? "",
+          label: h.label ?? "",
+        })),
       },
       contactPage: {
         mapEmbedUrl: initial.contactPage?.mapEmbedUrl ?? "",
@@ -114,6 +141,7 @@ export function SiteContentForm({ initial }: { initial: InitialDoc }) {
 
   const whyArr = useFieldArray({ control, name: "about.whyChooseUs" });
   const timelineArr = useFieldArray({ control, name: "about.timeline" });
+  const founderHighlightsArr = useFieldArray({ control, name: "about.founderHighlights" });
   const budgetArr = useFieldArray({ control, name: "contactPage.budgetRanges" });
   const promisesArr = useFieldArray({ control, name: "contactPage.quickPromises" });
   const headerArr = useFieldArray({ control, name: "navLinks.header" });
@@ -202,6 +230,73 @@ export function SiteContentForm({ initial }: { initial: InitialDoc }) {
             onClick={() => timelineArr.append({ year: "", title: "", description: "" })}
           >
             <Icon name="plus" size={12} /> Add timeline item
+          </Btn>
+        </div>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Founder &amp; CEO</h3>
+        <div className="admin-form-row">
+          <div className="field">
+            <label className="field__label">Founder name</label>
+            <input className="input" placeholder="Gudia Yadav" {...register("about.founderName")} />
+          </div>
+          <div className="field">
+            <label className="field__label">Founder title</label>
+            <input className="input" placeholder="Founder & CEO" {...register("about.founderTitle")} />
+          </div>
+        </div>
+        <div style={{ marginTop: 14 }}>
+          <ImageUploader
+            label="Founder photo"
+            value={watch("about.founderPhoto")}
+            onChange={(url) => register("about.founderPhoto").onChange({ target: { value: url, name: "about.founderPhoto" } })}
+            altValue={watch("about.founderPhotoAlt")}
+            onAltChange={(alt) => register("about.founderPhotoAlt").onChange({ target: { value: alt, name: "about.founderPhotoAlt" } })}
+          />
+        </div>
+        <div className="field" style={{ marginTop: 14 }}>
+          <label className="field__label">Short note (a few sentences)</label>
+          <textarea className="textarea" {...register("about.founderNote")} style={{ minHeight: 90 }} />
+        </div>
+        <div className="field" style={{ marginTop: 14 }}>
+          <label className="field__label">Mission</label>
+          <textarea className="textarea" {...register("about.mission")} style={{ minHeight: 80 }} />
+        </div>
+        <div className="field" style={{ marginTop: 14 }}>
+          <label className="field__label">Vision</label>
+          <textarea className="textarea" {...register("about.vision")} style={{ minHeight: 80 }} />
+        </div>
+        <div style={{ marginTop: 14 }}>
+          <div className="field__label" style={{ marginBottom: 6 }}>
+            Highlights (3 short stats, e.g. &quot;400+ — Projects shipped&quot;)
+          </div>
+          {founderHighlightsArr.fields.map((f, i) => (
+            <div key={f.id} style={{ display: "flex", gap: 8, marginTop: 6 }}>
+              <input
+                className="input"
+                placeholder="Value (e.g. 400+)"
+                style={{ maxWidth: 160 }}
+                {...register(`about.founderHighlights.${i}.value` as const)}
+              />
+              <input
+                className="input"
+                placeholder="Label (e.g. Projects shipped)"
+                {...register(`about.founderHighlights.${i}.label` as const)}
+              />
+              <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => founderHighlightsArr.remove(i)}>
+                <Icon name="x" size={12} />
+              </button>
+            </div>
+          ))}
+          <Btn
+            size="sm"
+            type="button"
+            variant="secondary"
+            style={{ marginTop: 8 }}
+            onClick={() => founderHighlightsArr.append({ value: "", label: "" })}
+          >
+            <Icon name="plus" size={12} /> Add highlight
           </Btn>
         </div>
       </div>
