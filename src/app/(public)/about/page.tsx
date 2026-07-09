@@ -7,6 +7,7 @@ import { getCachedSiteContent } from "@/server/services/siteContent.service";
 import { getPreviewDoc } from "@/server/preview/getPreviewDoc";
 import { listTeam } from "@/server/services/team.service";
 import { metadataFromDb } from "@/lib/seo";
+import { siteConfig } from "@/config/site";
 import { SafeImage } from "@/components/public/SafeImage";
 import { cldOptimize } from "@/lib/cloudinary";
 import { SchemaMarkup, aboutPageSchema, faqSchema } from "@/components/SchemaMarkup";
@@ -21,7 +22,14 @@ export async function generateMetadata() {
     path: "/about",
     title: "About Our Delhi Web Design Studio",
     description:
-      "Delhi web design & development studio since 2019 — 400+ sites delivered for 250+ clients across India and abroad. Meet the team behind your next site.",
+      "Delhi web design & development studio since 2019, founder-led by Gudia Yadav — 400+ sites delivered for 250+ clients across India and abroad. Meet our founder, mission, vision and team.",
+    keywords: [
+      "about web digital development",
+      "Gudia Yadav founder web design",
+      "web design studio Delhi founder",
+      "our mission and vision",
+      ...siteConfig.keywords,
+    ],
   });
 }
 

@@ -38,6 +38,11 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.webmanifest",
   appleWebApp: { title: siteConfig.name, statusBarStyle: "black-translucent" },
+  // Modern standard PWA tag — resolves the "apple-mobile-web-app-capable is
+  // deprecated" warning. iOS still reads apple-mobile-web-app-capable, which
+  // Next.js emits automatically from `appleWebApp` above; this adds the
+  // cross-browser standard equivalent alongside it.
+  other: { "mobile-web-app-capable": "yes" },
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION || "vHdFZp_PhiUwfyFBn-3o1muXYCz8GsTImtO165eN6vk",
     other: process.env.BING_SITE_VERIFICATION

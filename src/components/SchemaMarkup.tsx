@@ -58,7 +58,7 @@ export function localBusinessSchema() {
       "@type": "Person",
       "@id": `${siteConfig.url}#founder`,
       name: "Gudia Yadav",
-      jobTitle: "Founder",
+      jobTitle: "Founder & CEO",
     },
     geo: {
       "@type": "GeoCoordinates",
@@ -126,7 +126,7 @@ export function aboutPageSchema() {
         "@type": "Person",
         "@id": `${siteConfig.url}#founder`,
         name: "Gudia Yadav",
-        jobTitle: "Founder",
+        jobTitle: "Founder & CEO",
         worksFor: { "@id": `${siteConfig.url}#business` },
         url: `${siteConfig.url}/about`,
       },
