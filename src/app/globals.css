@@ -1056,6 +1056,21 @@ section:has(.blog-detail__meta) .blog-detail__meta .avatar {
   border: 2px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
+/* Blog article hero image — responsive height so it doesn't over-crop on mobile.
+   Mobile-first uses aspect-ratio (scales with width); desktop keeps the fixed 420px look. */
+.blog-hero-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .blog-hero-media { aspect-ratio: auto; height: 420px; }
+}
+@media (max-width: 480px) {
+  .blog-hero-media { border-radius: 12px; }
+}
 .blog-detail__body { max-width: 880px; margin: 0 auto; }
 .article-content { font-size: 19px; line-height: 1.75; color: #334155; }
 .article-content h3 { font-size: 28px; font-weight: 700; margin-top: 36px; color: #0F172A; }

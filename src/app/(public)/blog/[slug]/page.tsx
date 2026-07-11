@@ -162,7 +162,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
       <div className="container" style={{ maxWidth: 1040, margin: "-20px auto 0" }}>
         <Reveal>
           {post.featuredImage ? (
-            <div style={{ position: "relative", width: "100%", height: 420, borderRadius: 16, overflow: "hidden" }}>
+            <div className="blog-hero-media">
               <CldImage
                 src={post.featuredImage}
                 alt={post.featuredImageAlt || post.title}
