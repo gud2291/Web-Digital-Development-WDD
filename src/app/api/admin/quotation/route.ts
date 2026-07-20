@@ -69,6 +69,8 @@ export async function POST(req: Request) {
 
     const settings = await getCachedQuotationSettings();
 
+    const effectiveCost = (data.developmentCost || "").trim() || service.quotationCostRange || "";
+
     const quotationNo = `WDD-${quoteId()}`;
     const date = new Intl.DateTimeFormat("en-IN", {
       day: "2-digit",
@@ -93,7 +95,7 @@ export async function POST(req: Request) {
         validity: settings?.validity || "",
         headerSubtitle,
         greeting,
-        costRange: service.quotationCostRange || "",
+        costRange: effectiveCost,
         scope: (service.quotationScope as string[]) || [],
         paymentTerms: (settings?.paymentTerms || []).map((p) => ({
           percent: p.percent || "",
@@ -128,7 +130,7 @@ export async function POST(req: Request) {
           email: data.email || "",
           serviceSlug: String(service.slug || data.serviceSlug),
           serviceTitle: serviceLabel,
-          costRange: service.quotationCostRange || "",
+          costRange: effectiveCost,
           sentVia,
           pdfUrl,
         });

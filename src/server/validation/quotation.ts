@@ -34,6 +34,7 @@ export const generateQuotationSchema = z.object({
   email: z.string().email().optional().or(z.literal("")),
   phone: z.string().max(30).optional().or(z.literal("")),
   business: z.string().max(160).optional().or(z.literal("")),
+  developmentCost: z.string().max(60).optional().or(z.literal("")),
   action: z.enum(["download", "email", "whatsapp"]).default("download"),
 });
 

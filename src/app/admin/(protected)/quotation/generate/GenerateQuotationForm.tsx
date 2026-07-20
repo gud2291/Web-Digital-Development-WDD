@@ -45,6 +45,7 @@ export function GenerateQuotationForm({
   const [phone, setPhone] = React.useState(prefill.phone ?? "");
   const [business, setBusiness] = React.useState(prefill.business ?? "");
   const [serviceSlug, setServiceSlug] = React.useState(services[0]?.slug ?? "");
+  const [developmentCost, setDevelopmentCost] = React.useState("");
   const [busy, setBusy] = React.useState<Action | null>(null);
 
   const submit = async (action: Action) => {
@@ -81,6 +82,7 @@ export function GenerateQuotationForm({
           email: email.trim(),
           phone: phone.trim(),
           business: business.trim(),
+          developmentCost: developmentCost.trim(),
           action,
         }),
       });
@@ -174,6 +176,18 @@ export function GenerateQuotationForm({
               Enable “Quotation” on a service (Services → edit → Quotation) to make it available here.
             </span>
           )}
+        </div>
+        <div className="field" style={{ marginTop: 14 }}>
+          <label className="field__label">Total development cost</label>
+          <input
+            className="input"
+            value={developmentCost}
+            onChange={(e) => setDevelopmentCost(e.target.value)}
+            placeholder="e.g. ₹35,000  (leave blank to use the service's default)"
+          />
+          <span className="admin-form-help">
+            Shown as “Total Development Cost” on the quotation PDF. If left blank, the service’s saved cost is used.
+          </span>
         </div>
       </div>
 
