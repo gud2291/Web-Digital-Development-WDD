@@ -26,6 +26,16 @@ const schema = z.object({
   featureBadges: z
     .array(z.object({ title: z.string().default(""), subtitle: z.string().default("") }))
     .default([]),
+  customServices: z
+    .array(
+      z.object({
+        title: z.string().default(""),
+        costRange: z.string().default(""),
+        deliveryTime: z.string().default(""),
+        scopeText: z.string().default(""),
+      })
+    )
+    .default([]),
 });
 
 type Values = z.infer<typeof schema>;
@@ -40,6 +50,7 @@ export interface QuotationSettingsInitial {
   footerNote?: string;
   paymentTerms?: { percent?: string; label?: string; sub?: string }[];
   featureBadges?: { title?: string; subtitle?: string }[];
+  customServices?: { title?: string; costRange?: string; deliveryTime?: string; scope?: string[] }[];
 }
 
 export function QuotationSettingsForm({ initial }: { initial: QuotationSettingsInitial }) {
@@ -69,15 +80,33 @@ export function QuotationSettingsForm({ initial }: { initial: QuotationSettingsI
         title: b.title ?? "",
         subtitle: b.subtitle ?? "",
       })),
+      customServices: (initial.customServices ?? []).map((c) => ({
+        title: c.title ?? "",
+        costRange: c.costRange ?? "",
+        deliveryTime: c.deliveryTime ?? "",
+        scopeText: (c.scope ?? []).join("\n"),
+      })),
     },
   });
 
   const termsArr = useFieldArray({ control, name: "paymentTerms" });
   const badgesArr = useFieldArray({ control, name: "featureBadges" });
+  const servicesArr = useFieldArray({ control, name: "customServices" });
 
   const onSubmit = async (values: Values) => {
     try {
-      await adminApi.put("/api/admin/quotation", values);
+      const payload = {
+        ...values,
+        customServices: (values.customServices ?? [])
+          .map((c) => ({
+            title: c.title.trim(),
+            costRange: c.costRange.trim(),
+            deliveryTime: c.deliveryTime.trim(),
+            scope: c.scopeText.split("\n").map((l) => l.trim()).filter(Boolean),
+          }))
+          .filter((c) => c.title),
+      };
+      await adminApi.put("/api/admin/quotation", payload);
       toast.success("Quotation settings saved");
       router.refresh();
     } catch (err) {
@@ -102,6 +131,40 @@ export function QuotationSettingsForm({ initial }: { initial: QuotationSettingsI
         <p className="admin-form-help" style={{ marginTop: 8 }}>
           A service can override the delivery time in its own Quotation section; this is the fallback.
         </p>
+      </div>
+
+      <div className="admin-form-section">
+        <h3>Quotation services</h3>
+        <p className="t-small" style={{ marginBottom: 12 }}>
+          Reusable services shown in the Generate Quotation dropdown, e.g. Dynamic Website. Cost/scope here
+          are defaults you can still override per quotation.
+        </p>
+        <SortableList
+          items={servicesArr.fields}
+          getId={(f) => f.id}
+          onReorder={(ids) =>
+            applyFieldReorder(ids, servicesArr.fields.map((f) => f.id), watch("customServices") ?? [], servicesArr.replace)
+          }
+          empty={<span className="t-small">No quotation services yet — add one below.</span>}
+          render={(_f, idx) => (
+            <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input className="input" placeholder="Service name (e.g. Dynamic Website)" {...register(`customServices.${idx}.title` as const)} />
+                <button type="button" className="admin-icon-btn admin-icon-btn--danger" aria-label="Remove service" onClick={() => servicesArr.remove(idx)}>
+                  <Icon name="x" size={12} />
+                </button>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input className="input" placeholder="Default cost (e.g. ₹40,000)" {...register(`customServices.${idx}.costRange` as const)} />
+                <input className="input" placeholder="Delivery (optional)" {...register(`customServices.${idx}.deliveryTime` as const)} />
+              </div>
+              <textarea className="textarea" style={{ minHeight: 64 }} placeholder="Scope of work — one item per line (optional)" {...register(`customServices.${idx}.scopeText` as const)} />
+            </div>
+          )}
+        />
+        <Btn size="sm" type="button" variant="secondary" style={{ marginTop: 12 }} onClick={() => servicesArr.append({ title: "", costRange: "", deliveryTime: "", scopeText: "" })}>
+          <Icon name="plus" size={12} /> Add service
+        </Btn>
       </div>
 
       <div className="admin-form-section">

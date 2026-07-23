@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { listServices } from "@/server/services/service.service";
+import { getQuotationSettings } from "@/server/services/quotationSettings.service";
 import { PageHeader } from "@/components/admin/PageHeader";
 import { Btn } from "@/components/ui";
 import { GenerateQuotationForm, type GenServiceOption } from "./GenerateQuotationForm";
@@ -16,6 +17,13 @@ export default async function GenerateQuotationPage({ searchParams }: PageProps)
     .filter((s) => s.quotationEnabled)
     .map((s) => ({ slug: s.slug as string, title: (s.quotationTitle || s.title) as string }));
 
+  const settings = await getQuotationSettings().catch(() => null);
+  const customServices = (settings?.customServices ?? []).map((c) => ({
+    title: c.title as string,
+    costRange: (c.costRange as string) || "",
+    scope: (c.scope as string[]) || [],
+  }));
+
   return (
     <>
       <PageHeader
@@ -29,6 +37,7 @@ export default async function GenerateQuotationPage({ searchParams }: PageProps)
       />
       <GenerateQuotationForm
         services={services}
+        customServices={customServices}
         prefill={{
           clientName: searchParams?.name ?? "",
           email: searchParams?.email ?? "",

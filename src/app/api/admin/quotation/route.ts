@@ -62,14 +62,41 @@ export async function POST(req: Request) {
       return badRequest("Client phone is required to send via WhatsApp");
     }
 
-    const service = await getServiceBySlug(data.serviceSlug, true);
-    if (!service || !service.quotationEnabled) {
-      return badRequest("Selected service is not available for quotation");
-    }
+    const isCustom = data.serviceSlug === "__custom__";
+
+    let headerSubtitle: string;
+    let serviceLabel: string;
+    let scopeArr: string[];
+    let effectiveCost: string;
+    let deliveryTime: string;
+    let hostingCost: string;
+    let recordServiceSlug: string;
 
     const settings = await getCachedQuotationSettings();
 
-    const effectiveCost = (data.developmentCost || "").trim() || service.quotationCostRange || "";
+    if (isCustom) {
+      const title = (data.customServiceTitle || "").trim();
+      if (!title) return badRequest("Service name is required for a custom service");
+      headerSubtitle = title;
+      serviceLabel = title;
+      scopeArr = (data.customScope || []).filter(Boolean);
+      effectiveCost = (data.developmentCost || "").trim();
+      deliveryTime = settings?.deliveryTime || "";
+      hostingCost = settings?.hostingCost || "";
+      recordServiceSlug = "custom";
+    } else {
+      const service = await getServiceBySlug(data.serviceSlug, true);
+      if (!service || !service.quotationEnabled) {
+        return badRequest("Selected service is not available for quotation");
+      }
+      headerSubtitle = service.quotationTitle || service.title;
+      serviceLabel = String(service.quotationTitle || service.title);
+      scopeArr = (service.quotationScope as string[]) || [];
+      effectiveCost = (data.developmentCost || "").trim() || service.quotationCostRange || "";
+      deliveryTime = service.quotationDeliveryTime || settings?.deliveryTime || "";
+      hostingCost = service.quotationHostingCost || settings?.hostingCost || "";
+      recordServiceSlug = String(service.slug || data.serviceSlug);
+    }
 
     const quotationNo = `WDD-${quoteId()}`;
     const date = new Intl.DateTimeFormat("en-IN", {
@@ -78,10 +105,6 @@ export async function POST(req: Request) {
       year: "numeric",
     }).format(new Date());
 
-    // Per-service values fall back to the global quotation settings.
-    const deliveryTime = service.quotationDeliveryTime || settings?.deliveryTime || "";
-    const hostingCost = service.quotationHostingCost || settings?.hostingCost || "";
-    const headerSubtitle = service.quotationTitle || service.title;
     const greeting = (settings?.greetingTemplate || "").replace(/\{clientName\}/g, data.clientName);
     // Always show the brand domain on the PDF — never siteConfig.url / NEXT_PUBLIC_SITE_URL
     // (which is localhost in dev).
@@ -96,7 +119,7 @@ export async function POST(req: Request) {
         headerSubtitle,
         greeting,
         costRange: effectiveCost,
-        scope: (service.quotationScope as string[]) || [],
+        scope: scopeArr,
         paymentTerms: (settings?.paymentTerms || []).map((p) => ({
           percent: p.percent || "",
           label: p.label || "",
@@ -117,7 +140,6 @@ export async function POST(req: Request) {
     );
 
     const filename = `Quotation-${quotationNo}.pdf`;
-    const serviceLabel = String(service.quotationTitle || service.title);
 
     // Record every quotation so the admin can track who got what (never blocks
     // the response on failure).
@@ -128,7 +150,7 @@ export async function POST(req: Request) {
           clientName: data.clientName,
           phone: data.phone || "",
           email: data.email || "",
-          serviceSlug: String(service.slug || data.serviceSlug),
+          serviceSlug: recordServiceSlug,
           serviceTitle: serviceLabel,
           costRange: effectiveCost,
           sentVia,

@@ -37,6 +37,12 @@ export default async function QuotationSettingsPage() {
             title: b.title ?? "",
             subtitle: b.subtitle ?? "",
           })),
+          customServices: (doc?.customServices ?? []).map((c) => ({
+            title: c.title ?? "",
+            costRange: c.costRange ?? "",
+            deliveryTime: c.deliveryTime ?? "",
+            scope: (c.scope as string[]) ?? [],
+          })),
         }}
       />
     </>

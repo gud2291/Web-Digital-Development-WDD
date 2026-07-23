@@ -10,6 +10,12 @@ export interface GenServiceOption {
   title: string;
 }
 
+export interface GenCustomServiceOption {
+  title: string;
+  costRange: string;
+  scope: string[];
+}
+
 interface Prefill {
   clientName?: string;
   email?: string;
@@ -34,9 +40,11 @@ function normalizePhone(raw: string): string {
 
 export function GenerateQuotationForm({
   services,
+  customServices = [],
   prefill,
 }: {
   services: GenServiceOption[];
+  customServices?: GenCustomServiceOption[];
   prefill: Prefill;
 }) {
   const hasServices = services.length > 0;
@@ -44,9 +52,31 @@ export function GenerateQuotationForm({
   const [email, setEmail] = React.useState(prefill.email ?? "");
   const [phone, setPhone] = React.useState(prefill.phone ?? "");
   const [business, setBusiness] = React.useState(prefill.business ?? "");
-  const [serviceSlug, setServiceSlug] = React.useState(services[0]?.slug ?? "");
+  const [serviceSlug, setServiceSlug] = React.useState(services[0]?.slug ?? "__custom__");
   const [developmentCost, setDevelopmentCost] = React.useState("");
+  const [customTitle, setCustomTitle] = React.useState("");
+  const [customScopeText, setCustomScopeText] = React.useState("");
   const [busy, setBusy] = React.useState<Action | null>(null);
+
+  const isCustom = serviceSlug === "__custom__";
+
+  const handleServiceChange = (value: string) => {
+    if (value.startsWith("list:")) {
+      const idx = Number(value.slice("list:".length));
+      const item = customServices[idx];
+      setServiceSlug("__custom__");
+      setCustomTitle(item?.title ?? "");
+      setCustomScopeText((item?.scope ?? []).join("\n"));
+      setDevelopmentCost(item?.costRange ?? "");
+    } else if (value === "__custom__") {
+      setServiceSlug("__custom__");
+      setCustomTitle("");
+      setCustomScopeText("");
+      setDevelopmentCost("");
+    } else {
+      setServiceSlug(value);
+    }
+  };
 
   const submit = async (action: Action) => {
     if (!clientName.trim()) {
@@ -55,6 +85,10 @@ export function GenerateQuotationForm({
     }
     if (!serviceSlug) {
       toast.error("Please choose a service");
+      return;
+    }
+    if (isCustom && !customTitle.trim()) {
+      toast.error("Service name is required");
       return;
     }
     if (action === "email" && !email.trim()) {
@@ -83,6 +117,10 @@ export function GenerateQuotationForm({
           phone: phone.trim(),
           business: business.trim(),
           developmentCost: developmentCost.trim(),
+          customServiceTitle: isCustom ? customTitle.trim() : "",
+          customScope: isCustom
+            ? customScopeText.split("\n").map((l) => l.trim()).filter(Boolean)
+            : [],
           action,
         }),
       });
@@ -160,16 +198,19 @@ export function GenerateQuotationForm({
         <h3>Service</h3>
         <div className="field">
           <label className="field__label">Quotation service *</label>
-          <select className="select" value={serviceSlug} onChange={(e) => setServiceSlug(e.target.value)} disabled={!hasServices}>
-            {hasServices ? (
+          <select className="select" value={serviceSlug} onChange={(e) => handleServiceChange(e.target.value)}>
+            {hasServices &&
               services.map((s) => (
                 <option key={s.slug} value={s.slug}>
                   {s.title}
                 </option>
-              ))
-            ) : (
-              <option value="">No quotation-enabled services</option>
-            )}
+              ))}
+            {customServices.map((c, idx) => (
+              <option key={`list:${idx}`} value={`list:${idx}`}>
+                {c.title}
+              </option>
+            ))}
+            <option value="__custom__">➕ Other — type a service…</option>
           </select>
           {!hasServices && (
             <span className="admin-form-help">
@@ -177,6 +218,29 @@ export function GenerateQuotationForm({
             </span>
           )}
         </div>
+        {isCustom && (
+          <>
+            <div className="field" style={{ marginTop: 14 }}>
+              <label className="field__label">Service name *</label>
+              <input
+                className="input"
+                value={customTitle}
+                onChange={(e) => setCustomTitle(e.target.value)}
+                placeholder="e.g. Dynamic Website Development"
+              />
+            </div>
+            <div className="field" style={{ marginTop: 14 }}>
+              <label className="field__label">Scope of work (optional)</label>
+              <textarea
+                className="textarea"
+                style={{ minHeight: 80 }}
+                value={customScopeText}
+                onChange={(e) => setCustomScopeText(e.target.value)}
+                placeholder="One item per line"
+              />
+            </div>
+          </>
+        )}
         <div className="field" style={{ marginTop: 14 }}>
           <label className="field__label">Total development cost</label>
           <input
@@ -192,13 +256,13 @@ export function GenerateQuotationForm({
       </div>
 
       <div className="admin-form-actions">
-        <Btn type="button" iconRight="download" disabled={!hasServices || busy !== null} onClick={() => submit("download")}>
+        <Btn type="button" iconRight="download" disabled={busy !== null} onClick={() => submit("download")}>
           {busy === "download" ? "Generating…" : "Download PDF"}
         </Btn>
-        <Btn type="button" variant="secondary" iconRight="mail" disabled={!hasServices || busy !== null} onClick={() => submit("email")}>
+        <Btn type="button" variant="secondary" iconRight="mail" disabled={busy !== null} onClick={() => submit("email")}>
           {busy === "email" ? "Sending…" : "Email to client"}
         </Btn>
-        <Btn type="button" variant="secondary" iconRight="whatsapp" disabled={!hasServices || busy !== null} onClick={() => submit("whatsapp")}>
+        <Btn type="button" variant="secondary" iconRight="whatsapp" disabled={busy !== null} onClick={() => submit("whatsapp")}>
           {busy === "whatsapp" ? "Preparing…" : "Send via WhatsApp"}
         </Btn>
       </div>

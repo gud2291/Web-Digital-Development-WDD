@@ -11,6 +11,13 @@ const featureBadgeSchema = z.object({
   subtitle: z.string().max(120).default(""),
 });
 
+const customServiceSchema = z.object({
+  title: z.string().max(120).default(""),
+  costRange: z.string().max(60).default(""),
+  deliveryTime: z.string().max(120).default(""),
+  scope: z.array(z.string().max(200)).default([]),
+});
+
 /** Admin: update the global quotation settings singleton. */
 export const updateQuotationSettingsSchema = z.object({
   validity: z.string().max(80).default("1 Month"),
@@ -20,6 +27,7 @@ export const updateQuotationSettingsSchema = z.object({
   hostingNote: z.string().max(400).default(""),
   domainNote: z.string().max(400).default(""),
   featureBadges: z.array(featureBadgeSchema).default([]),
+  customServices: z.array(customServiceSchema).default([]),
   greetingTemplate: z.string().max(800).default(""),
   footerNote: z.string().max(400).default(""),
 });
@@ -35,6 +43,8 @@ export const generateQuotationSchema = z.object({
   phone: z.string().max(30).optional().or(z.literal("")),
   business: z.string().max(160).optional().or(z.literal("")),
   developmentCost: z.string().max(60).optional().or(z.literal("")),
+  customServiceTitle: z.string().max(120).optional().or(z.literal("")),
+  customScope: z.array(z.string().max(200)).default([]),
   action: z.enum(["download", "email", "whatsapp"]).default("download"),
 });
 

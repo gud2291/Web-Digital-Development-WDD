@@ -25,6 +25,16 @@ const FeatureBadgeSchema = new Schema(
   { _id: false }
 );
 
+const CustomServiceSchema = new Schema(
+  {
+    title: { type: String, default: "" },
+    costRange: { type: String, default: "" },
+    deliveryTime: { type: String, default: "" },
+    scope: { type: [String], default: [] },
+  },
+  { _id: false }
+);
+
 const QuotationSettingsSchema = new Schema(
   {
     validity: { type: String, default: "1 Month" },
@@ -34,6 +44,7 @@ const QuotationSettingsSchema = new Schema(
     hostingNote: { type: String, default: "" },
     domainNote: { type: String, default: "" },
     featureBadges: { type: [FeatureBadgeSchema], default: [] },
+    customServices: { type: [CustomServiceSchema], default: [] },
     greetingTemplate: {
       type: String,
       default:
