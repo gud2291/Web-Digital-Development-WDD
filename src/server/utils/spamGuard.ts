@@ -108,29 +108,46 @@ function tokenGibberishScore(rawToken: string): number {
   if (token.length < 5) return 0;
 
   let score = 0;
-  if (hasKeyboardWalk(token.toLowerCase())) score += 3;
+  if (hasKeyboardWalk(token.toLowerCase())) score += 4;
 
   const hasUpper = /[A-Z]/.test(token);
   const hasLower = /[a-z]/.test(token);
   const mixedCase = hasUpper && hasLower;
 
+  const lower = token.toLowerCase();
   const vowelCount = (token.match(/[aeiouyAEIOUY]/g) ?? []).length;
 
   // No vowel at all in a long word — not a word in any language we serve.
   if (vowelCount === 0) score += 3;
   else if (token.length >= 8) {
+    // Kept just under the ratio of the tightest real names we test against
+    // ("Ramkrishna" 0.30, "Krishnamurthy" 0.31, "Chandrashekhar" 0.29).
     const ratio = vowelCount / token.length;
-    if (ratio < 0.15) score += 2;
-    else if (ratio < 0.25) score += 1;
+    if (ratio < 0.2) score += 2;
+    else if (ratio < 0.28) score += 1;
   }
 
-  // Long consonant runs ("XMStNq…").
+  // Long consonant runs ("XMStNq…", "asdlkj…").
   const longestConsonantRun = Math.max(
     0,
     ...(token.match(/[^aeiouyAEIOUY]+/g) ?? []).map((r) => r.length)
   );
-  if (longestConsonantRun >= 6) score += 2;
-  else if (longestConsonantRun >= 5) score += 1;
+  if (longestConsonantRun >= 6) score += 3;
+  else if (longestConsonantRun >= 5) score += 2;
+  else if (longestConsonantRun >= 4) score += 1;
+
+  // One consonant carrying a third of a long word ("qdhabdadjkde" — four d's).
+  // Fingers resting on a key do this; names don't. Vowels are exempt because
+  // "Ananthanarayanan" is a perfectly good name, and so is "h" — it is the
+  // aspirate marker in transliterated Indian names ("Shahrukh", "Bhattacharya").
+  if (token.length >= 8) {
+    const counts = new Map<string, number>();
+    for (const ch of lower.replace(/[aeiouyh]/g, "")) {
+      counts.set(ch, (counts.get(ch) ?? 0) + 1);
+    }
+    const topConsonant = Math.max(0, ...counts.values());
+    if (topConsonant / token.length >= 0.3) score += 2;
+  }
 
   if (mixedCase) {
     // Repeated lower→UPPER flips inside one word ("petTrIGCUY"). One flip is
