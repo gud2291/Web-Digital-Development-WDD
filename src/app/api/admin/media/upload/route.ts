@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { uploadAndRecord } from "@/server/services/media.service";
+import { sniffMimeType, mimeCategory } from "@/server/media/sniff";
 import { badRequest, handle } from "@/server/utils/apiError";
 import { gateAdmin } from "@/server/utils/requireAdmin";
 
@@ -27,7 +28,9 @@ export async function POST(req: Request) {
     if (!(file instanceof File)) {
       return badRequest("Missing file");
     }
-    if (file.type && !ACCEPTED.includes(file.type)) {
+    // No `file.type &&` guard here — a missing content-type used to skip the
+    // allow-list entirely, which let any file through.
+    if (!ACCEPTED.includes(file.type)) {
       return badRequest("Unsupported file type. Allowed: jpg, png, webp, gif, svg, mp4, webm.");
     }
     const isVideo = file.type.startsWith("video/");
@@ -36,9 +39,23 @@ export async function POST(req: Request) {
       return badRequest(`File exceeds ${isVideo ? "50MB" : "10MB"} limit`);
     }
     const buffer = Buffer.from(await file.arrayBuffer());
+
+    // Decide from the bytes, not the label. A mislabelled but genuine image
+    // still uploads (plenty of real files carry the wrong extension) — anything
+    // that isn't actually one of the accepted media formats does not.
+    const actualType = sniffMimeType(buffer);
+    if (!actualType || !ACCEPTED.includes(actualType)) {
+      return badRequest("That file isn't a supported image or video. Allowed: jpg, png, webp, gif, svg, mp4, webm.");
+    }
+    // …and it must stay in the category the size limit was applied for, so a
+    // video can't slip in under the 10MB image allowance.
+    if (mimeCategory(actualType) !== mimeCategory(file.type)) {
+      return badRequest("File contents don't match its type. Please re-export and try again.");
+    }
+
     const doc = await uploadAndRecord(buffer, {
       filename: file.name,
-      mimeType: file.type,
+      mimeType: actualType,
       uploadedBy: gate.session.user.email ?? "",
     });
     return NextResponse.json(doc, { status: 201 });

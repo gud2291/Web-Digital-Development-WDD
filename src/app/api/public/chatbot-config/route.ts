@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCachedSettings } from "@/server/services/settings.service";
 import { handle } from "@/server/utils/apiError";
+import { publicReadGate } from "@/server/middleware/rateLimit";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,9 @@ const FALLBACK_QUICK_ACTIONS = [
  * welcome line, or swap quick-action prompts from /admin/settings without
  * a redeploy. Falls back to safe defaults when the DB is empty or unreachable.
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const limited = await publicReadGate(req, "chatbot-config");
+  if (limited) return limited;
   return handle(async () => {
     const settings = await getCachedSettings().catch(() => null);
     const cfg = settings?.chatbot;

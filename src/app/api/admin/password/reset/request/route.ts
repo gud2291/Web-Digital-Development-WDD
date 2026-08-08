@@ -13,7 +13,9 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   return handle(async () => {
     const ip = getClientIp(req);
-    const rl = await checkRateLimit(`pwd-reset:${ip}`);
+    // Unauthenticated and it sends mail, so the default 10-per-10s would let one
+    // caller flood the owner's inbox with reset links all day.
+    const rl = await checkRateLimit(`pwd-reset:${ip}`, { limit: 3, window: "15 m" });
     if (!rl.success) return rateLimited();
 
     const data = requestPasswordResetSchema.parse(await req.json());

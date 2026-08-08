@@ -298,15 +298,32 @@ export function checkSpam(input: SpamCheckInput): SpamVerdict {
   };
 }
 
+/** `kendraclive@gmail.com` → `ke***@gmail.com`. */
+function maskEmail(email: string): string {
+  const at = email.lastIndexOf("@");
+  if (at <= 0) return "***";
+  const local = email.slice(0, at);
+  return `${local.slice(0, 2)}***${email.slice(at)}`;
+}
+
 /**
  * Log a dropped submission at warn level. Nothing is written to the DB, so this
- * log line is the only record — keep the payload in it so a false positive can
- * still be recovered from the logs.
+ * log line is the only record of it — enough detail to recognise a false
+ * positive and re-contact the sender, but not a full copy of their message.
+ * Logs are retained and shipped off-box; they are not a place for raw PII.
  */
 export function logBlocked(
   endpoint: string,
   verdict: SpamVerdict,
   meta: Record<string, unknown>
 ) {
-  logger.warn({ endpoint, score: verdict.score, reasons: verdict.reasons, ...meta }, "spam blocked");
+  const safe: Record<string, unknown> = { ...meta };
+  if (typeof safe.email === "string") safe.email = maskEmail(safe.email);
+  if (typeof safe.emailKey === "string") safe.emailKey = maskEmail(safe.emailKey);
+  if (typeof safe.message === "string") safe.message = safe.message.slice(0, 120);
+
+  logger.warn(
+    { endpoint, score: verdict.score, reasons: verdict.reasons, ...safe },
+    "spam blocked"
+  );
 }

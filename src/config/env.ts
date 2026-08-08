@@ -44,8 +44,11 @@ const serverSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
-  // Google Gemini (chatbot) — free tier 15 RPM
-  GEMINI_API_KEY: z.string().min(1).describe("Google Gemini API key"),
+  // Google Gemini — optional. The chatbot currently answers from the
+  // admin-managed knowledge base in `@/server/ai/smart-reply` and never calls
+  // Gemini, so requiring this key only forced a live credential into every
+  // environment for nothing. Keep the slot for when an LLM path is added.
+  GEMINI_API_KEY: z.string().min(1).optional().describe("Google Gemini API key"),
 });
 
 // ── Client schema (exposed to browser via NEXT_PUBLIC_) ────────────────────

@@ -9,7 +9,9 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   return handle(async () => {
     const ip = getClientIp(req);
-    const rl = await checkRateLimit(`pwd-reset-confirm:${ip}`);
+    // Token-guessing throttle. The token itself is nanoid(48) + bcrypt, so this
+    // is belt-and-braces — but there is no reason to hand out 86k attempts a day.
+    const rl = await checkRateLimit(`pwd-reset-confirm:${ip}`, { limit: 3, window: "15 m" });
     if (!rl.success) return rateLimited();
 
     const data = confirmPasswordResetSchema.parse(await req.json());

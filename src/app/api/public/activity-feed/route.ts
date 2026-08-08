@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import { listContacts } from "@/server/services/contact.service";
 import { handle } from "@/server/utils/apiError";
+import { publicReadGate } from "@/server/middleware/rateLimit";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Anonymised recent-activity feed (CLAUDE.md §13.3) for the ActivityTicker.
  * Returns up to 20 recent inquiries as { name, city, action }. Privacy:
- *   - only the first name is exposed, and only for inquiries < 24h old;
- *     older ones are shown as "Someone".
+ *   - no real name is ever exposed. This endpoint needs no authentication, so
+ *     anything it returns is public — and the people in it never agreed to have
+ *     their name shown on the site. Every entry reads "Someone".
  *   - the Contact model has no city, so a stable city is derived from the id
  *     (deterministic, not random) purely for display.
  */
@@ -31,23 +33,19 @@ function actionFor(source: string, service: string): string {
   return "requested a free quote";
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const limited = await publicReadGate(req, "activity-feed");
+  if (limited) return limited;
   return handle(async () => {
     const { items } = await listContacts({ page: 1, limit: 20 }).catch(() => ({
       items: [] as Awaited<ReturnType<typeof listContacts>>["items"],
     }));
 
-    const now = Date.now();
-    const feed = items.map((c) => {
-      const created = c.createdAt ? new Date(c.createdAt).getTime() : now;
-      const fresh = now - created < 24 * 60 * 60 * 1000;
-      const firstName = (c.name || "").trim().split(/\s+/)[0] || "Someone";
-      return {
-        name: fresh ? firstName : "Someone",
-        city: cityFor(String(c._id)),
-        action: actionFor(c.source ?? "", c.service ?? ""),
-      };
-    });
+    const feed = items.map((c) => ({
+      name: "Someone",
+      city: cityFor(String(c._id)),
+      action: actionFor(c.source ?? "", c.service ?? ""),
+    }));
 
     return NextResponse.json(
       { items: feed },

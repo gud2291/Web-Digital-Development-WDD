@@ -24,10 +24,17 @@ export const createBlogSchema = z.object({
 export const updateBlogSchema = createBlogSchema.partial();
 
 export const blogQuerySchema = paginationSchema.extend({
-  category: z.string().optional(),
-  tag: z.string().optional(),
-  search: z.string().optional(),
-  published: z.coerce.boolean().optional(),
+  category: z.string().max(120).optional(),
+  tag: z.string().max(120).optional(),
+  // Capped: the value reaches a Mongo $regex, so an unbounded string is a
+  // needless CPU cost even after escaping.
+  search: z.string().max(100).optional(),
+  // NOT z.coerce.boolean() — that turns "" into false and "false" into true.
+  // Only the two literals mean anything; everything else is "not specified".
+  published: z.preprocess(
+    (v) => (v === "true" ? true : v === "false" ? false : undefined),
+    z.boolean().optional()
+  ),
 });
 
 export type CreateBlogInput = z.infer<typeof createBlogSchema>;

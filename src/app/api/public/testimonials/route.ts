@@ -5,12 +5,14 @@ import {
 } from "@/server/services/testimonial.service";
 import { publicTestimonialSchema } from "@/server/validation/testimonial";
 import { handle, getClientIp, rateLimited } from "@/server/utils/apiError";
-import { checkRateLimit } from "@/server/middleware/rateLimit";
+import { checkRateLimit, publicReadGate } from "@/server/middleware/rateLimit";
 import { checkSpam, logBlocked } from "@/server/utils/spamGuard";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const limited = await publicReadGate(req, "testimonials");
+  if (limited) return limited;
   return handle(async () => {
     const items = await listTestimonials();
     return NextResponse.json({ items });

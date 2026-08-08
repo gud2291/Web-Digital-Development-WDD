@@ -20,9 +20,16 @@ import { logger } from "@/server/utils/logger";
  */
 function ipFromAuthReq(req?: { headers?: Record<string, string> }): string {
   const headers = req?.headers ?? {};
+  const vercel = headers["x-vercel-forwarded-for"];
+  if (vercel) return vercel.split(",")[0].trim();
+  const realIp = headers["x-real-ip"];
+  if (realIp) return realIp.trim();
   const xff = headers["x-forwarded-for"];
-  if (xff) return xff.split(",")[0].trim();
-  return headers["x-real-ip"] || "unknown";
+  if (xff) {
+    const hops = xff.split(",").map((h) => h.trim()).filter(Boolean);
+    if (hops.length > 0) return hops[hops.length - 1];
+  }
+  return "unknown";
 }
 
 /**
@@ -34,9 +41,12 @@ function ipFromAuthReq(req?: { headers?: Record<string, string> }): string {
 function ipUaFromRequestHeaders(): { ip: string; ua: string } {
   try {
     const h = headers();
-    const xff = h.get("x-forwarded-for");
-    const ip = xff ? xff.split(",")[0].trim() : h.get("x-real-ip") || "unknown";
-    return { ip, ua: h.get("user-agent") || "" };
+    const asRecord: Record<string, string> = {};
+    for (const key of ["x-vercel-forwarded-for", "x-real-ip", "x-forwarded-for"]) {
+      const value = h.get(key);
+      if (value) asRecord[key] = value;
+    }
+    return { ip: ipFromAuthReq({ headers: asRecord }), ua: h.get("user-agent") || "" };
   } catch {
     return { ip: "unknown", ua: "" };
   }

@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const verdict = checkSpam({ req, body, email: data.email, minElapsedMs: MIN_NEWSLETTER_MS });
     if (verdict.blocked) {
       logBlocked("newsletter", verdict, { ip, email: data.email });
-      return NextResponse.json({ ok: true, already: false }, { status: 201 });
+      return NextResponse.json({ ok: true }, { status: 201 });
     }
 
     const { isNew } = await subscribe(data);
@@ -46,6 +46,10 @@ export async function POST(req: Request) {
       }
     }
 
-    return NextResponse.json({ ok: true, already: !isNew }, { status: 201 });
+    // Deliberately identical for a new and an existing subscriber. Returning
+    // `already` told any caller whether an address is on the list, which turns
+    // this endpoint into a subscriber-enumeration oracle. Neither caller reads
+    // the body — both only check `res.ok`.
+    return NextResponse.json({ ok: true }, { status: 201 });
   });
 }

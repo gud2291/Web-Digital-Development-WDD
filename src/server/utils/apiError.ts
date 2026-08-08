@@ -47,8 +47,32 @@ export function handle<T>(fn: () => Promise<T> | T) {
     });
 }
 
+/**
+ * Best available client IP, used as the rate-limit key everywhere.
+ *
+ * Order matters. `x-forwarded-for` is a client-settable header — a caller can
+ * put any value in it, and reading its first entry hands an attacker a fresh
+ * rate-limit bucket per request, which would defeat the contact-form limits and
+ * the admin login throttle alike. So the headers the platform sets itself come
+ * first, and the spoofable one is only a last resort.
+ *
+ *   1. x-vercel-forwarded-for  — written by Vercel's edge, overwrites anything the client sent
+ *   2. x-real-ip               — set by Vercel and by nginx/Cloudflare-style proxies
+ *   3. x-forwarded-for         — fallback for other hosts; take the LAST hop, which
+ *                                the nearest trusted proxy appended, rather than the
+ *                                first, which the client controls
+ */
 export function getClientIp(req: Request): string {
+  const vercel = req.headers.get("x-vercel-forwarded-for");
+  if (vercel) return vercel.split(",")[0].trim();
+
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
+
   const xff = req.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  return req.headers.get("x-real-ip") || "unknown";
+  if (xff) {
+    const hops = xff.split(",").map((h) => h.trim()).filter(Boolean);
+    if (hops.length > 0) return hops[hops.length - 1];
+  }
+  return "unknown";
 }

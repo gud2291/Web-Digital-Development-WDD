@@ -7,20 +7,35 @@ export interface ListBlogsOpts extends Partial<BlogQuery> {
   includeDrafts?: boolean;
 }
 
+/**
+ * Treat a caller-supplied search term as literal text. Without this the term is
+ * compiled as a regex by Mongo, which lets a public request send a
+ * catastrophically-backtracking pattern like `(a+)+$` and pin the database CPU.
+ * Same escape the chatbot uses in `@/server/ai/smart-reply`.
+ */
+function escapeRegex(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function listBlogs(opts: ListBlogsOpts = {}) {
   await connectDB();
   const { page = 1, limit = 20, category, tag, search, includeDrafts = false } = opts;
 
   const filter: Record<string, unknown> = {};
   if (!includeDrafts) filter.published = true;
-  if (typeof opts.published === "boolean") filter.published = opts.published;
+  // The explicit `published` filter is an ADMIN facility. Honouring it for
+  // public callers let `?published=` flip the line above and serve drafts.
+  if (includeDrafts && typeof opts.published === "boolean") {
+    filter.published = opts.published;
+  }
   if (category) filter.category = category;
   if (tag) filter.tags = tag;
   if (search) {
+    const term = escapeRegex(search.slice(0, 100));
     filter.$or = [
-      { title: { $regex: search, $options: "i" } },
-      { excerpt: { $regex: search, $options: "i" } },
-      { tags: { $regex: search, $options: "i" } },
+      { title: { $regex: term, $options: "i" } },
+      { excerpt: { $regex: term, $options: "i" } },
+      { tags: { $regex: term, $options: "i" } },
     ];
   }
 

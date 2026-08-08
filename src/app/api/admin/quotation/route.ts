@@ -22,6 +22,8 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const quoteId = customAlphabet("0123456789", 4);
+/** Unguessable suffix for the public Cloudinary path (see the whatsapp branch). */
+const pdfSlug = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 24);
 
 export async function GET() {
   const gate = await gateAdmin();
@@ -164,9 +166,15 @@ export async function POST(req: Request) {
     if (data.action === "whatsapp") {
       // WhatsApp can't attach a file via a link, so host the PDF on Cloudinary
       // (raw resource) and hand back its public URL for the share message.
+      //
+      // The path carries a random suffix on purpose. `quotationNo` alone is a
+      // 4-digit number, so `wdd/quotations/WDD-1234.pdf` could be walked from
+      // 0000 to 9999 to harvest every client's name, scope and pricing — and a
+      // repeated number would overwrite an earlier client's PDF. The number the
+      // client sees on the document is unchanged; only the storage path differs.
       const uploaded = await uploadToCloudinary(buffer, {
         folder: "wdd/quotations",
-        publicId: `${quotationNo}.pdf`,
+        publicId: `${quotationNo}-${pdfSlug()}.pdf`,
         resourceType: "raw",
       });
       await saveRecord("whatsapp", uploaded.url);

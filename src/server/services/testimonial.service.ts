@@ -26,8 +26,11 @@ export async function createTestimonial(data: CreateTestimonialInput) {
 
 export async function submitPublicTestimonial(data: PublicTestimonialInput) {
   await connectDB();
-  // Public submissions are visible immediately; admin can hide if needed
-  return Testimonial.create({ ...data, visible: true, source: "manual" });
+  // Held for moderation — anyone can post here without logging in, so nothing
+  // reaches the homepage or /reviews (or the Review JSON-LD) until an admin
+  // flips the visibility toggle in /admin/testimonials. This is what the form
+  // has always told the visitor: "we'll publish it after a quick review".
+  return Testimonial.create({ ...data, visible: false, source: "manual" });
 }
 
 export async function updateTestimonial(id: string, data: UpdateTestimonialInput) {

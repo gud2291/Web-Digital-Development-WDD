@@ -2,6 +2,7 @@ import "server-only";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { serverEnv } from "@/config/env";
+import { getClientIp, rateLimited } from "@/server/utils/apiError";
 
 /**
  * Rate limiting — sliding window, per IP. Default 10 requests / 10 seconds.
@@ -107,6 +108,26 @@ function memoryLimit(identifier: string, limit: number, windowMs: number) {
   // reset ≈ when the oldest in-window hit ages out (matches Upstash semantics).
   const reset = (hits.length > 0 ? hits[0] : now) + windowMs;
   return { success, limit, remaining, reset };
+}
+
+/**
+ * Throttle for public READ endpoints. 60/minute per IP is far above anything a
+ * person browsing the site produces (the blog list is debounced, the ticker
+ * fetches once per page load), but it stops an unauthenticated script from
+ * pulling the whole catalogue in a loop or driving up Atlas load for free.
+ *
+ * Returns a 429 response to hand straight back, or `null` to continue.
+ *
+ * NOTE: do NOT use this on `/api/public/locations/[slug]` — that route is
+ * fetched server-side by its own page, so every visitor's request would arrive
+ * from the one server IP and share a single bucket.
+ */
+export async function publicReadGate(req: Request, bucket: string) {
+  const rl = await checkRateLimit(`public:read:${bucket}:${getClientIp(req)}`, {
+    limit: 60,
+    window: "1 m",
+  });
+  return rl.success ? null : rateLimited();
 }
 
 export async function checkRateLimit(

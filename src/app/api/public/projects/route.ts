@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { listProjects } from "@/server/services/project.service";
 import { handle } from "@/server/utils/apiError";
+import { publicReadGate } from "@/server/middleware/rateLimit";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
+  const limited = await publicReadGate(req, "projects");
+  if (limited) return limited;
   return handle(async () => {
     const url = new URL(req.url);
     const category = url.searchParams.get("category") ?? undefined;

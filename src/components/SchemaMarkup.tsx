@@ -8,14 +8,28 @@ interface SchemaProps {
   data: Record<string, unknown>;
 }
 
+/**
+ * JSON.stringify escapes quotes and backslashes but NOT `<`, `>` or `&`. Any
+ * string in the graph that came from a person — a review body, a client name,
+ * a CMS title — could therefore carry a literal `</script>` and close this
+ * block early, turning the rest into live HTML.
+ *
+ * Escaping those three characters to their \uXXXX form keeps the payload valid
+ * JSON that parses back to the exact same values (so Google reads identical
+ * structured data), while making it impossible to break out of the tag.
+ */
+export function safeJsonLd(data: Record<string, unknown>): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+}
+
 export function SchemaMarkup({ data }: SchemaProps) {
   return (
     <script
       type="application/ld+json"
-      // The JSON.stringify output is safe — schema.org structured data is JSON,
-      // and the surrounding <script type="application/ld+json"> block is not
-      // executed as JavaScript by browsers.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   );
 }
