@@ -3,8 +3,10 @@
 import * as React from "react";
 import { Btn } from "@/components/ui";
 import { Icon } from "@/components/Icon";
+import { HoneypotField, useSpamShield } from "@/components/public/SpamShield";
 
 export function BlogSidebarCta() {
+  const { withShield, honeypotRef } = useSpamShield();
   const [email, setEmail] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -31,7 +33,7 @@ export function BlogSidebarCta() {
       const res = await fetch("/api/public/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed, source: "blog_sidebar_checklist" }),
+        body: JSON.stringify(withShield({ email: trimmed, source: "blog_sidebar_checklist" })),
       });
       
       if (!res.ok) {
@@ -75,6 +77,7 @@ export function BlogSidebarCta() {
 
   return (
     <form onSubmit={handleSubmit} className="card sidebar-cta" noValidate>
+      <HoneypotField ref={honeypotRef} />
       <h4 style={{ color: "#fff", fontSize: 20, fontWeight: 700 }}>
         Website Growth Checklist
       </h4>

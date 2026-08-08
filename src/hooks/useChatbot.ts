@@ -3,6 +3,7 @@
 import * as React from "react";
 import toast from "react-hot-toast";
 import { useChatbotStore, type ChatMessage } from "@/store/chatbot";
+import { ELAPSED_FIELD } from "@/config/antiSpam";
 
 const TALK_TO_HUMAN_PAYLOAD = "action:talk-to-human";
 
@@ -26,6 +27,9 @@ interface BotApiResponse {
 export function useChatbot() {
   const [isTyping, setIsTyping] = React.useState(false);
   const abortRef = React.useRef<AbortController | null>(null);
+  // Escalation writes into the same inbox as the contact form, so it carries the
+  // same timing token the forms do (see `@/server/utils/spamGuard`).
+  const mountedAt = React.useRef(Date.now());
 
   // Read store actions imperatively to avoid re-renders on every message change.
   const addMessage = useChatbotStore((s) => s.addMessage);
@@ -47,7 +51,11 @@ export function useChatbot() {
       const res = await fetch("/api/public/chatbot/escalate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, history }),
+        body: JSON.stringify({
+          sessionId,
+          history,
+          [ELAPSED_FIELD]: Date.now() - mountedAt.current,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));

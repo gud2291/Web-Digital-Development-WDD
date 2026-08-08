@@ -22,6 +22,9 @@ interface Inquiry {
   budget: string;
   message: string;
   status: Status;
+  /** Passed the spam guard but scored high enough that we withheld the auto-reply. */
+  suspicious?: boolean;
+  spamReasons?: string[];
   createdAt: string;
 }
 
@@ -43,6 +46,15 @@ export function InquiriesClient({ initial }: Props) {
       label: "Status",
       options: STATUS_OPTIONS.map((s) => ({ value: s, label: s[0].toUpperCase() + s.slice(1) })),
       match: (r, v) => r.status === v,
+    },
+    {
+      key: "spam",
+      label: "Spam",
+      options: [
+        { value: "clean", label: "Genuine only" },
+        { value: "suspicious", label: "Possible spam" },
+      ],
+      match: (r, v) => (v === "suspicious" ? Boolean(r.suspicious) : !r.suspicious),
     },
     {
       key: "range",
@@ -89,7 +101,25 @@ export function InquiriesClient({ initial }: Props) {
       sortValue: (r) => r.name.toLowerCase(),
       render: (r) => (
         <div>
-          <div style={{ fontWeight: 600 }}>{r.name}</div>
+          <div style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
+            {r.name}
+            {r.suspicious && (
+              <span
+                title={r.spamReasons?.join(", ") || "Flagged by the spam guard"}
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: "#B45309",
+                  background: "#FEF3C7",
+                  borderRadius: 999,
+                  padding: "2px 8px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Possible spam
+              </span>
+            )}
+          </div>
           <div className="t-small" style={{ fontSize: 12 }}>{r.email}</div>
         </div>
       ),

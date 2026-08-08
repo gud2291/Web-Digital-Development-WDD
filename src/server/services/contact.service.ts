@@ -7,9 +7,28 @@ import type {
   UpdateContactStatusInput,
 } from "@/server/validation/contact";
 
-export async function createContact(data: CreateContactInput & { ip?: string }) {
+export interface CreateContactExtras {
+  ip?: string;
+  source?: string;
+  suspicious?: boolean;
+  spamScore?: number;
+  spamReasons?: string[];
+}
+
+export async function createContact(data: CreateContactInput & CreateContactExtras) {
   await connectDB();
   return Contact.create(data);
+}
+
+/**
+ * How many submissions this inbox has already made inside `windowMs`.
+ * Matches on the normalised key, so gmail dot/plus aliases all collapse to one
+ * sender and can't be used to walk around the per-IP rate limit.
+ */
+export async function countRecentByEmailKey(emailKey: string, windowMs: number) {
+  await connectDB();
+  const since = new Date(Date.now() - windowMs);
+  return Contact.countDocuments({ emailKey, createdAt: { $gte: since } });
 }
 
 export async function listContacts(query: ContactQuery) {

@@ -18,6 +18,8 @@ export default async function InquiriesPage() {
     budget: i.budget ?? "",
     message: i.message,
     status: i.status as "new" | "viewed" | "replied" | "closed",
+    suspicious: Boolean(i.suspicious),
+    spamReasons: i.spamReasons ?? [],
     createdAt: i.createdAt ? new Date(i.createdAt).toISOString() : new Date().toISOString(),
   }));
 

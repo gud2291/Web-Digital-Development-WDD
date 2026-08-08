@@ -10,6 +10,7 @@ import { Btn } from "@/components/ui";
 import { FloatingInput } from "@/components/public/FloatingInput";
 import { FloatingTextarea } from "@/components/public/FloatingTextarea";
 import { FloatingSelect } from "@/components/public/FloatingSelect";
+import { HoneypotField, useSpamShield } from "@/components/public/SpamShield";
 import { siteConfig } from "@/config/site";
 
 const formSchema = z.object({
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export function ContactForm({ services }: Props) {
+  const { withShield, honeypotRef } = useSpamShield();
   const {
     register,
     handleSubmit,
@@ -61,7 +63,7 @@ export function ContactForm({ services }: Props) {
       const res = await fetch("/api/public/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(withShield(values)),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -92,6 +94,7 @@ export function ContactForm({ services }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="card contact-form" noValidate>
+      <HoneypotField ref={honeypotRef} />
       <h2 className="t-h3" style={{ fontSize: 24 }}>Send us a message</h2>
       <p className="t-small" style={{ marginTop: 6 }}>Required fields marked *</p>
       <div className="contact-form__fields" style={{ marginTop: 20 }}>

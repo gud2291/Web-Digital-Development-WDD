@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Icon } from "@/components/Icon";
 import { Eyebrow } from "@/components/ui";
+import { HoneypotField, useSpamShield } from "@/components/public/SpamShield";
 
 /**
  * Newsletter signup (CLAUDE.md §14.7). POSTs to /api/public/newsletter (which
@@ -18,6 +19,7 @@ type Values = z.infer<typeof schema>;
 
 export function NewsletterSignup({ variant = "card", source = "footer" }: { variant?: "card" | "compact"; source?: string }) {
   const [done, setDone] = React.useState(false);
+  const { withShield, honeypotRef } = useSpamShield();
   const {
     register,
     handleSubmit,
@@ -29,7 +31,7 @@ export function NewsletterSignup({ variant = "card", source = "footer" }: { vari
       const res = await fetch("/api/public/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: values.email, source }),
+        body: JSON.stringify(withShield({ email: values.email, source })),
       });
       if (!res.ok) throw new Error("failed");
       setDone(true);
@@ -57,6 +59,7 @@ export function NewsletterSignup({ variant = "card", source = "footer" }: { vari
       className={compact ? "newsletter newsletter--compact" : "card newsletter newsletter--card"}
       noValidate
     >
+      <HoneypotField ref={honeypotRef} />
       {!compact && (
         <>
           <Eyebrow>STAY IN THE LOOP</Eyebrow>

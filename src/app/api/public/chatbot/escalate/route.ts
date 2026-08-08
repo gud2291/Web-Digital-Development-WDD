@@ -3,6 +3,7 @@ import { connectDB } from "@/server/db/mongodb";
 import Contact from "@/server/models/Contact";
 import { chatbotEscalateSchema } from "@/server/validation/chatbot-message";
 import { checkRateLimit } from "@/server/middleware/rateLimit";
+import { checkSpam, logBlocked } from "@/server/utils/spamGuard";
 import { handle, getClientIp, rateLimited } from "@/server/utils/apiError";
 import { sendEmail } from "@/server/email/resend";
 import { ContactFormAdmin } from "@/server/email/templates/contact-form-admin";
@@ -21,7 +22,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   return handle(async () => {
     const ip = getClientIp(req);
-    const rl = await checkRateLimit(`chatbot-escalate:${ip}`);
+    const rl = await checkRateLimit(`chatbot-escalate:${ip}`, { limit: 3, window: "10 m" });
     if (!rl.success) return rateLimited();
 
     const body = await req.json();
@@ -39,6 +40,25 @@ export async function POST(req: Request) {
     const phone = data.phone?.trim() || "";
     const message = `[Talk to Human request from chatbot]\n\nSession: ${data.sessionId}\n\nConversation:\n${historyText}`;
 
+    // The widget stamps the same timing token the forms do, so a script POSTing
+    // straight at this endpoint (it writes into the same inbox) is dropped.
+    // Only the visitor's own lines are scored — Aria's replies quote our own
+    // links and would otherwise trip the link-spam signal.
+    const verdict = checkSpam({
+      req,
+      body,
+      name: data.name,
+      email: data.email,
+      message: data.history
+        .filter((m) => m.role === "user")
+        .map((m) => m.text)
+        .join("\n"),
+    });
+    if (verdict.blocked) {
+      logBlocked("chatbot-escalate", verdict, { ip, sessionId: data.sessionId, name, email });
+      return NextResponse.json({ ok: true, id: null }, { status: 201 });
+    }
+
     await connectDB();
     const doc = await Contact.create({
       name,
@@ -49,6 +69,9 @@ export async function POST(req: Request) {
       message,
       ip,
       source: "chatbot",
+      suspicious: verdict.suspicious,
+      spamScore: verdict.score,
+      spamReasons: verdict.reasons,
     });
 
     // Fire-and-forget admin email. If it fails, the DB record still exists.

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { Btn, Stars } from "@/components/ui";
+import { HoneypotField, useSpamShield } from "@/components/public/SpamShield";
 
 const reviewSchema = z.object({
   clientName: z.string().min(2).max(120),
@@ -17,6 +18,7 @@ const reviewSchema = z.object({
 type ReviewValues = z.infer<typeof reviewSchema>;
 
 export function ReviewForm() {
+  const { withShield, honeypotRef } = useSpamShield();
   const {
     register,
     handleSubmit,
@@ -36,7 +38,7 @@ export function ReviewForm() {
       const res = await fetch("/api/public/testimonials", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(withShield(values)),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -67,6 +69,7 @@ export function ReviewForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="card" style={{ padding: 22 }} noValidate>
+      <HoneypotField ref={honeypotRef} />
       <h2 className="t-h4">Write a review</h2>
       <div className="field" style={{ marginTop: 14 }}>
         <label className="field__label">Your Name *</label>
