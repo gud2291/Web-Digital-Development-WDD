@@ -83,8 +83,16 @@ const nextConfig = {
 
   async redirects() {
     return [
-      // Legacy → new routes (if needed later)
-      // { source: "/old-blog", destination: "/blog", permanent: true },
+      // Legacy PHP-era routes → new routes
+      { source: "/index.php", destination: "/", permanent: true },
+      { source: "/Home", destination: "/", permanent: true },
+      { source: "/home", destination: "/", permanent: true },
+      { source: "/about.php", destination: "/about", permanent: true },
+      { source: "/services.php", destination: "/services", permanent: true },
+      { source: "/projects.php", destination: "/projects", permanent: true },
+      { source: "/blogs.php", destination: "/blog", permanent: true },
+      { source: "/blogdetail.php", destination: "/blog", permanent: true },
+      { source: "/refund-and-cancellation-policy.php", destination: "/legal/refund", permanent: true },
     ];
   },
 };
