@@ -93,6 +93,15 @@ const nextConfig = {
       { source: "/blogs.php", destination: "/blog", permanent: true },
       { source: "/blogdetail.php", destination: "/blog", permanent: true },
       { source: "/refund-and-cancellation-policy.php", destination: "/legal/refund", permanent: true },
+      // Real legacy PHP filenames confirmed on the old server → new routes
+      { source: "/about-us.php", destination: "/about", permanent: true },
+      { source: "/contact-us.php", destination: "/contact", permanent: true },
+      { source: "/website-designing.php", destination: "/services/website-designing", permanent: true },
+      { source: "/why-mobile-responsive.php", destination: "/services/mobile-first-design", permanent: true },
+      { source: "/privacy-policy.php", destination: "/legal/privacy-policy", permanent: true },
+      { source: "/term-and-conditions.php", destination: "/legal/terms", permanent: true },
+      { source: "/msme-registration.php", destination: "/", permanent: true },
+      { source: "/12a-and-80g-registeration.php", destination: "/", permanent: true },
     ];
   },
 };
