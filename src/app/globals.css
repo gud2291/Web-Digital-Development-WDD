@@ -2902,8 +2902,11 @@ html.dark .lang-switcher__item:hover { background: var(--c-primary-50); color: #
    via the existing CSS variables, so they never affect other pages. */
 .ecom-rich { color: var(--c-text-muted); max-width: 860px; }
 .ecom-rich > *:first-child { margin-top: 0; }
-.ecom-rich h2 { font-size: 32px; line-height: 1.22; font-weight: 700; letter-spacing: -0.02em; color: var(--c-text); margin: 40px 0 14px; }
-.ecom-rich h3 { font-size: 21px; line-height: 1.35; font-weight: 600; color: var(--c-text); margin: 26px 0 10px; }
+/* In-content headings must always sit BELOW the page's own section headings
+   (.t-h2 is 42/34/30/24px from wide to ≤480px), so these are clamped to a
+   ceiling of 26px and a floor of 20px. Weights, margins and spacing unchanged. */
+.ecom-rich h2 { font-size: clamp(20px, 2.5vw, 26px); line-height: 1.22; font-weight: 700; letter-spacing: -0.02em; color: var(--c-text); margin: 40px 0 14px; }
+.ecom-rich h3 { font-size: clamp(17px, 2vw, 20px); line-height: 1.35; font-weight: 600; color: var(--c-text); margin: 26px 0 10px; }
 .ecom-rich p { margin: 0 0 14px; line-height: 1.72; font-size: 17px; }
 .ecom-rich p.lead { font-size: 19px; font-weight: 500; color: var(--c-text); }
 .ecom-rich strong { color: var(--c-text); font-weight: 600; }
