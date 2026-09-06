@@ -74,7 +74,7 @@ export default async function LocationPage({ params }: PageProps) {
       <section className="section">
         <div className="container" style={{ maxWidth: 880, margin: "0 auto" }}>
           <Reveal>
-            <article className="prose" style={{ color: "#475569" }}>
+            <article className="ecom-rich" style={{ color: "#475569" }}>
               <div dangerouslySetInnerHTML={{ __html: String(doc.content) }} />
             </article>
           </Reveal>

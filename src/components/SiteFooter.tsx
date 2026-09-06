@@ -22,6 +22,10 @@ const LOCATION_LINKS: [string, string][] = [
   ["Gurgaon", "/locations/gurgaon"],
   ["Faridabad", "/locations/faridabad"],
   ["Ghaziabad", "/locations/ghaziabad"],
+  ["Rohini", "/locations/rohini"],
+  ["South Delhi", "/locations/south-delhi"],
+  ["Dwarka", "/locations/dwarka"],
+  ["Janakpuri", "/locations/janakpuri"],
 ];
 
 const SERVICE_LINKS: [string, string][] = [
