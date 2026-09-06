@@ -35,7 +35,7 @@ export async function generateMetadata() {
 
 const FALLBACK_REASONS: [IconName, string, string][] = [
   ["target", "Result-Driven", "We measure success in your leads, not awards."],
-  ["zap", "Fast Turnaround", "Most websites ship in 3–5 weeks, fully tested."],
+  ["zap", "Fast Turnaround", "Most websites ship in 5–7 days, fully tested."],
   ["users", "Senior Designers", "No juniors handling your project blind."],
   ["shield", "Clear Written Scope", "Everything agreed in writing before we start."],
   ["chat", "Real Support", "Reply in under 4 hours during business days."],
@@ -141,7 +141,7 @@ const ABOUT_FAQ: [string, string][] = [
   ],
   [
     "How long does development take?",
-    "Most standard business websites are completed and launched within 2 to 4 weeks. Smaller landing pages can be ready in 7 to 10 days, while larger e-commerce sites or custom web applications may take 4 to 6 weeks. We establish clear project milestones from day one and deliver regular progress updates so your website launches on schedule without compromising on quality or testing.",
+    "Most standard business websites are completed and launched within 5 to 7 days. Smaller landing pages can be ready in 3 to 5 days, while larger e-commerce sites or custom web applications take 10 to 15 days. We establish clear project milestones from day one and deliver regular progress updates so your website launches on schedule without compromising on quality or testing.",
   ],
   [
     "Do you redesign existing websites?",

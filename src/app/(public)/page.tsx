@@ -60,7 +60,7 @@ const CHECKS: [string, string][] = [
   ["Custom design", "No templates. Every site is unique."],
   ["Conversion-first", "Designed to turn visitors into leads."],
   ["SEO-ready", "Built to rank from day one."],
-  ["1-month support", "We don't ghost after launch."],
+  ["15-day support", "We don't ghost after launch."],
 ];
 
 const FALLBACK_SERVICES: [IconName, string, string, string, string][] = [
@@ -141,8 +141,9 @@ const FALLBACK_BLOGS: [string, string, string, string, string][] = [
 const FALLBACK_TRUST_LOGOS = ["Expoed", "SBM Greens", "Vishwakarma Tour", "Shree Namo Motar"];
 
 // Homepage FAQ (C2 / AEO). Answers are factual and consistent with the rest of
-// the site (Palam, New Delhi · since 2019 · 400+ sites · 3–5 week delivery ·
-// 1-month support). The visible FAQList below and the FAQPage JSON-LD are built
+// the site (Palam, New Delhi · since 2019 · 400+ sites · 3–5 day landing pages,
+// 5–7 day business sites, 10–15 day e-commerce · 15-day support). The visible
+// FAQList below and the FAQPage JSON-LD are built
 // from this same array, so the schema mirrors exactly what users see.
 const HOME_FAQ: [string, string][] = [
   [
@@ -167,7 +168,7 @@ const HOME_FAQ: [string, string][] = [
   ],
   [
     "What happens after my website launches?",
-    "Every project includes one month of free support. After that, optional maintenance plans cover updates, security, backups and content edits.",
+    "Every project includes 15 days of free support. After that, optional maintenance plans cover updates, security, backups and content edits.",
   ],
 ];
 

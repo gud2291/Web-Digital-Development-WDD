@@ -39,7 +39,7 @@ const STEPS: Step[] = [
   {
     n: "04",
     title: "Launch & Grow",
-    desc: "Go live, analytics, plus a month of support.",
+    desc: "Go live, analytics, plus 15 days of support.",
     paths: [
       "M5 16c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2 2 0 0 0-2.9-.1z",
       "M12 15l-3-3a22 22 0 0 1 2-4 12 12 0 0 1 9-5c0 3-1 7-5 10a22 22 0 0 1-4 2z",

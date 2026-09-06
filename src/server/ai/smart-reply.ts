@@ -69,7 +69,7 @@ const DEFAULT_RESPONSES: { keywords: string[]; reply: string; priority: number }
   // Process
   {
     keywords: ["process", "how do you work", "steps", "timeline", "time", "kitna time", "kaise karte", "approach", "methodology"],
-    reply: `Our proven 4-step process:\n\n1️⃣ **Discovery** — We understand your goals, audience & competitors\n2️⃣ **Design** — Wireframes → Mockups → Your approval\n3️⃣ **Development** — Clean code, mobile-first, tested\n4️⃣ **Launch & Support** — Go live + 30 days free support\n\nMost projects take 2-6 weeks depending on complexity. Want to start with a free discovery call?`,
+    reply: `Our proven 4-step process:\n\n1️⃣ **Discovery** — We understand your goals, audience & competitors\n2️⃣ **Design** — Wireframes → Mockups → Your approval\n3️⃣ **Development** — Clean code, mobile-first, tested\n4️⃣ **Launch & Support** — Go live + 15 days free support\n\nMost projects take 3-15 days depending on complexity. Want to start with a free discovery call?`,
     priority: 3,
   },
   // Contact

@@ -37,7 +37,7 @@ const FALLBACK_CHECKS = [
   "Fast loading (<1.5s)",
   "Easy-to-use CMS",
   "Lead-capture forms",
-  "One month of post-launch support",
+  "15 days of post-launch support",
 ];
 
 // §E1 — real customer questions shown on every service page when the service has
@@ -58,7 +58,7 @@ const FALLBACK_SERVICE_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What happens after the project is delivered?",
-    a: "Every project includes one month of free support to fix any issues and make small tweaks. After that, optional maintenance plans cover ongoing updates, security, backups and edits. For websites you also get a simple CMS, so your team can manage day-to-day content yourselves.",
+    a: "Every project includes 15 days of free support to fix any issues and make small tweaks. After that, optional maintenance plans cover ongoing updates, security, backups and edits. For websites you also get a simple CMS, so your team can manage day-to-day content yourselves.",
   },
   {
     q: "How do we get started?",
@@ -385,7 +385,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <h2 className="t-h3" style={{ marginTop: 8 }}>Designed to grow your business</h2>
               {svc.content ? (
                 <div
-                  className="prose"
+                  className="ecom-rich"
                   style={{ marginTop: 14, color: "#475569" }}
                   dangerouslySetInnerHTML={{ __html: svc.content }}
                 />
