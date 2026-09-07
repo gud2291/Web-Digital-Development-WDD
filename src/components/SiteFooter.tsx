@@ -35,6 +35,9 @@ const SERVICE_LINKS: [string, string][] = [
   ["SEO Optimization", "/services/seo-services"],
   ["Digital Marketing", "/services/digital-marketing"],
   ["Graphic Designing", "/services/graphic-designing"],
+  ["Website Redesign", "/services/website-redesign"],
+  ["WordPress Website", "/services/wordpress-website"],
+  ["Mobile-First Design", "/services/mobile-first-design"],
 ];
 
 export async function SiteFooter() {
