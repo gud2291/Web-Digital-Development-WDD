@@ -240,6 +240,8 @@ export interface ServiceSchemaInput {
   description?: string;
   url: string;
   image?: string;
+  /** Defaults to "IN". Location pages pass the city/region they serve. */
+  areaServed?: string | string[];
 }
 
 export function serviceSchema(s: ServiceSchemaInput) {
@@ -262,7 +264,7 @@ export function serviceSchema(s: ServiceSchemaInput) {
         addressCountry: siteConfig.address.country,
       },
     },
-    areaServed: "IN",
+    areaServed: s.areaServed ?? "IN",
     serviceType: s.name,
     url: absoluteUrl(s.url) ?? siteConfig.url,
   };

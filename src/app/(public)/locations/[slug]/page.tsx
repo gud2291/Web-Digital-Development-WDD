@@ -3,7 +3,7 @@ import { Reveal, SectionHead, Btn, CTABanner } from "@/components/ui";
 import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
-import { SchemaMarkup, breadcrumbSchema } from "@/components/SchemaMarkup";
+import { SchemaMarkup, breadcrumbSchema, serviceSchema, faqSchema } from "@/components/SchemaMarkup";
 import { siteConfig } from "@/config/site";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +42,12 @@ export default async function LocationPage({ params }: PageProps) {
     notFound();
   }
 
+  // Machine-readable copy of the FAQ block already rendered inside `content`.
+  // Emitted as FAQPage only when present, so a doc without FAQs emits nothing.
+  const faqs = ((doc.faqs as { q: string; a: string }[] | undefined) ?? []).filter(
+    (f) => f?.q?.trim() && f?.a?.trim()
+  );
+
   return (
     <>
       <SchemaMarkup
@@ -51,6 +57,15 @@ export default async function LocationPage({ params }: PageProps) {
           { name: `${doc.city}`, url: `/locations/${doc.slug}` },
         ])}
       />
+      <SchemaMarkup
+        data={serviceSchema({
+          name: `Website Design & Development in ${String(doc.city)}`,
+          description: String(doc.seoDescription || doc.description || ""),
+          url: `${siteConfig.url}/locations/${String(doc.slug)}`,
+          areaServed: [String(doc.city), String(doc.region)].filter(Boolean),
+        })}
+      />
+      {faqs.length > 0 && <SchemaMarkup data={faqSchema(faqs)} />}
       <section className="page-banner">
         <div className="container" style={{ textAlign: "center", maxWidth: 760, margin: "0 auto" }}>
           <div className="breadcrumb">
