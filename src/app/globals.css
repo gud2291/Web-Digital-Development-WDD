@@ -601,6 +601,12 @@ html.lenis, html.lenis body { height: auto; }
 .site-ftr a { color: #94A3B8; font-size: 14.5px; line-height: 2.2; display: block; transition: color var(--dur-base) ease, transform var(--dur-base) ease; }
 .site-ftr a:hover { color: #fff; transform: translateX(2px); }
 .site-ftr .site-ftr__contact-item { display: flex; align-items: center; gap: 8px; font-size: 14.5px; line-height: 2.2; color: #94A3B8; }
+/* Service Areas sit in a full-width strip below the main footer grid: 9 cities
+   stacked in a ~219px column made that column far taller than the rest. Flex
+   wrap keeps them on one line on desktop and breaks cleanly on small screens. */
+.site-ftr__areas { border-top: 1px solid #1E293B; margin-top: 56px; padding-top: 26px; }
+.site-ftr__areas h5 { margin-bottom: 12px; }
+.site-ftr__areas-list { display: flex; flex-wrap: wrap; column-gap: 28px; row-gap: 2px; }
 .site-ftr__bottom {
   border-top: 1px solid #1E293B;
   margin-top: 64px; padding-top: 28px;
@@ -986,15 +992,15 @@ html[data-theme="dark"] .page-banner .btn--secondary:hover {
 .featured-blog__body { padding: 48px; }
 .blog-author { display: flex; gap: 10px; align-items: center; margin-top: 16px; }
 
-/* Blog covers on mobile: desktop keeps its fixed pixel heights (inline), but on
-   small screens the fixed height crops the image. Swap to a 16:9 aspect ratio so
-   covers scale to the card width and render fully — no crop, no layout shift. */
-@media (max-width: 768px) {
-  .blog-card__media,
-  .featured-blog__media {
-    height: auto !important;
-    aspect-ratio: 16 / 9;
-  }
+/* Blog covers: the source artwork is ~1.90-1.99:1 (1200x630 and 1769x889) with
+   text baked in, but the cards fixed pixel heights made the box ~1.36:1. With
+   `object-fit: cover` that chopped ~30% of the width - enough to cut the first
+   and last letters off the headline. Matching the container to the image ratio
+   means cover has nothing left to crop, at every breakpoint. */
+.blog-card__media,
+.featured-blog__media {
+  height: auto !important;
+  aspect-ratio: 1.9 / 1;
 }
 
 /* ========== BLOG DETAIL ========== */
@@ -1056,17 +1062,14 @@ section:has(.blog-detail__meta) .blog-detail__meta .avatar {
   border: 2px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
-/* Blog article hero image — responsive height so it doesn't over-crop on mobile.
-   Mobile-first uses aspect-ratio (scales with width); desktop keeps the fixed 420px look. */
+/* Blog article hero image - same 1.9:1 ratio as the cards at every width, so it
+   matches the source artwork and never over-crops. */
 .blog-hero-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1.9 / 1;
   border-radius: 16px;
   overflow: hidden;
-}
-@media (min-width: 768px) {
-  .blog-hero-media { aspect-ratio: auto; height: 420px; }
 }
 @media (max-width: 480px) {
   .blog-hero-media { border-radius: 12px; }

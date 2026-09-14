@@ -85,10 +85,6 @@ export async function SiteFooter() {
           {QUICK_LINKS.map(([to, label]) => (
             <Link key={to + label} href={to}>{label}</Link>
           ))}
-          <h5 style={{ marginTop: 18 }}>Service Areas</h5>
-          {LOCATION_LINKS.map(([label, href]) => (
-            <Link key={href} href={href}>{label}</Link>
-          ))}
         </div>
 
         <div>
@@ -112,6 +108,15 @@ export async function SiteFooter() {
           <h5 style={{ marginTop: 18 }}>Legal</h5>
           <Link href="/legal/privacy-policy">Privacy Policy</Link>
           <Link href="/legal/terms">Terms &amp; Conditions</Link>
+        </div>
+      </div>
+
+      <div className="container site-ftr__areas">
+        <h5>Service Areas</h5>
+        <div className="site-ftr__areas-list">
+          {LOCATION_LINKS.map(([label, href]) => (
+            <Link key={href} href={href}>{label}</Link>
+          ))}
         </div>
       </div>
 
