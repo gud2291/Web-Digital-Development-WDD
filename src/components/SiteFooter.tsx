@@ -26,6 +26,8 @@ const LOCATION_LINKS: [string, string][] = [
   ["South Delhi", "/locations/south-delhi"],
   ["Dwarka", "/locations/dwarka"],
   ["Janakpuri", "/locations/janakpuri"],
+  ["Delhi Cantt", "/locations/delhi-cantt"],
+  ["Palam", "/locations/palam"],
 ];
 
 const SERVICE_LINKS: [string, string][] = [
