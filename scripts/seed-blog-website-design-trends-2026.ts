@@ -29,7 +29,7 @@ const td = 'style="border:1px solid #D7E0F0;padding:10px 12px"';
 
 const content = `<p>The biggest website design trends in 2026 are AI-assisted personalization, bento-grid layouts, bold oversized typography, dark mode as a standard option, purposeful micro-interactions, and — the quiet one — structuring pages so AI search tools can read and quote them. Add performance-first builds and restrained 3D, and you have the year in one sentence.</p>
 <p>Here's what most trend lists won't tell you, though: half of these trends will do nothing for your business, and one or two could actively hurt your enquiries if you adopt them badly.</p>
-<p>We design and build websites for a living — 400+ of them since 2019, for 250+ clients, from our studio in Delhi — so this guide does something different. For each trend, we'll cover what it is, why it's growing, and whether a business website should adopt it, wait, or skip it.</p>
+<p>We design and build websites for a living — 150+ of them for 100+ clients from our studio in Delhi — so this guide does something different. For each trend, we'll cover what it is, why it's growing, and whether a business website should adopt it, wait, or skip it.</p>
 
 <h2>Key Takeaways</h2>
 <ul>

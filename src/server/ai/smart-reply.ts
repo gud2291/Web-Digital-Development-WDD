@@ -81,7 +81,7 @@ const DEFAULT_RESPONSES: { keywords: string[]; reply: string; priority: number }
   // About
   {
     keywords: ["about", "company", "who are you", "team", "experience", "since", "established", "kaun ho"],
-    reply: `**${siteConfig.name}** is a Delhi-based website design & development studio, serving clients across India since 2019.\n\n🏢 Based in Palam, New Delhi\n👥 Expert team of designers, developers & SEO specialists\n🌐 100+ websites delivered\n⭐ 5-star rated on Google\n\nWe're passionate about building websites that generate real business leads! Want to know more?`,
+    reply: `**${siteConfig.name}** is a Delhi-based website design & development studio, serving clients across India.\n\n🏢 Based in Palam, New Delhi\n👥 Expert team of designers, developers & SEO specialists\n🌐 100+ websites delivered\n⭐ 5-star rated on Google\n\nWe're passionate about building websites that generate real business leads! Want to know more?`,
     priority: 3,
   },
   // Portfolio / projects

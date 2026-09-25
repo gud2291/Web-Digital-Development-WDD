@@ -356,7 +356,7 @@ async function main() {
     if (!hp) hp = new Homepage({ heroSlides: [] });
     const slides: any[] = Array.isArray(hp.heroSlides) ? hp.heroSlides : [];
     const SLIDE_TEXT = [
-      { title: "A website your customers actually **find.** Not just a digital business card.", subtitle: "Custom-coded design, SEO-ready development and honest fixed-price quotes. 400+ websites shipped since 2019.", ctaText: "Get a Free Quote", ctaUrl: "/contact" },
+      { title: "A website your customers actually **find.** Not just a digital business card.", subtitle: "Custom-coded design, SEO-ready development and honest fixed-price quotes. 150+ websites shipped.", ctaText: "Get a Free Quote", ctaUrl: "/contact" },
       { title: "Reach Google's first page. Then **stay there.**", subtitle: "On-page, technical, content and ethical backlinks — the full SEO stack, with monthly reports you can verify.", ctaText: "Free SEO Audit", ctaUrl: "/contact" },
       { title: "From the first wireframe to the **first sale.**", subtitle: "Design, development, content, SEO and support — one team in Delhi, same WhatsApp, same people.", ctaText: "Start a Project", ctaUrl: "/contact" },
       { title: "From wireframe to launch — see how we actually build.", subtitle: "A 15-second look at our real workflow.", ctaText: "See Our Process", ctaUrl: "/projects" },

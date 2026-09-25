@@ -14,7 +14,7 @@ export async function generateMetadata() {
     path: "/projects",
     title: "Website Design Portfolio",
     description:
-      "Browse 400+ websites we've shipped — e-commerce, tourism, corporate and automotive — each with a live link you can open and check for yourself.",
+      "Browse 150+ websites we've shipped — e-commerce, tourism, corporate and automotive — each with a live link you can open and check for yourself.",
   });
 }
 

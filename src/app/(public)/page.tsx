@@ -48,9 +48,9 @@ export async function generateMetadata() {
 }
 
 const FALLBACK_STATS: [string, string, string, IconName][] = [
-  ["400+", "Websites Delivered", "#4ADE80", "rocket"],
-  ["250+", "Happy Clients", "#2563EB", "users"],
-  ["6+", "Years in Business", "#F59E0B", "award"],
+  ["150+", "Websites Delivered", "#4ADE80", "rocket"],
+  ["100+", "Happy Clients", "#2563EB", "users"],
+  ["4+", "Years in Business", "#F59E0B", "award"],
   ["24×7", "WhatsApp Support", "#8B5CF6", "shield"],
 ];
 
@@ -141,7 +141,7 @@ const FALLBACK_BLOGS: [string, string, string, string, string][] = [
 const FALLBACK_TRUST_LOGOS = ["Expoed", "SBM Greens", "Vishwakarma Tour", "Shree Namo Motar"];
 
 // Homepage FAQ (C2 / AEO). Answers are factual and consistent with the rest of
-// the site (Palam, New Delhi · since 2019 · 400+ sites · 3–5 day landing pages,
+// the site (Palam, New Delhi · 150+ sites · 3–5 day landing pages,
 // 5–7 day business sites, 10–15 day e-commerce · 15-day support). The visible
 // FAQList below and the FAQPage JSON-LD are built
 // from this same array, so the schema mirrors exactly what users see.
@@ -164,7 +164,7 @@ const HOME_FAQ: [string, string][] = [
   ],
   [
     "Do you work with businesses outside Delhi?",
-    "Yes. We're based in Palam, New Delhi, but we've delivered 400+ websites for clients across India and abroad. The entire process can be handled online.",
+    "Yes. We're based in Palam, New Delhi, but we've delivered 150+ websites for clients across India and abroad. The entire process can be handled online.",
   ],
   [
     "What happens after my website launches?",
@@ -431,7 +431,7 @@ export default async function HomePage() {
 
       {/* Trust Bar — §12.10 infinite marquee */}
       <div id="s-trust">
-        <TrustMarquee logos={trustLogos} label="Trusted by 400+ businesses across India and abroad" />
+        <TrustMarquee logos={trustLogos} label="Trusted by 150+ businesses across India and abroad" />
       </div>
 
       {/* Stats */}
@@ -464,7 +464,7 @@ export default async function HomePage() {
             <Reveal>
               <Eyebrow>ABOUT US</Eyebrow>
               <h2 className="t-h2" style={{ marginTop: 14 }}>
-                Built in Delhi. Trusted across India and abroad. Since 2019.
+                Built in Delhi. Trusted across India and abroad.
               </h2>
             </Reveal>
             <Reveal delay={100}>
@@ -474,10 +474,10 @@ export default async function HomePage() {
                 </p>
               ) : (
                 <p className="t-lead" style={{ marginTop: 16 }}>
-                  I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi, in 2019 —
+                  I&apos;m Gudia Yadav. I started Web Digital Development in Palam, New Delhi —
                   with one laptop and one belief. A small business deserves a website as good as a big
-                  company gets, without the big-company invoice. Six years on, there are six of us in
-                  one office. We&apos;ve shipped 400+ sites for clients across India and abroad. And I
+                  company gets, without the big-company invoice. Four years on, there are six of us in
+                  one office. We&apos;ve shipped 150+ sites for clients across India and abroad. And I
                   still review every design before it goes live.
                 </p>
               )}

@@ -21,7 +21,7 @@ for (const name of [".env.local", ".env"]) {
 
 const slug = "why-every-business-needs-a-website-2026";
 
-const content = `<p><strong>Short answer:</strong> in 2026, a small business in India needs its own website because that's where buyers go to check if you're real before they call, pay, or walk in. A Facebook or Instagram page helps people find you — but a website is the one place you own, where you control the story, show up on Google, take payments, and don't disappear when an algorithm changes its mind. We've built 400+ sites for Indian businesses, and the pattern is always the same: the ones online win the customers the ones offline never even hear about.</p>
+const content = `<p><strong>Short answer:</strong> in 2026, a small business in India needs its own website because that's where buyers go to check if you're real before they call, pay, or walk in. A Facebook or Instagram page helps people find you — but a website is the one place you own, where you control the story, show up on Google, take payments, and don't disappear when an algorithm changes its mind. We've built 150+ sites for Indian businesses, and the pattern is always the same: the ones online win the customers the ones offline never even hear about.</p>
 
 <p>We're Web Digital Development, a web studio in Palam, New Delhi. So we'll be upfront — we build websites for a living. But the case below isn't a sales pitch; it's what we've watched happen to real shops, clinics, and service businesses across India, the ones who got online and the ones who kept saying "next year."</p>
 

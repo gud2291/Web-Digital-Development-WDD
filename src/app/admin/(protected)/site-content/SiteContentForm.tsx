@@ -269,13 +269,13 @@ export function SiteContentForm({ initial }: { initial: InitialDoc }) {
         </div>
         <div style={{ marginTop: 14 }}>
           <div className="field__label" style={{ marginBottom: 6 }}>
-            Highlights (3 short stats, e.g. &quot;400+ — Projects shipped&quot;)
+            Highlights (3 short stats, e.g. &quot;150+ — Projects shipped&quot;)
           </div>
           {founderHighlightsArr.fields.map((f, i) => (
             <div key={f.id} style={{ display: "flex", gap: 8, marginTop: 6 }}>
               <input
                 className="input"
-                placeholder="Value (e.g. 400+)"
+                placeholder="Value (e.g. 150+)"
                 style={{ maxWidth: 160 }}
                 {...register(`about.founderHighlights.${i}.value` as const)}
               />

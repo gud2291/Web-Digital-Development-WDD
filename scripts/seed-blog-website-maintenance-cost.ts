@@ -29,7 +29,7 @@ const td = 'style="border:1px solid #D7E0F0;padding:10px 12px"';
 
 const content = `<p>Website maintenance costs between ₹2,000 and ₹25,000 per month in India for most business websites — roughly $50 to $300 per month at global rates. Simple brochure sites sit at the bottom of that range, e-commerce stores typically run ₹10,000–₹40,000 a month, and large custom platforms go well past ₹50,000.</p>
 <p>Those ranges are wide because "maintenance" means very different things depending on who you ask. For one site it means renewing hosting and updating a few plugins. For another it means daily backups, security monitoring, weekly content changes, and ongoing SEO work.</p>
-<p>We've been looking after client websites since 2019 — 400+ sites built for 250+ clients from our studio in Delhi — and business owners always ask the same three questions: what am I actually paying for, what's a fair price in 2026, and what can I safely skip? This guide answers all three, with honest numbers.</p>
+<p>We've been looking after client websites — 150+ sites built for 100+ clients from our studio in Delhi — and business owners always ask the same three questions: what am I actually paying for, what's a fair price in 2026, and what can I safely skip? This guide answers all three, with honest numbers.</p>
 
 <h2>Key Takeaways</h2>
 <ul>

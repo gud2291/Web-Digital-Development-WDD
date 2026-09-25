@@ -510,10 +510,10 @@ async function seedSiteContent() {
 
   const data = {
     about: {
-      heading: "From a one-woman setup in 2019 to Delhi's most trusted web studio.",
+      heading: "From a one-woman setup to Delhi's most trusted web studio.",
       description: [
-        "Web Digital Development started in 2019 with a simple idea — that small businesses in India deserve the same quality of website that a Fortune 500 company gets, just without the Fortune 500 price tag. We're a Delhi-based studio that designs, codes and ranks websites for clients across India and abroad. No outsourcing, no white-labelling, no templates dressed up as \"custom\" work. Every site we ship is built by our own team, here in New Delhi.",
-        "Six years in, we've launched **400+ websites**, ranked dozens of them on the first page of Google, and built long-term relationships with clients we now consider friends. We're proud of the businesses we've helped grow — from a Spanish e-commerce brand to a tour operator in north India to plantation companies and motor glass dealers. If your business has a story, we know how to put it on the internet in a way that wins customers.",
+        "Web Digital Development started with a simple idea — that small businesses in India deserve the same quality of website that a Fortune 500 company gets, just without the Fortune 500 price tag. We're a Delhi-based studio that designs, codes and ranks websites for clients across India and abroad. No outsourcing, no white-labelling, no templates dressed up as \"custom\" work. Every site we ship is built by our own team, here in New Delhi.",
+        "Four years in, we've launched **150+ websites**, ranked dozens of them on the first page of Google, and built long-term relationships with clients we now consider friends. We're proud of the businesses we've helped grow — from a Spanish e-commerce brand to a tour operator in north India to plantation companies and motor glass dealers. If your business has a story, we know how to put it on the internet in a way that wins customers.",
       ].join("\n\n"),
       whyChooseUs: [
         "**Custom-coded, not templated** — Every site is designed and developed from scratch. We don't sell Wix or hand you a Wordpress theme and disappear.",
@@ -524,7 +524,7 @@ async function seedSiteContent() {
         "**Clear written scope** — Everything agreed in writing before we start. No \"discovery phase invoice\" surprises.",
       ],
       timeline: [
-        { year: "2019", title: "Web Digital Development founded by Gudia Yadav in New Delhi", description: "" },
+        { year: "Start", title: "Web Digital Development founded by Gudia Yadav in New Delhi", description: "" },
         { year: "2020", title: "First international client onboarded — Expoed, Spain", description: "" },
         {
           year: "2022",
@@ -622,8 +622,8 @@ async function seedSiteContent() {
     },
     footer: {
       tagline:
-        "Web Digital Development — Delhi's small but mighty website studio. Serving Delhi NCR (Delhi, Noida, Gurgaon, Faridabad) and clients across India and abroad since 2019.",
-      copyright: "© 2019 — 2026 Web Digital Development. All rights reserved. Made in Delhi.",
+        "Web Digital Development — Delhi's small but mighty website studio. Serving Delhi NCR (Delhi, Noida, Gurgaon, Faridabad) and clients across India and abroad.",
+      copyright: "© 2026 Web Digital Development. All rights reserved. Made in Delhi.",
       policyLinks: [
         { label: "Privacy Policy", href: "/legal/privacy-policy" },
         { label: "Terms & Conditions", href: "/legal/terms" },
@@ -661,7 +661,7 @@ async function seedHomepage() {
         video: "",
         title: "Websites that bring you **paying customers,** not just visitors.",
         subtitle:
-          "Custom-coded design and SEO-ready development from a Delhi team that has launched 400+ websites that actually grow businesses.",
+          "Custom-coded design and SEO-ready development from a Delhi team that has launched 150+ websites that actually grow businesses.",
         ctaText: "Discuss Your Project",
         ctaUrl: "/contact",
       },
@@ -687,9 +687,9 @@ async function seedHomepage() {
       },
     ],
     stats: [
-      { value: "400+", label: "Websites Launched" },
-      { value: "250+", label: "Happy Clients" },
-      { value: "6+", label: "Years in Business" },
+      { value: "150+", label: "Websites Launched" },
+      { value: "100+", label: "Happy Clients" },
+      { value: "4+", label: "Years in Business" },
       { value: "24×7", label: "WhatsApp Support" },
     ],
     clientLogos: [],
@@ -752,7 +752,7 @@ async function seedServices() {
       pricingTiers: [],
       seoTitle: "Website Design Services in Delhi",
       seoDescription:
-        "Mobile-first, conversion-focused website design in Delhi. 400+ projects since 2019, Figma prototypes before code, and one month of post-launch support.",
+        "Mobile-first, conversion-focused website design in Delhi. 150+ projects delivered, Figma prototypes before code, and one month of post-launch support.",
       visible: true,
       order: 1,
     },
@@ -798,7 +798,7 @@ async function seedServices() {
       pricingTiers: [],
       seoTitle: "Web Development Company in Delhi",
       seoDescription:
-        "Hand-coded website development from a Delhi studio. Next.js, React, WordPress and PHP. 6 years, 400+ launches, Lighthouse 90+ guaranteed.",
+        "Hand-coded website development from a Delhi studio. Next.js, React, WordPress and PHP. 4 years, 150+ launches, Lighthouse 90+ guaranteed.",
       visible: true,
       order: 2,
     },
@@ -926,7 +926,7 @@ async function seedServices() {
       pricingTiers: [],
       seoTitle: "E-commerce Development in Delhi",
       seoDescription:
-        "E-commerce sites that sell. Shopify and WooCommerce experts in Delhi. Razorpay, GST-ready, abandoned cart recovery. 6 years building online stores.",
+        "E-commerce sites that sell. Shopify and WooCommerce experts in Delhi. Razorpay, GST-ready, abandoned cart recovery. 4 years building online stores.",
       visible: true,
       order: 5,
     },
@@ -1051,7 +1051,7 @@ async function seedProjects() {
       image: "",
       description: [
         "Expoed came to us in 2020 with a clear brief — they wanted a clean, conversion-focused store that wouldn't look out of place next to Spain's best D2C brands. We designed the entire identity from scratch, built the store on WooCommerce (for full control over their European payment + tax workflow), and shipped a Spanish + English version that switched seamlessly based on visitor location.",
-        "Six years later, Expoed is one of our longest-running clients. We've redesigned twice, added new product lines, and helped them rank for high-intent Spanish keywords. Yasmin (founder) called us \"dependable, innovative, and quick to respond\" — which is the kind of testimonial that means more than any award.",
+        "Four years later, Expoed is one of our longest-running clients. We've redesigned twice, added new product lines, and helped them rank for high-intent Spanish keywords. Yasmin (founder) called us \"dependable, innovative, and quick to respond\" — which is the kind of testimonial that means more than any award.",
       ].join("\n\n"),
     },
     {
@@ -1113,7 +1113,7 @@ async function seedTeam() {
       name: "Gudia Yadav",
       designation: "Founder & Lead Designer",
       photo: "",
-      bio: "Gudia founded Web Digital Development in 2019 with one laptop, a Tata Sky connection and a stubborn belief that small businesses deserve better websites. Six years and 400+ projects later, she still personally reviews every design before it ships. Based in Palam, New Delhi.",
+      bio: "Gudia founded Web Digital Development with one laptop, a Tata Sky connection and a stubborn belief that small businesses deserve better websites. Four years and 150+ projects later, she still personally reviews every design before it ships. Based in Palam, New Delhi.",
       linkedinUrl: "https://linkedin.com/in/gudia-yadav-7aa002220",
       visible: true,
       order: 1,
@@ -1520,7 +1520,7 @@ async function seedBlogs() {
         "A practical checklist — what we put on every website we build, what we deliberately leave off, and why. Save this when you're vetting your next quote.",
       featuredImage: "",
       content: toHtml([
-        "Most \"10 things every website needs\" articles are written by SEO writers who've never built one. Here's the real list, from 400+ projects.",
+        "Most \"10 things every website needs\" articles are written by SEO writers who've never built one. Here's the real list, from 150+ projects.",
         "**Things every business website needs in 2026:**",
         "**1. A WhatsApp button.** Sticky, visible on every page, opens the right number with a pre-filled message. India runs on WhatsApp. Your website should accept it.",
         "**2. Fast mobile load.** Under 2 seconds on a 3-year-old phone with patchy 4G. Most of your visitors are on mobile. If your hero image takes 5 seconds to load, half of them are gone before they ever see your offer.",
@@ -1540,7 +1540,7 @@ async function seedBlogs() {
       published: true,
       seoTitle: "Must-Have Website Features (2026)",
       seoDescription:
-        "Practical checklist from a Delhi web studio that's shipped 400+ sites. What to insist on, what to skip, and why. Save when reviewing your next website quote.",
+        "Practical checklist from a Delhi web studio that's shipped 150+ sites. What to insist on, what to skip, and why. Save when reviewing your next website quote.",
       order: 3,
     },
   ];
@@ -1620,16 +1620,16 @@ async function seedSeoMeta() {
       pageSlug: "home",
       title: "Delhi's Top Website Design & Development Company | WDD",
       description:
-        "Web Digital Development — Delhi's trusted website design, development, SEO and digital marketing studio since 2019. 400+ sites launched, fixed pricing, one-month free support.",
+        "Web Digital Development — Delhi's trusted website design, development, SEO and digital marketing studio. 150+ sites launched, fixed pricing, one-month free support.",
       keywords: feats(
         "website designing company in delhi, web development delhi, seo services delhi, digital marketing agency"
       ),
     },
     {
       pageSlug: "about",
-      title: "About Web Digital Development | Delhi Web Studio Since 2019",
+      title: "About Web Digital Development | Delhi Web Studio",
       description:
-        "Founded by Gudia Yadav in 2019, WDD is a Delhi-based website design studio that's launched 400+ projects across India and abroad. Founder-led, no outsourcing.",
+        "Founded by Gudia Yadav, WDD is a Delhi-based website design studio that's launched 150+ projects across India and abroad. Founder-led, no outsourcing.",
       keywords: feats("about web digital development, gudia yadav, delhi web studio"),
     },
     {
@@ -1643,14 +1643,14 @@ async function seedSeoMeta() {
       pageSlug: "projects",
       title: "Our Work — Sites We've Designed, Built & Ranked | WDD Portfolio",
       description:
-        "A few of our favourite projects from 2019 onwards. Real businesses, real traffic, real revenue. Spanish e-commerce, Delhi tourism, plantation, automotive — and more.",
+        "A few of our favourite projects. Real businesses, real traffic, real revenue. Spanish e-commerce, Delhi tourism, plantation, automotive — and more.",
       keywords: feats("web design portfolio delhi, website projects, wdd case studies"),
     },
     {
       pageSlug: "blog",
       title: "WDD Blog — Notes on Websites, SEO & Small-Business Growth",
       description:
-        "Plain-English writing on what works on the small-business internet in 2026. Written by a founder who's shipped 400+ sites.",
+        "Plain-English writing on what works on the small-business internet in 2026. Written by a founder who's shipped 150+ sites.",
       keywords: feats("web design blog, seo blog india, small business blog"),
     },
     {

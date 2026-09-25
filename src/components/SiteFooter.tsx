@@ -64,7 +64,7 @@ export async function SiteFooter() {
           <p>
             Web Digital Development — a Delhi-based website design and development studio.
             Serving clients across Delhi NCR (Delhi, Noida, Gurgaon, Faridabad) and the rest
-            of India since 2019.
+            of India.
           </p>
           <div className="site-ftr__socials">
             {(["facebook", "linkedin", "instagram", "youtube"] as const).map((s) => {

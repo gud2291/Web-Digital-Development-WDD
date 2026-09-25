@@ -22,7 +22,7 @@ export async function generateMetadata() {
     path: "/about",
     title: "About Our Delhi Web Design Studio",
     description:
-      "Delhi web design & development studio since 2019, founder-led by Gudia Yadav — 400+ sites delivered for 250+ clients across India and abroad. Meet our founder, mission, vision and team.",
+      "Delhi web design & development studio, founder-led by Gudia Yadav — 150+ sites delivered for 100+ clients across India and abroad. Meet our founder, mission, vision and team.",
     keywords: [
       "about web digital development",
       "Gudia Yadav founder web design",
@@ -43,7 +43,7 @@ const FALLBACK_REASONS: [IconName, string, string][] = [
 ];
 
 const FALLBACK_TIMELINE: [string, string, string][] = [
-  ["2019", "Studio founded", "Web Digital Development started in New Delhi; first client signed — Expoed, Spain"],
+  ["Start", "Studio founded", "Web Digital Development started in New Delhi; first client signed — Expoed, Spain"],
   ["2020", "60+ projects", "COVID arrives and every business suddenly wants a website"],
   ["2022", "SEO + marketing", "Added SEO and digital marketing as full services"],
   ["2024", "300+ launches", "Team grows with senior developers and a content writer"],
@@ -58,9 +58,9 @@ const FALLBACK_TEAM: [string, string, string][] = [
 ];
 
 const MINI_STATS: [string, string][] = [
-  ["6+", "Years"],
-  ["400+", "Projects"],
-  ["250+", "Clients"],
+  ["4+", "Years"],
+  ["150+", "Projects"],
+  ["100+", "Clients"],
   ["6", "Team"],
 ];
 
@@ -80,14 +80,14 @@ const FOUNDER_NAME_FALLBACK = "Gudia Yadav";
 const FOUNDER_TITLE_FALLBACK = "Founder & CEO";
 const FOUNDER_PHOTO_ALT_FALLBACK = "Gudia Yadav, Founder & CEO of Web Digital Development";
 const FOUNDER_NOTE_FALLBACK =
-  "When I started Web Digital Development in 2019, I believed a world-class website shouldn't be a luxury only big brands can afford. That belief still drives everything we do. Every project that leaves our studio passes across my desk — because your website carries my name as much as yours. My promise is simple: premium design, honest pricing, and real support that doesn't disappear after launch.";
+  "When I started Web Digital Development, I believed a world-class website shouldn't be a luxury only big brands can afford. That belief still drives everything we do. Every project that leaves our studio passes across my desk — because your website carries my name as much as yours. My promise is simple: premium design, honest pricing, and real support that doesn't disappear after launch.";
 const FOUNDER_MISSION_FALLBACK =
   "To help small and mid-sized businesses across India and beyond build fast, beautiful, high-performing websites they're genuinely proud of — pairing premium design with honest pricing and support that stays with them long after launch.";
 const FOUNDER_VISION_FALLBACK =
   "To become India's most trusted web design studio — the first name a growing business thinks of when it wants a website that looks world-class and actually drives real growth.";
 const FOUNDER_HIGHLIGHTS_FALLBACK: { value: string; label: string }[] = [
-  { value: "2019", label: "Building since" },
-  { value: "400+", label: "Projects shipped" },
+  { value: "4+ Yrs", label: "Experience" },
+  { value: "150+", label: "Projects shipped" },
   { value: "Hands-on", label: "On every build" },
 ];
 
@@ -133,7 +133,7 @@ const WHO_WE_BRING: [string, string, string][] = [
 const ABOUT_FAQ: [string, string][] = [
   [
     "Why choose Web Digital Development?",
-    "We are a client-first web design and development studio in Delhi with over 6 years of experience, delivering 400+ custom websites for 250+ clients across India and globally. Unlike generic agencies, we don't use rigid templates; every site is crafted with hand-tailored design, fast performance, search engine optimization, and direct founder-led quality control. We focus on transparent pricing, clear timelines, and long-term support to ensure your website directly drives lead generation and business growth.",
+    "We are a client-first web design and development studio in Delhi with over 4 years of experience, delivering 150+ custom websites for 100+ clients across India and globally. Unlike generic agencies, we don't use rigid templates; every site is crafted with hand-tailored design, fast performance, search engine optimization, and direct founder-led quality control. We focus on transparent pricing, clear timelines, and long-term support to ensure your website directly drives lead generation and business growth.",
   ],
   [
     "How much does a website cost?",
@@ -251,13 +251,13 @@ export default async function AboutPage() {
                 <>
                   <p style={{ marginTop: 18, color: "#475569" }}>
                     Web Digital Development is a website design and development studio in Palam,
-                    New Delhi, founded in 2019 by Gudia Yadav. It started with one simple belief:
+                    New Delhi, founded by Gudia Yadav. It started with one simple belief:
                     small and mid-sized Indian businesses deserve websites as good as the ones
                     global brands enjoy — without the global-brand invoice.
                   </p>
                   <p style={{ marginTop: 14, color: "#475569" }}>
-                    Since then we&apos;ve delivered 400+ websites and digital growth services to
-                    250+ clients across India and abroad — and the founder still reviews every
+                    Since then we&apos;ve delivered 150+ websites and digital growth services to
+                    100+ clients across India and abroad — and the founder still reviews every
                     design before it goes live.
                   </p>
                 </>
@@ -295,7 +295,7 @@ export default async function AboutPage() {
           </Reveal>
           <Reveal delay={100}>
             <p className="t-lead" style={{ marginTop: 16 }}>
-              Since 2019, we&apos;ve helped businesses across industries build websites that
+              We&apos;ve helped businesses across industries build websites that
               don&apos;t just exist online, but actually perform.
             </p>
           </Reveal>
@@ -350,7 +350,7 @@ export default async function AboutPage() {
               Built for Businesses That Mean Business
             </h3>
             <p className="t-small" style={{ marginTop: 12 }}>
-              Since 2019 we&apos;ve refined our process so that what you get isn&apos;t just a
+              Over the years, we&apos;ve refined our process so that what you get isn&apos;t just a
               beautiful website — it&apos;s a reliable digital asset that supports your growth. Our
               designers and developers stay current with the latest web standards, design trends, and
               search best practices, so your site launches ready to perform.

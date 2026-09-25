@@ -29,7 +29,7 @@ const td = 'style="border:1px solid #D7E0F0;padding:10px 12px"';
 
 const content = `<p>To choose the best website development company, judge five things: live portfolio work you can open on your phone, technical fit for your specific project, how the team communicates before you've paid anything, whether the scope and pricing are transparent, and what happens after launch. Everything else — awards, office photos, big claims — is decoration.</p>
 <p>The hard part is that every company's website says the same words: best, leading, trusted. You can't choose on adjectives. You need a way to test what's underneath them, and that's what this guide is: the criteria that separate good companies from good marketing, the exact questions to ask before signing, and the red and green flags to watch for.</p>
-<p>It's written from the other side of the table. We've been building websites since 2019 — 400+ projects for 250+ clients from our studio in Delhi — and we've inherited enough half-finished, badly built, or hostage-held projects to know precisely where the choosing process goes wrong.</p>
+<p>It's written from the other side of the table. We've been building websites — 150+ projects for 100+ clients from our studio in Delhi — and we've inherited enough half-finished, badly built, or hostage-held projects to know precisely where the choosing process goes wrong.</p>
 
 <h2>Key Takeaways</h2>
 <ul>

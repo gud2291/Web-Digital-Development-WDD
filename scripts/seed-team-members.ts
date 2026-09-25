@@ -74,7 +74,7 @@ const MEMBERS: Member[] = [
   {
     name: "Rohit Sharma",
     designation: "Senior Full-Stack Developer",
-    bio: "6+ years building React + Next.js apps. Lead developer on Expoed and SBM Greens. Owns our entire dev pipeline.",
+    bio: "4+ years building React + Next.js apps. Lead developer on Expoed and SBM Greens. Owns our entire dev pipeline.",
     // No real LinkedIn profile yet — left blank so the seed never emits a broken
     // placeholder link. Add the real URL in the admin panel when available.
     linkedinUrl: "",

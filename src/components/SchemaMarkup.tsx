@@ -67,7 +67,7 @@ export function localBusinessSchema() {
     telephone: siteConfig.phone,
     email: siteConfig.email,
     priceRange: "₹₹",
-    foundingDate: "2019-06",
+
     founder: {
       "@type": "Person",
       "@id": `${siteConfig.url}#founder`,

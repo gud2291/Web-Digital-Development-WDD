@@ -4,7 +4,7 @@
  * Covers Issues 1, 2, 3, 6, 8, 12 — all the DB-side fixes:
  *   1  clientLogos → real WDD clients (no fake big brands)
  *   2  heroSlides  → 3 content slides + 1 Cloudinary video slide
- *   3  stats       → 400+/250+/6+/24×7
+ *   3  stats       → 150+/100+/4+/24×7
  *   6  about       → founder-voice heading, description, whyChooseUs, timeline
  *   8  footer      → CONTENT_FINAL tagline
  *   12 hero video  → Pexels mp4 re-hosted on Cloudinary (no external CDN link)
@@ -132,7 +132,7 @@ async function run() {
       video: "",
       title: "Websites that bring you **paying customers** — not just traffic.",
       subtitle:
-        "Custom-coded design, SEO-ready development and honest, fixed-price quotes. We've shipped 400+ websites that actually grow businesses.",
+        "Custom-coded design, SEO-ready development and honest, fixed-price quotes. We've shipped 150+ websites that actually grow businesses.",
       ctaText: "Get a Written Quote",
       ctaUrl: "/contact",
     },
@@ -162,7 +162,7 @@ async function run() {
       video: videoUrl,
       title: "Custom websites, **built in Delhi.**",
       subtitle:
-        "Hand-coded, mobile-first and tuned to load fast on real phones — see the work behind 400+ launches across India and abroad.",
+        "Hand-coded, mobile-first and tuned to load fast on real phones — see the work behind 150+ launches across India and abroad.",
       ctaText: "See Our Work",
       ctaUrl: "/projects",
     },
@@ -170,9 +170,9 @@ async function run() {
 
   // ── Issue 3: stats ──────────────────────────────────────────────────────
   const stats = [
-    { value: "400+", label: "Websites Delivered" },
-    { value: "250+", label: "Happy Clients" },
-    { value: "6+", label: "Years in Business" },
+    { value: "150+", label: "Websites Delivered" },
+    { value: "100+", label: "Happy Clients" },
+    { value: "4+", label: "Years in Business" },
     { value: "24×7", label: "WhatsApp Support" },
   ];
 
@@ -192,8 +192,8 @@ async function run() {
 
   // ── Issue 6 + 8: SiteContent about + footer tagline ─────────────────────
   const aboutDescription = [
-    "I'm Gudia Yadav, and I run a website design and development studio in Palam, New Delhi. I started it in June 2019 because I was tired of watching small businesses get fleeced — corporate rates for templated work, the few good studios with six-month waiting lists, and freelancers who'd vanish halfway through your project. So I began Web Digital Development with one laptop and a stubborn belief that a small business in Delhi deserves the same quality of website a big company gets, without the big-company invoice.",
-    "My first client wasn't even in India — it was Expoed, an e-commerce brand out of Spain, found through a friend's referral. They paid on time, they're still my client six years later, and that one relationship taught me the thing I've built everything else around: do the work properly the first time and the client doesn't go looking for someone else.",
+    "I'm Gudia Yadav, and I run a website design and development studio in Palam, New Delhi. I started it because I was tired of watching small businesses get fleeced — corporate rates for templated work, the few good studios with six-month waiting lists, and freelancers who'd vanish halfway through your project. So I began Web Digital Development with one laptop and a stubborn belief that a small business in Delhi deserves the same quality of website a big company gets, without the big-company invoice.",
+    "My first client wasn't even in India — it was Expoed, an e-commerce brand out of Spain, found through a friend's referral. They paid on time, they're still my client four years later, and that one relationship taught me the thing I've built everything else around: do the work properly the first time and the client doesn't go looking for someone else.",
     "Today there are six of us, all in the same office in Palam, all reachable on WhatsApp — me, three developers, an SEO specialist and a content writer. No outsourcing, no white-labelling, no junior pretending to be a senior on your call. We've built for businesses across Delhi NCR, Mumbai, Bangalore, and as far as Spain and the UK, and we'll never sell you something you don't need.",
   ].join("\n\n");
 
@@ -209,7 +209,7 @@ async function run() {
   ];
 
   const timeline = [
-    { year: "2019", title: "Studio founded", description: "I started Web Digital Development in New Delhi. First client signed: Expoed, an e-commerce brand in Spain." },
+    { year: "Start", title: "Studio founded", description: "I started Web Digital Development in New Delhi. First client signed: Expoed, an e-commerce brand in Spain." },
     { year: "2020", title: "60+ projects", description: "COVID arrives and suddenly every business wants a website. We ship 60-plus projects that year." },
     { year: "2022", title: "SEO + marketing added", description: "We add SEO and digital marketing as full services, because nearly every client was asking for both." },
     { year: "2024", title: "300+ launches", description: "The team grows with senior developers and a dedicated content writer. We cross 300 launches." },
@@ -217,13 +217,13 @@ async function run() {
   ];
 
   const footerTagline =
-    "Web Digital Development — a Delhi-based website design and development studio. Serving clients across Delhi NCR (Delhi, Noida, Gurgaon, Faridabad) and the rest of India since 2019.";
+    "Web Digital Development — a Delhi-based website design and development studio. Serving clients across Delhi NCR (Delhi, Noida, Gurgaon, Faridabad) and the rest of India.";
 
   const scRes = await db.collection("sitecontents").updateOne(
     {},
     {
       $set: {
-        "about.heading": "Built in Delhi. Trusted across India and abroad. Since 2019.",
+        "about.heading": "Built in Delhi. Trusted across India and abroad.",
         "about.description": aboutDescription,
         "about.whyChooseUs": whyChooseUs,
         "about.timeline": timeline,

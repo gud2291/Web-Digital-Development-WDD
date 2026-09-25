@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /** Insert ONE published blog post + upsert its SeoMeta. Idempotent (upsert by slug).
  *  Content is CLIENT-PROVIDED — formatted to HTML with two owner-required factual
- *  corrections (200+ -> 400+ websites; one year of maintenance -> one month of free
+ *  corrections (200+ -> 150+ websites; one year of maintenance -> one month of free
  *  post-launch support) and in-body internal links added. Substance unchanged.
  *  featuredImage / ogImage live only in $setOnInsert so a later manual upload
  *  survives a re-run. Run: npx tsx scripts/seed-blog-questions-before-hiring-website-agency.ts */
@@ -427,7 +427,7 @@ const content = `<p>Imagine this...</p>
 <h2>Why Businesses Choose Web Digital Development</h2>
 <p>At <a href="/about">Web Digital Development</a>, we believe every business deserves more than just a visually appealing website.</p>
 <p>Before starting any project, we take the time to understand your business, industry, target audience, and long-term goals. This allows us to recommend the right technology, features, and strategy instead of offering the same solution to every client.</p>
-<p>Our team has successfully delivered 400+ websites for manufacturers, exporters, service providers, interior designers, agro businesses, startups, and local businesses.</p>
+<p>Our team has successfully delivered 150+ websites for manufacturers, exporters, service providers, interior designers, agro businesses, startups, and local businesses.</p>
 <p>We don't stop after launching your website.</p>
 <p>We provide:</p>
 <ul>
@@ -545,7 +545,7 @@ async function run() {
     "| h2:", (b.content.match(/<h2/g) || []).length,
     "| h3:", (b.content.match(/<h3/g) || []).length
   );
-  console.log("corrections check | '400+':", b.content.includes("400+ websites"),
+  console.log("corrections check | '150+':", b.content.includes("150+ websites"),
     "| 'one month support':", b.content.includes("One month of free post-launch support"),
     "| stale '200+':", b.content.includes("200+"), "| stale 'One year of maintenance':", b.content.includes("One year of maintenance"));
   console.log("in-body internal links:", internalLinks.join(", "));

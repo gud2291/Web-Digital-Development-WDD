@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps) {
       title: doc.seoTitle || `Website Design in ${doc.city}`,
       description:
         doc.seoDescription ||
-        `Website design, development and SEO in ${doc.city} by Web Digital Development. 400+ sites delivered — get a free quote.`,
+        `Website design, development and SEO in ${doc.city} by Web Digital Development. 150+ sites delivered — get a free quote.`,
       keywords: doc.keywords,
     });
   } catch {

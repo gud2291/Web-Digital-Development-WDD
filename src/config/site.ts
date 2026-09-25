@@ -10,7 +10,7 @@ export const siteConfig = {
   shortName: "Web Digital",
   title: "Website Design Company in Delhi | Web Digital Development",
   description:
-    "Delhi web design & development studio building fast, responsive sites that turn visitors into paying customers. 400+ delivered — get a free quote.",
+    "Delhi web design & development studio building fast, responsive sites that turn visitors into paying customers. 150+ delivered — get a free quote.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://webdigitaldevelopment.com",
   ogImage: "/og-image.png",
   twitterHandle: "@webdigitaldev",

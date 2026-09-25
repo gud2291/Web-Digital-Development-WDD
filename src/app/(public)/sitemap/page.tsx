@@ -152,7 +152,7 @@ export default async function SitemapPageView() {
                 for Indian businesses, each on its own detailed page.
               </li>
               <li>
-                <b>Projects</b> — a portfolio of real websites we have built since 2019, every one
+                <b>Projects</b> — a portfolio of real websites we have built, every one
                 with a live link you can open and check for yourself.
               </li>
               <li>
@@ -180,7 +180,7 @@ export default async function SitemapPageView() {
           <Reveal delay={220}>
             <p style={{ marginTop: 10, color: "#475569" }}>
               Web Digital Development is a website design and development studio based in Palam, New
-              Delhi. We have served 250+ clients across India and abroad since 2019, building fast,
+              Delhi. We have served 100+ clients across India and abroad, building fast,
               mobile-first sites that are ready to rank on Google from day one. Whether you need a
               brand-new website, a redesign, or ongoing SEO and maintenance, every page listed above
               is a good starting point. If you cannot find what you are looking for, the contact link

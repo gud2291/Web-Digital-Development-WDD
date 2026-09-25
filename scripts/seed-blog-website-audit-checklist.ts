@@ -29,7 +29,7 @@ const td = 'style="border:1px solid #D7E0F0;padding:10px 12px"';
 
 const content = `<p>A website audit is a structured check of everything that decides whether your site wins customers: speed, mobile experience, SEO, security, content, and the paths visitors take to contact you. You don't need an agency to do a useful one — this website audit checklist walks a business owner through the whole thing in about 30 minutes, using free tools, with a simple score at the end.</p>
 <p>Why bother? Because websites don't usually fail loudly. They fail quietly — a form that stopped sending last month, a page that takes eight seconds on mobile, a homepage still advertising last year's offer. The business keeps paying for hosting while the site slowly stops earning it.</p>
-<p>We've audited hundreds of business websites since 2019 — alongside building 400+ of them for 250+ clients from our studio in Delhi — and the same handful of silent problems shows up in almost every one. This checklist is built around exactly those.</p>
+<p>We've audited hundreds of business websites — alongside building 150+ of them for 100+ clients from our studio in Delhi — and the same handful of silent problems shows up in almost every one. This checklist is built around exactly those.</p>
 
 <h2>Key Takeaways</h2>
 <ul>

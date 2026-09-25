@@ -54,7 +54,7 @@ const FALLBACK_SERVICE_FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Do you work with businesses outside Delhi?",
-    a: "Yes. We are based in Palam, New Delhi, but we have delivered 400+ projects for clients across India and abroad. Everything — discovery, work, feedback and delivery — can be handled online over call, email and WhatsApp, so your location is never a barrier to working with us.",
+    a: "Yes. We are based in Palam, New Delhi, but we have delivered 150+ projects for clients across India and abroad. Everything — discovery, work, feedback and delivery — can be handled online over call, email and WhatsApp, so your location is never a barrier to working with us.",
   },
   {
     q: "What happens after the project is delivered?",

@@ -270,7 +270,7 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
       <SectionCard
         n={3}
         title="Quick Stats"
-        hint="The number tiles — e.g. 400+ Websites Delivered."
+        hint="The number tiles — e.g. 150+ Websites Delivered."
         anchor="s-stats"
         onFocus={setAnchor}
       >
@@ -282,7 +282,7 @@ export function HomepageForm({ initial }: { initial: InitialDoc }) {
             render={(_f, idx) => (
               <div style={{ display: "flex", gap: 8, width: "100%", alignItems: "center" }}>
                 <span className="section-card__num" title={`Stat ${idx + 1}`}>{idx + 1}</span>
-                <input className="input" placeholder="Value (e.g. 400+)" style={{ maxWidth: 180 }} {...register(`stats.${idx}.value` as const)} />
+                <input className="input" placeholder="Value (e.g. 150+)" style={{ maxWidth: 180 }} {...register(`stats.${idx}.value` as const)} />
                 <input className="input" placeholder="Label" {...register(`stats.${idx}.label` as const)} />
                 <button type="button" className="admin-icon-btn admin-icon-btn--danger" onClick={() => statsArr.remove(idx)}>
                   <Icon name="x" size={12} />

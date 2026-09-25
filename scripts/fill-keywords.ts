@@ -65,7 +65,7 @@ async function run() {
       pageSlug: "services/website-development",
       title: "Web Development Company in Delhi",
       description:
-        "Website development company in Delhi serving businesses across India — hand-coded Next.js, React & WordPress, 400+ launches and Lighthouse 90+ builds.",
+        "Website development company in Delhi serving businesses across India — hand-coded Next.js, React & WordPress, 150+ launches and Lighthouse 90+ builds.",
     },
     {
       pageSlug: "services/website-designing",
@@ -138,7 +138,7 @@ async function run() {
         coverImageAlt: "Website development company in Delhi building a custom site",
         seoTitle: "Web Development Company in Delhi",
         seoDescription:
-          "Website development company in Delhi serving businesses across India — hand-coded Next.js, React & WordPress, 400+ launches and Lighthouse 90+ builds.",
+          "Website development company in Delhi serving businesses across India — hand-coded Next.js, React & WordPress, 150+ launches and Lighthouse 90+ builds.",
         updatedAt: now,
       },
     }

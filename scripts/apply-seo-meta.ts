@@ -78,13 +78,13 @@ const STATIC_ENTRIES: SeoEntry[] = [
     pageSlug: "home",
     title: "Website Design Company in Delhi",
     description:
-      "Delhi web design & development studio building fast, responsive sites that turn visitors into paying customers. 400+ delivered — get a free quote.",
+      "Delhi web design & development studio building fast, responsive sites that turn visitors into paying customers. 150+ delivered — get a free quote.",
   },
   {
     pageSlug: "about",
     title: "About Our Delhi Web Design Studio",
     description:
-      "Delhi web design & development studio since 2019 — 400+ sites delivered for 250+ clients across India and abroad. Meet the team behind your next site.",
+      "Delhi web design & development studio — 150+ sites delivered for 100+ clients across India and abroad. Meet the team behind your next site.",
   },
   {
     pageSlug: "blog",
@@ -120,7 +120,7 @@ const STATIC_ENTRIES: SeoEntry[] = [
     pageSlug: "projects",
     title: "Website Design Portfolio",
     description:
-      "Browse 400+ websites we've shipped — e-commerce, tourism, corporate and automotive — each with a live link you can open and check for yourself.",
+      "Browse 150+ websites we've shipped — e-commerce, tourism, corporate and automotive — each with a live link you can open and check for yourself.",
   },
 ];
 
@@ -130,13 +130,13 @@ const SERVICE_ENTRIES: SeoEntry[] = [
     pageSlug: "services/website-designing",
     title: "Website Design Services in Delhi",
     description:
-      "Mobile-first, conversion-focused website design in Delhi. 400+ projects since 2019, Figma prototypes before code, and one month of post-launch support.",
+      "Mobile-first, conversion-focused website design in Delhi. 150+ projects delivered, Figma prototypes before code, and one month of post-launch support.",
   },
   {
     pageSlug: "services/website-development",
     title: "Web Development Company in Delhi",
     description:
-      "Hand-coded website development from a Delhi studio — Next.js, React, WordPress and PHP. 6 years, 400+ launches, Lighthouse 90+ on every build.",
+      "Hand-coded website development from a Delhi studio — Next.js, React, WordPress and PHP. 4 years, 150+ launches, Lighthouse 90+ on every build.",
   },
   {
     pageSlug: "services/seo-services",
@@ -154,7 +154,7 @@ const SERVICE_ENTRIES: SeoEntry[] = [
     pageSlug: "services/ecommerce-development",
     title: "E-commerce Development in Delhi",
     description:
-      "E-commerce sites that sell — Shopify and WooCommerce experts in Delhi. Razorpay, GST-ready, abandoned-cart recovery. 6 years building online stores.",
+      "E-commerce sites that sell — Shopify and WooCommerce experts in Delhi. Razorpay, GST-ready, abandoned-cart recovery. 4 years building online stores.",
   },
   {
     pageSlug: "services/graphic-designing",
@@ -182,13 +182,13 @@ const LOCATION_ENTRIES: SeoEntry[] = [
     pageSlug: "locations/delhi",
     title: "Web Design Company in Delhi NCR",
     description:
-      "Professional website design, SEO and development in Delhi. Serving businesses across NCR with 400+ launches since 2019. Talk to our Delhi team today.",
+      "Professional website design, SEO and development in Delhi. Serving businesses across NCR with 150+ launches. Talk to our Delhi team today.",
   },
   {
     pageSlug: "locations/noida",
     title: "Website Design Services in Noida",
     description:
-      "Custom website design and SEO for Noida businesses. We serve Noida, Greater Noida and nearby areas with 400+ successful projects. Get a free quote.",
+      "Custom website design and SEO for Noida businesses. We serve Noida, Greater Noida and nearby areas with 150+ successful projects. Get a free quote.",
   },
   {
     pageSlug: "locations/gurgaon",
@@ -200,7 +200,7 @@ const LOCATION_ENTRIES: SeoEntry[] = [
     pageSlug: "locations/faridabad",
     title: "Web Design in Faridabad",
     description:
-      "Faridabad businesses deserve great websites. We design and develop custom, SEO-ready sites optimised for Google and local visibility. 400+ projects.",
+      "Faridabad businesses deserve great websites. We design and develop custom, SEO-ready sites optimised for Google and local visibility. 150+ projects.",
   },
   {
     pageSlug: "locations/ghaziabad",
@@ -228,7 +228,7 @@ const BLOG_ENTRIES: SeoEntry[] = [
     pageSlug: "blog/essential-website-features-2026",
     title: "Must-Have Website Features (2026)",
     description:
-      "Practical checklist from a Delhi studio that's shipped 400+ sites — what to insist on, what to skip, and why. Save it before your next quote.",
+      "Practical checklist from a Delhi studio that's shipped 150+ sites — what to insist on, what to skip, and why. Save it before your next quote.",
   },
   {
     pageSlug: "blog/how-to-choose-website-design-company-delhi-2026",
