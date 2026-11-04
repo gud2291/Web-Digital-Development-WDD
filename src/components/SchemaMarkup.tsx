@@ -109,14 +109,9 @@ export function websiteSchema() {
     name: siteConfig.name,
     description: siteConfig.description,
     publisher: { "@id": `${siteConfig.url}#business` },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/blog?search={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
+    // No SearchAction: /blog does not read a ?search= param (search is
+    // client-side state only), so the target URL never returned results.
+    // Google also retired the sitelinks search box in Nov 2024.
   };
 }
 
