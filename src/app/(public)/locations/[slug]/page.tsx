@@ -1,20 +1,33 @@
 import { notFound } from "next/navigation";
 import { Reveal, SectionHead, Btn, CTABanner } from "@/components/ui";
 import { buildMetadata } from "@/lib/seo";
-import { getLocationPageBySlug } from "@/server/services/locationPage.service";
+import { getLocationPageBySlug, listLocationPages } from "@/server/services/locationPage.service";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { SchemaMarkup, breadcrumbSchema, serviceSchema, faqSchema } from "@/components/SchemaMarkup";
 import { siteConfig } from "@/config/site";
 
-export const dynamic = "force-dynamic";
+// ISR like the other public pages. Location docs are only changed by scripts
+// (seed-location-pages / fill-keywords), so a 1h window is fine. Main benefit:
+// if a background re-render hits a DB error, Next keeps serving the last good
+// copy instead of an error page. (With the (public) loading.tsx the response
+// is already streaming as 200, so a thrown error can't become a 5xx.)
+export const revalidate = 3600;
 
 interface PageProps {
   params: { slug: string };
 }
 
+export async function generateStaticParams() {
+  const pages = await listLocationPages().catch(() => []);
+  return pages.filter((p) => p.slug).map((p) => ({ slug: p.slug }));
+}
+
 export async function generateMetadata({ params }: PageProps) {
-  const doc = await getLocationPageBySlug(params.slug).catch(() => null);
+  // No catch: a DB error must never become noindex metadata (that would drop
+  // the page from Google). Letting it throw keeps the cached ISR copy live.
+  // Only a genuinely missing slug gets noindex + 404.
+  const doc = await getLocationPageBySlug(params.slug);
   if (!doc) return buildMetadata({ title: "Location", path: `/locations/${params.slug}`, noIndex: true });
   return buildMetadata({
     path: `/locations/${params.slug}`,
@@ -30,8 +43,8 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function LocationPage({ params }: PageProps) {
   // Read the DB directly instead of fetching our own public API over the
-  // network: one less round-trip per request, and a DB error now surfaces as
-  // a 5xx (crawlers retry) instead of being swallowed into a 404.
+  // network: one less round-trip per request, and a DB error is no longer
+  // swallowed into a 404 (which tells Google the page is gone).
   const doc = await getLocationPageBySlug(params.slug);
   if (!doc) notFound();
 
