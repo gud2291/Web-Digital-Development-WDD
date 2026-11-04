@@ -1,6 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Btn, Reveal } from "@/components/ui";
+import type { Metadata } from "next";
+
+// 404s must not inherit the root layout's "index, follow" + homepage canonical.
+export const metadata: Metadata = {
+  title: "Page Not Found",
+  robots: { index: false, follow: true },
+  alternates: { canonical: null },
+};
 
 export default function NotFound() {
   return (
