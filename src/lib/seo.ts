@@ -8,6 +8,11 @@ export interface BuildMetadataInput {
   ogImage?: string;
   keywords?: string[];
   noIndex?: boolean;
+  /** "article" for blog posts so OG consumers get article:* tags. */
+  ogType?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  authors?: string[];
 }
 
 /**
@@ -27,6 +32,12 @@ export function buildMetadata(input: BuildMetadataInput = {}): Metadata {
   const path = input.path || "/";
   const canonical = new URL(path, siteConfig.url).toString();
   const ogImage = input.ogImage || siteConfig.ogImage;
+  // Only the bundled default card has known dimensions (1200x630); CMS images
+  // vary, so we don't guess theirs.
+  const ogImageEntry =
+    ogImage === siteConfig.ogImage
+      ? { url: ogImage, width: 1200, height: 630, alt: siteConfig.name }
+      : { url: ogImage, alt: stripped || siteConfig.name };
   const keywords = input.keywords?.length ? input.keywords : [...siteConfig.keywords];
 
   return {
@@ -41,8 +52,16 @@ export function buildMetadata(input: BuildMetadataInput = {}): Metadata {
       description,
       url: canonical,
       siteName: siteConfig.name,
-      type: "website",
-      images: [{ url: ogImage }],
+      locale: "en_IN",
+      images: [ogImageEntry],
+      ...(input.ogType === "article"
+        ? {
+            type: "article" as const,
+            publishedTime: input.publishedTime,
+            modifiedTime: input.modifiedTime,
+            authors: input.authors,
+          }
+        : { type: "website" as const }),
     },
     twitter: {
       card: "summary_large_image",
@@ -73,6 +92,10 @@ export async function metadataFromDb(
       ogImage: meta.ogImage || fallback.ogImage,
       keywords: meta.keywords?.length ? meta.keywords : fallback.keywords,
       noIndex: meta.noIndex,
+      ogType: fallback.ogType,
+      publishedTime: fallback.publishedTime,
+      modifiedTime: fallback.modifiedTime,
+      authors: fallback.authors,
     });
   } catch {
     return buildMetadata(fallback);

@@ -48,6 +48,10 @@ export async function generateMetadata({ params }: PageProps) {
       `${post.title} — web design, development and SEO insights from Web Digital Development.`,
     ogImage: post.featuredImage || undefined,
     keywords: post.tags,
+    ogType: "article",
+    publishedTime: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
+    modifiedTime: post.updatedAt ? new Date(post.updatedAt).toISOString() : undefined,
+    authors: post.author ? [post.author] : undefined,
   });
 }
 
