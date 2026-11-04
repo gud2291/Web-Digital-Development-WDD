@@ -33,6 +33,8 @@ const STATIC_PATHS: {
   { path: "/contact", priority: 0.6, changeFrequency: "monthly" },
   { path: "/reviews", priority: 0.6, changeFrequency: "monthly" },
   { path: "/sitemap", priority: 0.6, changeFrequency: "monthly" },
+  // /legal is a public, indexable index page (canonical /legal) — list it too.
+  { path: "/legal", priority: 0.3, changeFrequency: "yearly" },
 ];
 
 const FALLBACK_LEGAL_SLUGS: string[] = ["privacy-policy", "terms", "refund"];
