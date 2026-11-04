@@ -426,9 +426,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         </Badge>
                       </div>
                       <div className="project-card__body">
-                        <h4 className="t-h4" style={{ fontSize: 18 }}>
+                        <h3 className="t-h4" style={{ fontSize: 18 }}>
                           {r.title}
-                        </h4>
+                        </h3>
                         {/* §14.13 — strict 2-line clamp; never the full case-study body. */}
                         <p className="t-small" style={{ marginTop: 6 }}>
                           {r.description || ""}

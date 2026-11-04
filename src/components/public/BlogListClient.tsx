@@ -141,9 +141,9 @@ export function BlogListClient({ initialPosts, initialPage, totalPages }: Props)
                   )}
                   <div className="blog-card__body" style={{ padding: "24px" }}>
                     <Badge kind={idx % 2 ? "neutral" : "primary"}>{b.category}</Badge>
-                    <h4 style={{ fontWeight: 700, fontSize: 22, marginTop: 12, lineHeight: 1.35 }}>
+                    <h3 style={{ fontWeight: 700, fontSize: 22, marginTop: 12, lineHeight: 1.35 }}>
                       {b.title}
-                    </h4>
+                    </h3>
                     <div className="t-small" style={{ marginTop: 16, display: "flex", justifyContent: "space-between" }}>
                       <span>{b.date}</span>
                       <span>{b.readTime} read</span>

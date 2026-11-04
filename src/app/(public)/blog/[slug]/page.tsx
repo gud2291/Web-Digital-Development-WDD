@@ -259,9 +259,9 @@ export default async function BlogDetailPage({ params }: PageProps) {
                       )}
                       <div className="blog-card__body">
                         <Badge>{p.category || "General"}</Badge>
-                        <h4 style={{ fontWeight: 700, fontSize: 18, marginTop: 10, lineHeight: 1.35 }}>
+                        <h3 style={{ fontWeight: 700, fontSize: 18, marginTop: 10, lineHeight: 1.35 }}>
                           {p.title}
-                        </h4>
+                        </h3>
                         <div className="t-small" style={{ marginTop: 14 }}>{p.readTime ?? 5} min read</div>
                       </div>
                     </article>

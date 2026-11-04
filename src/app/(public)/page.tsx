@@ -647,12 +647,12 @@ export default async function HomePage() {
                     )}
                     <div className="blog-card__body">
                       <Badge>{b.category}</Badge>
-                      <h4
+                      <h3
                         className="t-h4"
                         style={{ marginTop: 10, fontSize: 18, lineHeight: 1.35 }}
                       >
                         {b.title}
-                      </h4>
+                      </h3>
                       <div
                         className="t-small"
                         style={{ marginTop: 12, display: "flex", justifyContent: "space-between" }}

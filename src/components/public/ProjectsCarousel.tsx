@@ -93,10 +93,10 @@ export function ProjectsCarousel({ projects, title }: { projects: ProjectSlide[]
                     <div className="project-card__body">
                       {p.slug ? (
                         <Link href={`/projects/${p.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
-                          <h4 className="t-h4">{p.title}</h4>
+                          <h3 className="t-h4">{p.title}</h3>
                         </Link>
                       ) : (
-                        <h4 className="t-h4">{p.title}</h4>
+                        <h3 className="t-h4">{p.title}</h3>
                       )}
                       <p className="t-small" style={{ marginTop: 6 }}>{p.description}</p>
                       <div style={{ display: "flex", gap: 10, marginTop: 18 }}>

@@ -92,7 +92,7 @@ export function ProcessSteps() {
                   <StepIcon paths={s.paths} inView={inView} reduce={reduce} order={idx} />
                   <span className="process-steps__num">{s.n}</span>
                 </div>
-                <h4 className="t-h4" style={{ fontSize: 18, marginTop: 14 }}>{s.title}</h4>
+                <h3 className="t-h4" style={{ fontSize: 18, marginTop: 14 }}>{s.title}</h3>
                 <p className="t-small" style={{ marginTop: 8 }}>{s.desc}</p>
               </div>
             ))}

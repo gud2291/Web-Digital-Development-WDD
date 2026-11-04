@@ -1566,10 +1566,10 @@ html[data-theme="dark"] {
 /* 6. Clamp variable-length text so one card can't tower over its row */
 .services-grid .card p.t-small,
 .testimonials-grid .testimonial-card > p,
-.blog-card__body h4 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; }
+.blog-card__body h3, .blog-card__body h4 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; }
 .services-grid .card p.t-small { -webkit-line-clamp: 3; }
 .testimonials-grid .testimonial-card > p { -webkit-line-clamp: 4; }
-.blog-card__body h4 { -webkit-line-clamp: 2; }
+.blog-card__body h3, .blog-card__body h4 { -webkit-line-clamp: 2; }
 .project-card__body p.t-small { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
 .doc-card { display: flex; gap: 10px; align-items: center; padding: 14px !important; }
