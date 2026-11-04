@@ -28,3 +28,17 @@ export async function listLocationPages(): Promise<LocationPageResult[]> {
     updatedAt: d.updatedAt as Date | undefined,
   }));
 }
+
+/**
+ * Single visible location page by slug, or null when it doesn't exist.
+ * Errors (e.g. DB unreachable) propagate so the page returns a 5xx, which
+ * crawlers retry, instead of a 404, which tells them the page is gone.
+ */
+export async function getLocationPageBySlug(slug: string): Promise<Record<string, unknown> | null> {
+  const mongoose = await connectDB();
+  const db = mongoose.connection.db;
+  if (!db) throw new Error("Database not connected");
+  return (await db
+    .collection("locationpages")
+    .findOne({ slug, visible: true })) as Record<string, unknown> | null;
+}

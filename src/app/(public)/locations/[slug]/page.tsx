@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Reveal, SectionHead, Btn, CTABanner } from "@/components/ui";
 import { buildMetadata } from "@/lib/seo";
+import { getLocationPageBySlug } from "@/server/services/locationPage.service";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { SchemaMarkup, breadcrumbSchema, serviceSchema, faqSchema } from "@/components/SchemaMarkup";
@@ -13,34 +14,26 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  try {
-    const res = await fetch(`${siteConfig.url}/api/public/locations/${params.slug}`, { cache: "no-store" });
-    if (!res.ok) return buildMetadata({ title: "Location", path: `/locations/${params.slug}` });
-    const doc = await res.json();
-    return buildMetadata({
-      path: `/locations/${params.slug}`,
-      // Fall back to city-specific copy so empty SEO fields don't inherit the
-      // homepage title/description.
-      title: doc.seoTitle || `Website Design in ${doc.city}`,
-      description:
-        doc.seoDescription ||
-        `Website design, development and SEO in ${doc.city} by Web Digital Development. 150+ sites delivered — get a free quote.`,
-      keywords: doc.keywords,
-    });
-  } catch {
-    return buildMetadata({ title: "Location", path: `/locations/${params.slug}` });
-  }
+  const doc = await getLocationPageBySlug(params.slug).catch(() => null);
+  if (!doc) return buildMetadata({ title: "Location", path: `/locations/${params.slug}`, noIndex: true });
+  return buildMetadata({
+    path: `/locations/${params.slug}`,
+    // Fall back to city-specific copy so empty SEO fields don't inherit the
+    // homepage title/description.
+    title: (doc.seoTitle as string) || `Website Design in ${doc.city}`,
+    description:
+      (doc.seoDescription as string) ||
+      `Website design, development and SEO in ${doc.city} by Web Digital Development. 150+ sites delivered — get a free quote.`,
+    keywords: doc.keywords as string[] | undefined,
+  });
 }
 
 export default async function LocationPage({ params }: PageProps) {
-  let doc: Record<string, unknown>;
-  try {
-    const res = await fetch(`${siteConfig.url}/api/public/locations/${params.slug}`, { cache: "no-store" });
-    if (!res.ok) notFound();
-    doc = await res.json();
-  } catch {
-    notFound();
-  }
+  // Read the DB directly instead of fetching our own public API over the
+  // network: one less round-trip per request, and a DB error now surfaces as
+  // a 5xx (crawlers retry) instead of being swallowed into a 404.
+  const doc = await getLocationPageBySlug(params.slug);
+  if (!doc) notFound();
 
   // Machine-readable copy of the FAQ block already rendered inside `content`.
   // Emitted as FAQPage only when present, so a doc without FAQs emits nothing.
