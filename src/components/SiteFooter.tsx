@@ -83,21 +83,21 @@ export async function SiteFooter() {
         </div>
 
         <div>
-          <h5>Quick Links</h5>
+          <h2>Quick Links</h2>
           {QUICK_LINKS.map(([to, label]) => (
             <Link key={to + label} href={to}>{label}</Link>
           ))}
         </div>
 
         <div>
-          <h5>Services</h5>
+          <h2>Services</h2>
           {SERVICE_LINKS.map(([label, href]) => (
             <Link key={href} href={href}>{label}</Link>
           ))}
         </div>
 
         <div>
-          <h5>Contact</h5>
+          <h2>Contact</h2>
           <a href={`tel:${phone.replace(/\s+/g, "")}`} className="site-ftr__contact-item">
             <Icon name="phone" size={13} /> {phone}
           </a>
@@ -107,14 +107,14 @@ export async function SiteFooter() {
           <span className="site-ftr__contact-item">
             <Icon name="map" size={13} /> {addressStr}
           </span>
-          <h5 style={{ marginTop: 18 }}>Legal</h5>
+          <h2 style={{ marginTop: 18 }}>Legal</h2>
           <Link href="/legal/privacy-policy">Privacy Policy</Link>
           <Link href="/legal/terms">Terms &amp; Conditions</Link>
         </div>
       </div>
 
       <div className="container site-ftr__areas">
-        <h5>Service Areas</h5>
+        <h2>Service Areas</h2>
         <div className="site-ftr__areas-list">
           {LOCATION_LINKS.map(([label, href]) => (
             <Link key={href} href={href}>{label}</Link>

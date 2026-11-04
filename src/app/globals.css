@@ -597,7 +597,7 @@ html.lenis, html.lenis body { height: auto; }
   line-height: 1;
 }
 .site-ftr .site-ftr__social:hover { background: var(--c-primary-600); transform: translateY(-2px); }
-.site-ftr h5 { color: #fff; font-size: 14.5px; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
+.site-ftr h2, .site-ftr h5 { color: #fff; font-size: 14.5px; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
 .site-ftr a { color: #94A3B8; font-size: 14.5px; line-height: 2.2; display: block; transition: color var(--dur-base) ease, transform var(--dur-base) ease; }
 .site-ftr a:hover { color: #fff; transform: translateX(2px); }
 .site-ftr .site-ftr__contact-item { display: flex; align-items: center; gap: 8px; font-size: 14.5px; line-height: 2.2; color: #94A3B8; }
@@ -605,7 +605,7 @@ html.lenis, html.lenis body { height: auto; }
    stacked in a ~219px column made that column far taller than the rest. Flex
    wrap keeps them on one line on desktop and breaks cleanly on small screens. */
 .site-ftr__areas { border-top: 1px solid #1E293B; margin-top: 56px; padding-top: 26px; }
-.site-ftr__areas h5 { margin-bottom: 12px; }
+.site-ftr__areas h2, .site-ftr__areas h5 { margin-bottom: 12px; }
 .site-ftr__areas-list { display: flex; flex-wrap: wrap; column-gap: 28px; row-gap: 2px; }
 .site-ftr__bottom {
   border-top: 1px solid #1E293B;
@@ -2639,7 +2639,7 @@ html[data-theme="dark"] {
 .site-ftr { padding: 72px 0 26px; }
 .site-ftr a { transition: color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
 .site-ftr a:hover { color: #fff; transform: translateX(2px); }
-.site-ftr h5 { letter-spacing: 0.08em; }
+.site-ftr h2, .site-ftr h5 { letter-spacing: 0.08em; }
 .site-ftr .site-ftr__social:hover { background: rgba(255, 255, 255, .16); transform: translateY(-2px); }
 .site-ftr .site-ftr__social { transition: background var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
 
